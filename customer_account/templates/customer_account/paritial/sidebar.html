@@ -1,0 +1,47 @@
+{% load static %}
+
+<aside class="sidebar">
+
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+
+        <a href="/my/dashboard/">
+            <div class="sidebar-header">    
+                <h2>My Account</h2>
+                <p>Account Management</p>
+            </div>
+        </a>
+
+
+        <a href="/my/information/">
+            <div class="sidebar-item" onclick="highlightCard('personal')">
+                <h3>Personal Information</h3>
+                <p>Modify Your Personal Information</p>
+            </div>
+        </a>
+
+
+        <a href="/my/orders/">
+            <div class="sidebar-item" onclick="highlightCard('orders')">
+                <h3>My Orders</h3>
+                <p>View Your Previous Orders</p>
+            </div>
+        </a>
+
+
+        <a href="/my/wishlist/">
+           <div class="sidebar-item" onclick="highlightCard('wishlist')">
+            <h3>Wishlist</h3>
+            <p>View Games You Added in Wishlist</p>
+            </div>
+        </a>
+        
+
+        <a href="/my/payment/">
+            <div class="sidebar-item" onclick="highlightCard('payment')">
+                <h3>Payment Methods</h3>
+                <p>Adjust Your Payment Method</p>
+            </div>
+        </a>
+
+</aside>
+

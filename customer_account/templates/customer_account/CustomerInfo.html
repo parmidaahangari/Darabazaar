@@ -1,0 +1,91 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FirstGame - My Account</title>
+
+  <link rel="stylesheet" href="{% static 'css/app_account/customeraccount.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app_account/customerinfo.css' %}">
+  <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+  
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  {% include 'customer_account/paritial/navbar.html' %}
+
+  <!-- MAIN -->
+  <main>
+
+    <section class="content-panel">
+            {% csrf_token %}
+
+    <div class="form-container">
+        <form method="POST" class="profile-form">
+            {% csrf_token %}
+
+            <h2 class="form-title">نام کاربری</h2>
+            
+            <div class="form-group full-width">
+                <input type="text" id="username" name="username" placeholder="Gamer-#125412" class="form-input">
+            </div>
+
+            <h3 class="form-subtitle">ایمیل</h3>
+            <h3 class="form-subtitle phone-title">شماره موبایل</h3>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="emailaddress@gmail.com" class="form-input">
+                    <span class="verified-text">ایمیل تایید شد</span>
+                </div>
+                
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" placeholder="09123456789" class="form-input">
+                    <span class="verified-text">شماره موبایل تایید شد</span>
+                </div>
+            </div>
+
+            <h3 class="form-subtitle password-title">رمز عبور</h3>
+            <a href="#" class="recover-link">رمز جدید</a>
+
+            <button type="submit" class="save-btn">ذخیره</button>
+        </form>
+    </div>
+
+    </section>
+
+
+
+    <!-- Sidebar -->
+    {% include 'customer_account/paritial/sidebar.html' %}
+
+  </main>
+
+
+  <!-- FOOTER -->
+   {% include 'customer_account/paritial/footer.html' %}
+
+
+
+  <script>
+    function highlightCard(type) {
+      // Remove active from all cards
+      document.querySelectorAll('.card').forEach(c => {
+        c.style.background = '';
+        c.style.outline = '';
+      });
+
+      // Highlight selected card
+      const card = document.getElementById('card-' + type);
+      if (card) {
+        card.style.background = '#2d3480';
+        card.style.outline = '2px solid #4a54c8';
+      }
+    }
+  </script>
+
+</body>
+</html>

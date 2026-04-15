@@ -1,0 +1,117 @@
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sidebar a:hover,
+.sidebar a:focus,
+.sidebar a:active,
+.sidebar a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #2a2f72 0%, #1a1e50 50%, #14172e 100%);
+    border-radius: 16px;
+    width: 280px;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-header {
+    background: linear-gradient(135deg, #3d4394 0%, #2e3480 50%, #252a6a 100%);
+    padding: 24px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.sidebar-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255,255,255,0.25) 50%, 
+        transparent 100%
+    );
+}
+
+.sidebar-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+}
+
+.sidebar-header p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+.sidebar-item {
+    padding: 20px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    background: transparent;
+}
+
+.sidebar-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, 
+        rgba(74, 84, 200, 0.4) 0%, 
+        rgba(74, 84, 200, 0.15) 50%,
+        transparent 100%
+    );
+    transition: width 0.25s ease;
+}
+
+.sidebar-item:hover::before {
+    width: 100%;
+}
+
+.sidebar-item:hover {
+    background: linear-gradient(90deg, 
+        rgba(58, 64, 160, 0.35) 0%, 
+        rgba(46, 52, 128, 0.2) 60%,
+        transparent 100%
+    );
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-item h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.2px;
+}
+
+.sidebar-item p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+    font-weight: 400;
+}
+
+.sidebar-item:first-of-type {
+    border-top: none;
+}

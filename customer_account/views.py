@@ -19,20 +19,12 @@ class CustomerAccountInfoView(View):
     def post(self, request):
         form = UserForm(request.POST)
 
+        print(">>> POST RECEIVED")
+        print("POST:", request.POST)
+        print("FORM ERRORS:", form.errors)
+
         if form.is_valid():
-            user = User()
-            user.username = form.cleaned_data['username']
-            user.phone = form.cleaned_data['phone']
-            user.email = form.cleaned_data['email']
-
-            user.set_password(form.cleaned_data['password'])  
-            user.save()
-            return redirect("/dashboard/")
-
-
-
-        return render(request,'customer_account/CustomerInfo.html',{
-            "form": UserForm(),
-
-            "success": True
-        })
+            form.save()
+            return redirect('/my/dashboard/')
+        
+        return render(request, 'customer_account/CustomerInfo.html', {"form": form})

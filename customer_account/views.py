@@ -19,9 +19,6 @@ class CustomerAccountInfoView(View):
     def post(self, request):
         form = UserForm(request.POST)
 
-        print(">>> POST RECEIVED")
-        print("POST:", request.POST)
-        print("FORM ERRORS:", form.errors)
 
         if form.is_valid():
             form.save()

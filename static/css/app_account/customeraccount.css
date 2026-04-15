@@ -378,3 +378,15 @@ a:hover {
         grid-template-columns: 1fr;
     }
 }
+
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/static/css/app_account/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+       url('/static/css/app_account/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+body, button, input, select, textarea {
+  font-family: 'Vazirmatn', sans-serif !important;
+}

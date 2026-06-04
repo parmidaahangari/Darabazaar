@@ -44,6 +44,7 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
+        port: 2222
         script: |
                   cd /root/darabazaar
                   echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -51,3 +52,4 @@ jobs:
                   docker-compose up -d --remove-orphans
                   docker-compose exec -T web python manage.py migrate --noinput
                   docker-compose exec -T web python manage.py collectstatic --noinput
+        

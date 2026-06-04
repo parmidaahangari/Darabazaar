@@ -1,0 +1,62 @@
+name: Django CI/CD with Docker
+
+on:
+  push:
+    branches: [ "main" ] # هر زمان روی شاخه main کد بفرستی، فرآیند شروع می‌شود
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # ۱. ورود به بخش پکیج‌های گیت‌هاب
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    # ۲. ساخت و آپلود ایمیج داکر (شخصی‌سازی شده کاملاً با حروف کوچک برای Darabazaar)
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        # شخصی‌سازی شد: نام دقیق ایمیج هماهنگ با docker-compose
+        tags: ghcr.io/parmidaahangari/darabazaar/django-app:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+    # ۳. اتصال به سرور ابری از طریق SSH با استفاده از ۳ سکرتی که ساختی
+    - name: Deploy to Cloud Server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # شخصی‌سازی شد: حواست باشد این مسیر پوشه روی سرور ابری‌ات درست باشد
+          cd /home/ubuntu/darabazaar
+          
+          # لاگین داکرِ سرور به گیت‌هاب
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          
+          # دانلود کردن ایمیج جدید ساخته شده
+          docker-compose pull
+          
+          # اجرای کانتینرها در پس‌زمینه
+          docker-compose up -d --remove-orphans
+          
+          # اجرای خودکار ماگریشن‌های جانگو و جمع‌آوری فایل‌های استاتیک در پروداکشن
+          docker-compose exec -T web python manage.py migrate --noinput
+          docker-compose exec -T web python manage.py collectstatic --noinput

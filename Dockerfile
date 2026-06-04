@@ -1,11 +1,12 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bookworm
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# اصلاح فرمت متغیرهای محیطی برای رفع وارنینگ‌ها
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# نصب وابستگی‌های سیستم برای پپش‌نیازهای کانتینر (مثل اتصال به postgres)
+# نصب وابستگی‌های سیستم (این بار بدون ارور ۴۰۴ اجرا می‌شود)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \

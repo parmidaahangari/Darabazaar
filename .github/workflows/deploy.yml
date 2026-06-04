@@ -41,9 +41,9 @@ jobs:
     - name: Deploy to Cloud Server
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
         script: |
           # شخصی‌سازی شد: حواست باشد این مسیر پوشه روی سرور ابری‌ات درست باشد
           cd /home/ubuntu/darabazaar

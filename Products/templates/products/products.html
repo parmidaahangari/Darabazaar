@@ -1,0 +1,329 @@
+{% load static%}
+{% load humanize %}
+
+<link rel="stylesheet" href="{% static 'css/app_products/products.css' %}">
+<link rel="stylesheet" href="{% static 'css/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>محصولات</title>
+{% include "layout/navbar.html" %}
+
+<main class="browse-main">
+  
+    <!-- ── Special Events Banner ── -->
+    <section class="special-events">
+        <h2>Special Events</h2>
+        <div class="banner">
+            <img src="{% static 'img/productsbanner.jpg' %}" />
+            <div class="banner-overlay">
+                <span class="banner-tag">Summer</span>
+                <h3>Savings</h3>
+                <p class="banner-date">August 7 – August 21</p>
+                <p class="banner-desc">Make this summer unforgettable with GameVerse at unbeatable prices.<br>Grab your favorites now – up to 70% OFF for a limited time!</p>
+                <a href="#" class="banner-btn">Browse Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Browse Section (Grid + Filters) ── -->
+    <section class="browse-section">
+
+        <!-- Game Cards Grid -->
+        <div class="games-grid">
+            {% for product in products %}
+            <div class="game-card">
+                <a href="{% url 'product' product.slug %}" style="display: block; height: 100%; width: 100%;">
+                    <div class="game-img">
+                        <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                    </div>                
+                    <div class="game-info">
+                        <h4>{{ product.name }}</h4>
+                        {% with best=product.best_price_info %}
+                            {% if best %}
+                                <p class="price">
+                                    {% if best.discount > 0 %}
+                                        <span class="discount">{{ best.discount }}%</span>
+                                        <span class="old">{{ best.old_price|intcomma }}</span>
+                                    {% endif %}
+                                    
+                                    <span>{{ best.final_price|intcomma }} ت</span>
+                                </p>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Filters Sidebar -->
+        <form method="get" action="{% url 'products' %}" id="filterForm">
+            <aside class="filters-sidebar">
+                <div class="filters-header">
+                    <h3>Filters (<span id="filterCount">0</span>)</h3>
+                    <button type="button" class="reset-btn" id="resetFilters">reset</button>
+                </div>
+
+                <div class="filter-search">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" name="keyword" placeholder="Keywords..." id="keywordInput" value="{{ request.GET.keyword|default:'' }}" />
+                    <button type="button" class="search-clear" id="clearKeyword" aria-label="Clear">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Sort -->
+                <div class="filter-group">
+                    <button type="button" class="filter-toggle" data-target="sortDropdown">
+                        Sort by <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown {% if request.GET.sort %}open{% endif %}" id="sortDropdown">
+                        <label><input type="radio" name="sort" value="newest" {% if request.GET.sort == 'newest' %}checked{% endif %}> Newest</label>
+                        <label><input type="radio" name="sort" value="price-low" {% if request.GET.sort == 'price-low' %}checked{% endif %}> Price: Low to High</label>
+                        <label><input type="radio" name="sort" value="price-high" {% if request.GET.sort == 'price-high' %}checked{% endif %}> Price: High to Low</label>
+                        <label><input type="radio" name="sort" value="name" {% if request.GET.sort == 'name' %}checked{% endif %}> Name A–Z</label>
+                    </div>
+                </div>
+
+                <!-- Genres -->
+                <div class="filter-group">
+                    <button type="button" class="filter-toggle" data-target="genreDropdown">
+                        Genres <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown {% if selected_genres %}open{% endif %}" id="genreDropdown">
+                        <label>
+                            <input type="checkbox" name="genre" value="all" 
+                                {% if not selected_genres or 'all' in selected_genres %}checked{% endif %}> 
+                            All Games
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="action" 
+                                {% if 'action' in selected_genres %}checked{% endif %}> 
+                            Action
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="adventure" 
+                                {% if 'adventure' in selected_genres %}checked{% endif %}> 
+                            Adventure
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="arcade" 
+                                {% if 'arcade' in selected_genres %}checked{% endif %}> 
+                            Arcade
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="fps" 
+                                {% if 'fps' in selected_genres %}checked{% endif %}> 
+                            FPS
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="rpg" 
+                                {% if 'rpg' in selected_genres %}checked{% endif %}> 
+                            RPG
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="strategy" 
+                                {% if 'strategy' in selected_genres %}checked{% endif %}> 
+                            Strategy
+                        </label>
+                        <label>
+                            <input type="checkbox" name="genre" value="sports" 
+                                {% if 'sports' in selected_genres %}checked{% endif %}> 
+                            Sports
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Price -->
+                <div class="filter-group">
+                    <button type="button" class="filter-toggle" data-target="priceDropdown">
+                        Price <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown {% if selected_prices %}open{% endif %}" id="priceDropdown">
+                        <label>
+                            <input type="checkbox" name="price" value="free" 
+                                {% if 'free' in selected_prices %}checked{% endif %}> 
+                            Free
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="under10" 
+                                {% if 'under10' in selected_prices %}checked{% endif %}> 
+                            Under $10
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="under30" 
+                                {% if 'under30' in selected_prices %}checked{% endif %}> 
+                            Under $30
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="under60" 
+                                {% if 'under60' in selected_prices %}checked{% endif %}> 
+                            Under $60
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="above60" 
+                                {% if 'above60' in selected_prices %}checked{% endif %}> 
+                            $60+
+                        </label>
+                    </div>
+                </div>
+
+
+
+                <!-- Stock -->
+                <div class="filter-group filter-stock">
+                    <span>In stock</span>
+                    <label class="switch">
+                        <input type="checkbox" name="instock" id="inStockToggle" {% if request.GET.instock %}checked{% endif %} />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+            </aside>
+        </form>
+
+    </section>
+
+    {% include "layout/footer.html" %}
+</main>
+
+<script>
+        // تبدیل اعداد انگلیسی به فارسی
+    function toPersianNum(str) {
+        const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return str.replace(/\d/g, x => persianDigits[x]);
+    }
+
+    function convertElementNumbers(element) {
+        if (element.childNodes.length > 0) {
+            element.childNodes.forEach(child => {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    child.nodeValue = toPersianNum(child.nodeValue);
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    convertElementNumbers(child);
+                }
+            });
+        }
+    }
+
+    // اعمال روی تمام قیمت‌ها و تخفیف‌ها
+    const priceElements = document.querySelectorAll('.price');
+    priceElements.forEach(el => {
+        convertElementNumbers(el);
+    });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filterForm');
+    
+    // Toggle dropdowns
+    const toggles = document.querySelectorAll('.filter-toggle');
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const dropdown = document.getElementById(targetId);
+            dropdown.classList.toggle('open');
+            this.classList.toggle('active');
+            
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.style.transform = dropdown.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+    });
+
+    // Handle "All Games" checkbox logic - uncheck others when All is checked
+    // در بخش JavaScript
+    const allGamesCheckbox = document.querySelector('input[name="genre"][value="all"]');
+    const genreCheckboxes = document.querySelectorAll('input[name="genre"]:not([value="all"])');
+
+    if (allGamesCheckbox) {
+        allGamesCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                genreCheckboxes.forEach(cb => cb.checked = false);
+                // ارسال فرم فوری برای ریست کردن
+                document.getElementById('filterForm').submit();
+            }
+        });
+    }
+
+    genreCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            if (this.checked && allGamesCheckbox) {
+                allGamesCheckbox.checked = false;
+            }
+        });
+    });
+
+
+    // Auto-submit on checkbox change (with slight delay for better UX)
+    let timeout;
+    const filterInputs = document.querySelectorAll('.filter-dropdown input[type="checkbox"], #inStockToggle');
+    filterInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => form.submit(), 100);
+        });
+    });
+
+    // Auto-submit on radio change (Sort)
+    const radioInputs = document.querySelectorAll('input[type="radio"]');
+    radioInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            form.submit();
+        });
+    });
+
+    // Handle search input (submit on Enter)
+    const keywordInput = document.getElementById('keywordInput');
+    const clearBtn = document.getElementById('clearKeyword');
+    
+    if (keywordInput) {
+        keywordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                form.submit();
+            }
+        });
+    }
+    
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            keywordInput.value = '';
+            form.submit();
+        });
+    }
+
+    // Update filter count
+    function updateFilterCount() {
+        const checkedInputs = document.querySelectorAll('.filter-dropdown input[type="checkbox"]:checked, #inStockToggle:checked');
+        const keywordValue = keywordInput ? keywordInput.value.trim() : '';
+        let count = 0;
+        
+        // Count genre filters (excluding 'all')
+        checkedInputs.forEach(input => {
+            if (input.name === 'genre' && input.value === 'all') return;
+            count++;
+        });
+        
+        if (keywordValue) count++;
+        document.getElementById('filterCount').textContent = count;
+    }
+
+    // Reset filters
+    const resetBtn = document.getElementById('resetFilters');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            window.location.href = window.location.pathname;
+        });
+    }
+
+    // Initial count update
+    updateFilterCount();
+});
+</script>

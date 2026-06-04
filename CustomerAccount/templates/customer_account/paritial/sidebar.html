@@ -1,0 +1,55 @@
+{% load static %}
+
+<aside class="sidebar">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+
+
+    <a href="/my/dashboard/">
+        <div class="sidebar-item {% if request.path == '/my/dashboard/' %}active{% endif %}">
+            <h3>حساب کاربری من</h3>
+            <p>مدیریت حساب</p>
+        </div>
+    </a>
+
+    <a href="/my/information/">
+        <div class="sidebar-item {% if request.path == '/my/information/' %}active{% endif %}">
+            <h3>اطلاعات شخصی</h3>
+            <p>ویرایش اطلاعات شخصی</p>
+        </div>
+    </a>
+
+    <a href="/my/orders/">
+        <div class="sidebar-item {% if request.path == '/my/orders/' %}active{% endif %}">
+            <h3>سفارش‌های من</h3>
+            <p>مشاهده سفارش‌های قبلی</p>
+        </div>
+    </a>
+
+    <a href="/my/wishlist/">
+       <div class="sidebar-item {% if request.path == '/my/wishlist/' %}active{% endif %}">
+        <h3>علاقه‌مندی‌ها</h3>
+        <p>بازی‌های مورد علاقه شما</p>
+        </div>
+    </a>
+    
+    <a href="/my/addresses/">
+        <div class="sidebar-item {% if request.path == '/my/addresses/' %}active{% endif %}">
+            <h3>‌ لیست آدرس‌ها </h3>
+            <p>مشاهده آدرس‌های ثبت شده</p>
+        </div>
+    </a>
+
+    <a href="{% url 'logout' %}" style="text-decoration: none;">
+        <div class="sidebar-item" style="display: flex; align-items: center; gap: 8px;">
+            <h3 style="margin: 0; color: rgb(255, 62, 62);">
+                <i class="fas fa-sign-out-alt"></i> خروج از حساب کاربری
+            </h3>
+        </div>
+    </a>
+</aside>
+
+<script>
+if (location.pathname.startsWith('/my')) {
+    document.body.classList.add('my-page');
+}
+</script>

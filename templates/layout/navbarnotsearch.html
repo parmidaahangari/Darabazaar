@@ -1,0 +1,296 @@
+{% load static %}
+
+<header>
+    <body data-path="{{ request.path }}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+
+    <div class="containers">
+        <div class="header-content">
+
+        <div class="logo-area">
+            <div class="logo-circle">G</div>
+        </div>
+
+            <div class="search-wrapper" style="position: relative; width: 100%; max-width: 400px;">
+                <form action="{% url 'products' %}" method="get" class="search-containers" style="position: relative; width: 100%;">
+                    <svg class="search-icon" style="width:0.9rem;height:0.9rem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input class="search-input" 
+                        type="text" 
+                        name="keyword" 
+                        placeholder="جستجو در فروشگاه" 
+                        value="{{ request.GET.keyword|default:'' }}"
+                        id="nav-search-input"
+                        autocomplete="off">
+                    
+                    {% if request.GET.keyword %}
+                    <button type="button" 
+                            class="search-clear" 
+                            onclick="document.getElementById('nav-search-input').value=''; this.form.submit();"
+                            style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 0;">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    {% endif %}
+                </form>
+                
+                <div id="search-suggestions" class="search-dropdown" style="display: none;"></div>
+            </div>
+
+        <nav>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">خانه</a>     
+            <a href="/products/" class="{% if '/products' in request.path %}active{% endif %}">محصولات</a>            
+            <a href="/news/" class="{% if '/home/news' in request.path %}active{% endif %}">اخبار</a> 
+            <a href="#">درباره ما</a>
+        </nav>
+
+        <div class="header-icons">
+            <a href="{% url 'cart' %}">
+            <button class="icon-btn" aria-label="Cart">
+            <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184
+                1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            </button>
+            </a>
+            {% if is_logged_in %}
+            <a href="{% url 'dashboard' %}" class="icon-btn active" aria-label="Profile">
+                <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="icon-btn active" aria-label="Profile">
+                <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+    <script>
+    function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('nav-search-input');
+        const suggestionsBox = document.getElementById('search-suggestions');
+        let selectedIndex = -1;
+        let currentResults = [];
+
+        function showSuggestions(results, keyword) {
+            currentResults = results;
+            selectedIndex = -1;
+            
+            if (results.length === 0) {
+                suggestionsBox.innerHTML = '<div class="search-no-result">نتیجه‌ای یافت نشد</div>';
+                suggestionsBox.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            results.forEach((item, index) => {
+                // Escape regex special characters
+                const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+                const highlightedName = item.name.replace(regex, '<span class="mark">$1</span>');
+                
+                const productUrl = `/products/${item.slug}/`;
+                
+                html += `
+                    <a href="${productUrl}" class="search-item" data-index="${index}">
+                        ${item.image 
+                            ? `<img src="${item.image}" class="search-item-image" alt="${item.name}" onerror="this.parentElement.querySelector('.fallback-icon').style.display='flex'; this.style.display='none';">` 
+                            : ''
+                        }
+                        <div class="search-item-image fallback-icon" style="display: ${item.image ? 'none' : 'flex'}; align-items:center; justify-content:center; background:#404040;">
+                            <span style="font-size:20px;">🎮</span>
+                        </div>
+                        <div class="search-item-info">
+                            <div class="search-item-name">${highlightedName}</div>
+                            <div class="search-item-price">${item.price} تومان</div>
+                        </div>
+                    </a>
+                `;
+            });
+            
+            suggestionsBox.innerHTML = html;
+            suggestionsBox.style.display = 'block';
+        }
+
+        const performSearch = debounce(async (keyword) => {
+            if (keyword.length < 2) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            suggestionsBox.innerHTML = '<div class="search-loading">در حال جستجو...</div>';
+            suggestionsBox.style.display = 'block';
+
+            try {
+                const url = `{% url 'search_suggestions' %}?q=${encodeURIComponent(keyword)}`;
+                console.log('Fetching:', url);
+                
+                const response = await fetch(url);
+                console.log('Status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Results:', data.results);
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                showSuggestions(data.results || [], keyword);
+            } catch (error) {
+                console.error('Search error:', error);
+                suggestionsBox.innerHTML = `<div class="search-error">خطا در جستجو</div>`;
+            }
+        }, 300);
+
+        searchInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.trim();
+            if (keyword.length < 2) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+            performSearch(keyword);
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (!suggestionsBox.style.display || suggestionsBox.style.display === 'none') return;
+            
+            const items = suggestionsBox.querySelectorAll('.search-item');
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                updateSelection(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSelection(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedIndex >= 0 && items[selectedIndex]) {
+                    window.location.href = items[selectedIndex].href;
+                } else {
+                    searchInput.closest('form').submit();
+                }
+            } else if (e.key === 'Escape') {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        function updateSelection(items) {
+            items.forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-wrapper')) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('focus', () => {
+            const keyword = searchInput.value.trim();
+            if (keyword.length >= 2 && currentResults.length > 0) {
+                suggestionsBox.style.display = 'block';
+            }
+        });
+
+        // Scroll header
+        const header = document.querySelector('header');
+        let lastScroll = 0;
+        const scrollThreshold = 80;
+        header.classList.add('at-top');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll <= scrollThreshold) {
+                header.classList.add('at-top');
+                header.classList.remove('nav-hidden', 'nav-visible');
+                lastScroll = currentScroll;
+                return;
+            }
+            header.classList.remove('at-top');
+            if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+                header.classList.add('nav-hidden');
+                header.classList.remove('nav-visible');
+            } else if (currentScroll < lastScroll) {
+                header.classList.remove('nav-hidden');
+                header.classList.add('nav-visible');
+            }
+            lastScroll = currentScroll;
+        });
+    });
+    </script>
+    </body>
+</header>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="bottom-nav">
+    <div class="bottom-nav-content">
+        <a href="/" class="bottom-nav-item {% if request.path == '/' %}active{% endif %}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+        </a>
+
+        <a href="/products/" class="bottom-nav-item {% if '/products' in request.path %}active{% endif %}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+        </a>
+
+        <a href="{% url 'cart' %}" class="bottom-nav-item {% if '/cart' in request.path %}active{% endif %}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184
+                1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+        </a>
+
+        {% if is_logged_in %}
+        <a href="{% url 'dashboard' %}" class="bottom-nav-item {% if '/my/' in request.path %}active{% endif %}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+        </a>
+        {% else %}
+        <a href="{% url 'login' %}" class="bottom-nav-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+</nav>

@@ -1,5 +1,16 @@
-
+.venv/
 .vscode/
 .lh/
 **/__pycache__/
 *.sqlite3
+data_backup.json
+.env
+.env.local
+.env.production
+*.tar
+*.zip
+media/
+__pycache__/
+db.sqlite3
+*.log
+.env.example

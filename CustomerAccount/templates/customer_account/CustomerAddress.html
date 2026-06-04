@@ -1,0 +1,324 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa"">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت آدرس‌ها</title>
+    <link rel="stylesheet" href="{% static 'css/app_account/address.css' %}">
+    <link rel="stylesheet" href="{% static 'css/app_account/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    {% include "layout/navbar.html" %}
+
+    <main class="page-content">
+        <div class="checkout-container">
+            <div class="main-content glass-box"  style="direction: rtl; text-align: right;">
+                <div class="header-section">
+                    <h2><i class="fas fa-map-marker-alt"></i> مدیریت آدرس‌ها</h2>
+                </div>
+
+                <!-- لیست آدرس‌های موجود -->
+                <div class="addresses-list">
+                    {% for addr in addresses %}
+                    <div class="address-card {% if addr.is_default %}default{% endif %}" data-id="{{ addr.id }}">
+                        {% if addr.is_default %}
+                        {% endif %}
+                        
+                        <div class="address-content">
+                            <h4><i class="fas fa-user"></i> {{ addr.users_total_name }}</h4>
+                            <p><i class="fas fa-map-pin"></i> {{ addr.address }}</p>
+                            <div class="address-details">
+                                <span><i class="fas fa-city"></i> {{ addr.city }}</span>
+                                <span><i class="fas fa-mail-bulk"></i> {{ addr.postal_code }}</span>
+                                <span><i class="fas fa-phone"></i> {{ addr.phone }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="address-actions">
+                            {% if not addr.is_default %}
+                                <button type="button" class="btn-set-default" onclick="SetAddressDefault({{addr.id}})" title="تنظیم به عنوان پیش‌فرض">
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                            {% endif %}
+                            
+                            <a href="{% url 'customer_addresses_edit' addr.id %}" class="btn-edit" title="ویرایش">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            
+                            <button type="button" class="btn-delete" onclick="deleteAddress({{ addr.id }})" title="حذف">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>هنوز آدرسی ثبت نکرده‌اید</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- دکمه افزودن آدرس جدید -->
+                {% if can_add_more %}
+                <button type="button" class="btn-add-new" onclick="toggleForm()">
+                    افزودن آدرس جدید
+                </button>
+                {% else %}
+                <div class="limit-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    شما به حداکثر تعداد مجاز آدرس ({{ max_addresses }}) رسیده‌اید
+                </div>
+                {% endif %}
+
+                <!-- فرم آدرس -->
+                <div class="form-container" id="addressForm" style="{% if not edit_mode and addresses %}display: none;{% endif %}">
+                    <h3>{% if edit_mode %}ویرایش آدرس{% else %}آدرس جدید{% endif %}</h3>
+                    
+                    <form method="POST" id="addressFormElement" action="{{ request.path }}" onsubmit="return handleSubmit(event)">
+
+                        {% csrf_token %}
+                        
+                        {% if edit_mode %}
+                        <input type="hidden" name="address_id" value="{{ address_id }}">
+                        {% endif %}
+
+                        <div class="input-group">
+                            <label>نام و نام خانوادگی</label>
+                            <input type="text" name="users_total_name" 
+                                   value="{{ form.users_total_name.value|default:'' }}" 
+                                   placeholder="نام کامل گیرنده" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>آدرس</label>
+                            <textarea name="address" rows="3" placeholder="آدرس دقیق..." required>{{ form.address.value|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="input-group half">
+                                <label>شهر</label>
+                                <input type="text" name="city" 
+                                       value="{{ form.city.value|default:'' }}" 
+                                       placeholder="شهر" required>
+                            </div>
+                            <div class="input-group half">
+                                <label>کد پستی</label>
+                                <input type="text" name="postal_code" 
+                                       value="{{ form.postal_code.value|default:'' }}" 
+                                       placeholder="کد پستی 10 رقمی" required maxlength="10">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>شماره تماس</label>
+                            <input type="text" name="phone" 
+                                   value="{{ form.phone.value|default:'' }}" 
+                                   placeholder="09......... یا شماره ثابت" required>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn-confirm">
+                               
+                                {% if edit_mode %}ذخیره تغییرات{% else %}ثبت آدرس{% endif %}
+                            </button>
+                            
+                            
+                            <button type="button" class="btn-cancel" onclick="cancelForm()">
+                                انصراف
+                            </button>
+                        
+                        </div>
+                    </form>
+                </div>
+
+            </div> 
+
+            
+        </div>
+    {% include 'customer_account/paritial/sidebar.html' %}
+    </main>
+
+    {% include "layout/footer.html" %}
+
+    <script>
+// نمایش/مخفی کردن یا تغییر حالت فرم
+function toggleForm() {
+    const formContainer = document.getElementById('addressForm');
+    const formElement = document.getElementById('addressFormElement');
+    
+    const isHidden = window.getComputedStyle(formContainer).display === 'none';
+    // تشخیص اینکه آیا در انتهای URL یک عدد (ID) وجود دارد یا خیر
+    const isEditUrl = /\/\d+\/?$/.test(window.location.pathname);
+
+    if (isHidden) {
+        formContainer.style.display = 'block';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+    } else if (isEditUrl) {
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        formContainer.style.display = 'none';
+        return;
+    }
+
+    formElement.reset();
+    
+    const hiddenId = formElement.querySelector('input[name="address_id"]');
+    if (hiddenId) hiddenId.remove();
+    
+    // مسیر پایه: حذف ID از انتهای URL تا تبدیل به مسیر ساخت آدرس جدید شود
+    const baseUrl = window.location.pathname.replace(/\/\d+\/?$/, '/');
+    formElement.setAttribute('action', baseUrl);
+    window.history.pushState({}, '', baseUrl); 
+    
+    const title = formContainer.querySelector('h3');
+    if(title) title.innerText = 'آدرس جدید';
+    
+    const submitBtn = formContainer.querySelector('.btn-confirm');
+    if(submitBtn) submitBtn.innerText = 'ثبت آدرس';
+}
+
+// ارسال فرم با AJAX (فقط یک بار نوشته شود)
+function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    // آدرس ارسال را از ویژگی action فرم می‌گیرد
+    const submitUrl = form.getAttribute('action') || window.location.pathname;
+    
+    fetch(submitUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw err; });
+        }
+        return response.json();
+    })
+    .then(data => {
+        showNotification(data.message, 'success');
+        setTimeout(() => location.reload(), 1000); // رفرش صفحه برای آپدیت شدن لیست
+    })
+    .catch(error => {
+        if (error.errors) {
+            Object.values(error.errors).flat().forEach(err => {
+                showNotification(err, 'error');
+            });
+        } else {
+            showNotification(error.message || 'خطا در ثبت آدرس', 'error');
+        }
+    });
+    
+    return false;
+}
+
+// بستن فرم یا انصراف از ویرایش
+function cancelForm() {
+    const isEditUrl = /\/\d+\/?$/.test(window.location.pathname);
+    if (isEditUrl) {
+        // بازگشت به مسیر اصلی (بدون ID)
+        const baseUrl = window.location.pathname.replace(/\/\d+\/?$/, '/');
+        window.location.href = baseUrl; 
+    } else {
+        document.getElementById('addressForm').style.display = 'none';
+        document.getElementById('addressFormElement').reset();
+    }
+}
+
+// حذف آدرس با تایید
+function deleteAddress(addressId) {
+    if (!confirm('آیا از حذف این آدرس اطمینان دارید؟')) return;
+
+    fetch(`/my/addresses/delete/${addressId}/`, { // دقت کنید این URL با مسیرهای شما در urls.py همخوانی داشته باشد
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.querySelector(`[data-id="${addressId}"]`).remove();
+            showNotification(data.message, 'success');
+            if (document.querySelectorAll('.address-card').length === 0) {
+                location.reload();
+            }
+        }
+    })
+    .catch(error => showNotification('خطا در حذف آدرس', 'error'));
+}
+
+// تنظیم آدرس پیش‌فرض
+function SetAddressDefault(addressId) {
+    const url = `/my/addresses/set-default/${addressId}/`; // اطمینان حاصل کنید URL صحیح است
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ address_id: addressId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.querySelectorAll('.address-card').forEach(card => {
+                card.classList.remove('default');
+                const actionsDiv = card.querySelector('.address-actions');
+                if (!actionsDiv.querySelector('.btn-set-default')) {
+                    const cardId = card.getAttribute('data-id');
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'btn-set-default';
+                    btn.onclick = function() { SetAddressDefault(cardId); };
+                    btn.title = 'تنظیم به عنوان پیش‌فرض';
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+                    actionsDiv.insertBefore(btn, actionsDiv.firstChild);
+                }
+            });
+            
+            const selectedCard = document.querySelector(`[data-id="${addressId}"]`);
+            selectedCard.classList.add('default');
+            
+            const defaultBtn = selectedCard.querySelector('.btn-set-default');
+            if (defaultBtn) {
+                defaultBtn.remove();
+            }
+            
+            showNotification('آدرس پیش‌فرض تنظیم شد', 'success');
+        }
+    })
+    .catch(error => {
+        console.error("ERROR:", error);
+        showNotification('خطا در تنظیم آدرس پیش‌فرض', 'error');
+    });
+}
+
+// نمایش نوتیفیکیشن
+function showNotification(message, type) {
+    const div = document.createElement('div');
+    div.className = `notification ${type}`;
+    div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check' : 'fa-exclamation'}"></i> ${message}`;
+    document.body.appendChild(div);
+    
+    setTimeout(() => {
+        div.classList.add('show');
+        setTimeout(() => div.remove(), 3000);
+    }, 100);
+}
+
+    </script>
+</body>
+</html>

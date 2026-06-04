@@ -1,0 +1,377 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سبد خرید</title>
+    <link rel="stylesheet" href="{% static 'css/app_account/customercart.css' %}">
+    <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+</head>
+<body>
+
+    {% include "layout/navbar.html" %}
+
+    <!-- نمایش پیام‌های جنگو -->
+    {% if messages %}
+        <div id="django-messages" style="display: none;">
+            {% for message in messages %}
+                <div data-type="{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div>
+        <main class="main-content">
+            {% if orders %}
+                {% for item in orders %}
+                    {% if item.details|length > 0 %}
+                    
+                    <div class="cart-container">
+
+                        <div class="cart-column">
+                            <div class="cart-header-outer">
+                                <h1 class="page-title">سبد خرید</h1>
+                                <p class="cart-subtitle">شما <span id="header-items-count">{{ item.order.items_count }}</span> کالا در سبد دارید</p>
+                            </div>
+
+                            <div class="cart-items-container" id="cart-items-container">
+                                {% for detail in item.details %}
+                                <div class="cart-item" id="cart-item-{{ detail.id }}" data-id="{{ detail.id }}">
+                                    {% if detail.product.cover_image %}
+                                        <img src="{{ detail.product.cover_image.url }}" alt="{{ detail.product.name }}" class="item-image">
+                                    {% else %}
+                                        <div class="item-image no-image">
+                                            <i class="fas fa-gamepad"></i>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="item-details">
+                                        <div class="item-top">
+                                            <h3 class="item-title">
+                                                {{ detail.product.name }}
+                                                <span class="product-condition">({{ detail.get_condition_display }})</span>
+                                            </h3>
+                                            
+                                            <form method="post" action="{% url 'remove_from_cart' detail.id %}" class="remove-form">
+                                                {% csrf_token %}
+                                                <button type="submit" class="remove-btn" title="حذف از سبد">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                        <div class="item-bottom">
+                                            <div class="quantity-control">
+                                                <button type="button" class="qty-btn qty-decrease" data-id="{{ detail.id }}" data-change="-1">-</button>
+                                                <input type="text" value="{{ detail.quantity }}" class="qty-input" id="qty-input-{{ detail.id }}" readonly>
+                                                <button type="button" class="qty-btn qty-increase" data-id="{{ detail.id }}" data-change="1">+</button>
+                                            </div>
+
+                                            <div class="price-section">
+                                                <span class="item-price" id="item-total-{{ detail.id }}">{{ detail.total_price }} تومان</span>
+                                                <span class="unit-price" id="unit-price-{{ detail.id }}">هر عدد {{ detail.unit_price }} تومان</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="order-summary">
+                            <h2 class="summary-title">خلاصه سفارش</h2>
+                            
+                            <div class="summary-row">
+                                <span class="summary-label">جمع کالاها</span>
+                                <span class="summary-value" id="summary-items-count">{{ item.order.items_count }} عدد</span>
+                            </div>
+                            
+                            <div class="summary-row">
+                                <span class="summary-label">تخفیف</span>
+                                <span class="summary-value" id="summary-discount-price">{{ item.order.total_discount|default:"0" }} تومان</span>
+                            </div>
+
+                            <div class="discount-code">
+                                <label class="discount-label">کد تخفیف</label>
+                                <input type="text" class="discount-input" placeholder="کد را وارد کنید">
+                            </div>
+
+                            <div class="summary-total">
+                                <span class="total-label">جمع کل</span>
+                                <span class="total-value" id="summary-total-price">{{ item.order.total_price }} تومان</span>
+                            </div>
+                            
+                            <a href="/checkout/addresse/">
+                                <button type="button" class="checkout-btn" onclick="proceedToCheckout()">
+                                    <span>ادامه و پرداخت</span>
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </a>
+
+                            <a href="/products/" class="continue-link">
+                                <button class="continue-btn">ادامه خرید</button>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    {% else %}
+                        <div class="empty-wishlist">
+                            <div class="empty-wishlist-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <h2 class="empty-wishlist-title">سبد خرید شما خالی است</h2>
+                            <p class="empty-wishlist-text">شما هنوز هیچ محصولی به سبد خرید اضافه نکرده‌اید.</p>
+                            <a href="/products/" class="empty-wishlist-btn">
+                            
+                                مشاهده فروشگاه
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════
+        // توابع کمکی فارسی‌سازی
+        // ═══════════════════════════════════════════════════
+        function toPersianNumber(str) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/[0-9]/g, function(w) {
+                return persianDigits[+w];
+            });
+        }
+
+        function formatPrice(price) {
+            // ابتدا عدد را با کامای انگلیسی فرمت می‌کند، سپس فارسی می‌کند
+            return toPersianNumber(parseInt(price).toLocaleString('en-US'));
+        }
+
+        // ═══════════════════════════════════════════════════
+        // فارسی‌سازی اعداد هنگام لود صفحه
+        // ═══════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', function() {
+            // ۱. فارسی کردن تعداد آیتم‌ها در هدر و سامری
+            const headerCount = document.getElementById('header-items-count');
+            if (headerCount) {
+                headerCount.textContent = toPersianNumber(headerCount.textContent.trim());
+            }
+
+            const summaryCount = document.getElementById('summary-items-count');
+            if (summaryCount) {
+                const num = summaryCount.textContent.replace(' عدد', '').trim();
+                summaryCount.textContent = toPersianNumber(num) + ' عدد';
+            }
+
+            // ۲. فارسی کردن جمع کل در سامری
+            const summaryTotal = document.getElementById('summary-total-price');
+            if (summaryTotal) {
+                const text = summaryTotal.textContent.replace(' تومان', '').trim();
+                summaryTotal.textContent = formatPrice(text) + ' تومان';
+            }
+
+            // ۳. فارسی کردن input های تعداد محصولات
+            document.querySelectorAll('.qty-input').forEach(input => {
+                input.value = toPersianNumber(input.value);
+            });
+
+            // ۴. فارسی کردن قیمت کل هر آیتم
+            document.querySelectorAll('.item-price').forEach(el => {
+                const text = el.textContent.replace(' تومان', '').trim();
+                el.textContent = formatPrice(text) + ' تومان';
+            });
+
+            // ۵. فارسی کردن قیمت واحد هر آیتم
+            document.querySelectorAll('.unit-price').forEach(el => {
+                const text = el.textContent.replace('هر عدد ', '').replace(' تومان', '').trim();
+                el.textContent = 'هر عدد ' + formatPrice(text) + ' تومان';
+            });
+            
+            // نمایش پیام‌های جنگو
+            const msgContainer = document.getElementById('django-messages');
+            if (msgContainer) {
+                const messages = msgContainer.querySelectorAll('div');
+                messages.forEach(msg => {
+                    const type = msg.getAttribute('data-type').includes('error') ? 'error' : 
+                                 msg.getAttribute('data-type').includes('warning') ? 'warning' : 'success';
+                    showNotification(msg.textContent, type);
+                });
+            }
+        });
+
+        // ═══════════════════════════════════════════════════
+        // نمایش نوتیفیکیشن
+        // ═══════════════════════════════════════════════════
+        function showNotification(msg, type = "success") {
+            const div = document.createElement("div");
+            div.textContent = msg;
+            div.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                font-size: 14px;
+                z-index: 9999;
+                background: ${type === "success" ? "#11998e" : type === "warning" ? "#f39c12" : "#eb3349"};
+                font-family: inherit;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                animation: slideIn 0.3s ease;
+                direction: rtl;
+                min-width: 300px;
+                text-align: center;
+            `;
+            
+            document.body.appendChild(div);
+            setTimeout(() => {
+                div.style.transition = 'all 0.3s ease';
+                div.style.opacity = '0';
+                div.style.transform = 'translateX(100%)';
+                setTimeout(() => div.remove(), 300);
+            }, 4000);
+        }
+
+        // ═══════════════════════════════════════════════════
+        // CSRF Token
+        // ═══════════════════════════════════════════════════
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        // ═══════════════════════════════════════════════════
+        // آپدیت سبد خرید
+        // ═══════════════════════════════════════════════════
+        function updateQuantity(itemId, change) {
+            const url = `/my/cart/update/${itemId}/`;
+            const input = document.getElementById(`qty-input-${itemId}`);
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({change: change})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.deleted) {
+                        const itemRow = document.getElementById(`cart-item-${itemId}`);
+                        if (itemRow) {
+                            itemRow.style.opacity = '0';
+                            itemRow.style.transform = 'translateX(20px)';
+                            itemRow.style.transition = 'all 0.3s ease';
+                            setTimeout(() => {
+                                itemRow.remove();
+                                if (data.items_count === 0) location.reload();
+                            }, 300);
+                        }
+                        updateSummary(data.cart_total, data.items_count);
+                        showNotification('محصول از سبد حذف شد', 'success');
+                    } else {
+                        input.value = toPersianNumber(data.quantity);
+                        
+                        const itemTotalEl = document.getElementById(`item-total-${itemId}`);
+                        if (itemTotalEl) {
+                            itemTotalEl.textContent = formatPrice(data.item_total) + ' تومان';
+                        }
+                        
+                        updateSummary(data.cart_total, data.items_count);
+                    }
+                } else if (data.limited_stock) {
+                    showNotification(data.error, 'error');
+                    input.value = toPersianNumber(data.available);
+                    
+                    setTimeout(() => {
+                        adjustToAvailableStock(itemId, data.available);
+                    }, 100);
+                } else {
+                    showNotification(data.error || 'خطا در بروزرسانی سبد خرید', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('خطا در ارتباط با سرور', 'error');
+            });
+        }
+
+        function adjustToAvailableStock(itemId, availableQty) {
+            fetch(`/my/cart/update/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({change: 0})
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && !data.deleted) {
+                    const itemTotalEl = document.getElementById(`item-total-${itemId}`);
+                    if (itemTotalEl) {
+                        itemTotalEl.textContent = formatPrice(data.item_total) + ' تومان';
+                    }
+                    updateSummary(data.cart_total, data.items_count);
+                }
+            });
+        }
+
+        function updateSummary(total, count, discount) {
+            const headerCount = document.getElementById('header-items-count');
+            if (headerCount) headerCount.textContent = toPersianNumber(count);
+            
+            const summaryCount = document.getElementById('summary-items-count');
+            if (summaryCount) summaryCount.textContent = toPersianNumber(count) + ' عدد';
+            
+            const summaryTotal = document.getElementById('summary-total-price');
+            if (summaryTotal) summaryTotal.textContent = formatPrice(total) + ' تومان';
+
+            // آپدیت کردن قیمت تخفیف
+            const summaryDiscount = document.getElementById('summary-discount-price');
+            if (summaryDiscount) {
+                const text = summaryDiscount.textContent.replace(' تومان', '').trim();
+                summaryDiscount.textContent = formatPrice(text) + ' تومان';
+            }
+        }
+
+
+        // اتصال event listener به دکمه‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.qty-decrease, .qty-increase').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const itemId = this.getAttribute('data-id');
+                    const change = parseInt(this.getAttribute('data-change'));
+                    updateQuantity(itemId, change);
+                });
+            });
+        });
+
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+
+</body>
+</html>

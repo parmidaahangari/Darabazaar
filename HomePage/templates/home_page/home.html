@@ -1,0 +1,547 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دارا بازار | خرید دیسک بازی PS5، PS4 و Xbox</title>
+    <link rel="stylesheet" href="{% static 'css/app_homepage/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+{% include 'layout/navbar.html' %}
+
+<div class="hero-slider-container">
+    <!-- حلقه روی مدل Hero -->
+    {% for hero in heroes %}
+    <section class="hero slide {% if forloop.first %}active{% endif %}">
+        <div class="hero-bg" style="background-image: url('{{ hero.image.url }}');"></div>
+        <div class="gradient-top"></div>
+        <div class="gradient-bottom"></div>
+        
+        <div class="hero-title">
+            {% if hero.text %}
+                <h1>{{ hero.text|linebreaksbr }}</h1>
+            {% endif %}
+        </div>
+
+
+    </section>
+    {% endfor %}
+
+    <!-- دکمه‌های کنترل -->
+    <button class="hero-btn hero-prev">&#10094;</button>
+    <button class="hero-btn hero-next">&#10095;</button>
+
+    <!-- نقطه‌های پایین (Dots) -->
+    <div class="hero-dots">
+        {% for hero in heroes %}
+        <span class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+<!-- SECTION TEMPLATE -->
+<section class="section">
+    <h2>آخرین ها <span>›</span></h2>
+    <div class="row-wrapper">
+        <div class="card-row">
+            {% for product in latests %}
+                <div class="game-card" 
+                     data-href="{% url 'product' product.slug %}" 
+                     role="link" 
+                     tabindex="0">
+                    <img src="{{ product.cover_image.url }}">
+                    <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="wishlist" onclick="event.stopPropagation();">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </form>
+                    <h3>{{product.name}}</h3>
+                        {% with best=product.best_price_info %}
+                            {% if best %}
+                                <p class="price">
+                                    {% if best.discount > 0 %}
+                                        <span class="discount">{{ best.discount }}%</span>
+                                        <span class="old">{{ best.old_price|intcomma }}</span>
+                                    {% endif %}
+                                    
+                                    <span>{{ best.final_price|intcomma }} ت</span>
+                                </p>
+                            {% endif %}
+                        {% endwith %}                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- TRENDING -->
+<section class="section">
+    <a href="trending"></a>
+    <h2>پرطرفدارها <span>›</span></h2>
+    <div class="row-wrapper">
+        <div class="card-row">
+            {% for trend in trending %}
+                {% for product in trend.product.all %}
+                    <div class="game-card" 
+                         data-href="{% url 'product' product.slug %}" 
+                         role="link" 
+                         tabindex="0">
+                        <img src="{{ product.cover_image.url }}">
+                        <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="wishlist" onclick="event.stopPropagation();">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </form>
+                        <h3>{{product.name}}</h3>
+                        {% with best=product.best_price_info %}
+                            {% if best %}
+                                <p class="price">
+                                    {% if best.discount > 0 %}
+                                        <span class="discount">{{ best.discount }}%</span>
+                                        <span class="old">{{ best.old_price|intcomma }}</span>
+                                    {% endif %}
+                                    
+                                    <span>{{ best.final_price|intcomma }} ت</span>
+                                </p>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- BESTSELLERS -->
+<section class="section">
+    <h2>پر‌فروش‌ترین ها <span>›</span></h2>
+    <div class="row-wrapper">
+        <div class="card-row">
+            {% for trend in bestsellers %}
+                {% for product in trend.product.all %}
+                    <div class="game-card" 
+                         data-href="{% url 'product' product.slug %}" 
+                         role="link" 
+                         tabindex="0">
+                        <img src="{{ product.cover_image.url }}">
+                        <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="wishlist" onclick="event.stopPropagation();">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </form>
+                        <h3>{{product.name}}</h3>
+                        {% with best=product.best_price_info %}
+                            {% if best %}
+                                <p class="price">
+                                    {% if best.discount > 0 %}
+                                        <span class="discount">{{ best.discount }}%</span>
+                                        <span class="old">{{ best.old_price|intcomma }}</span>
+                                    {% endif %}
+                                    
+                                    <span>{{ best.final_price|intcomma }} ت</span>
+                                </p>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- BEST DEALS -->
+<section class="section">
+    <h2>بهترین‌ها <span>›</span></h2>
+    <div class="row-wrapper">
+        <div class="card-row">
+            {% for trend in bestdeals %}
+                {% for product in trend.product.all %}
+                    <div class="game-card" 
+                         data-href="{% url 'product' product.slug %}" 
+                         role="link" 
+                         tabindex="0">
+                        <img src="{{ product.cover_image.url }}">
+                        <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="wishlist" onclick="event.stopPropagation();">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </form>
+                        <h3>{{product.name}}</h3>
+                        {% with best=product.best_price_info %}
+                            {% if best %}
+                                <p class="price">
+                                    {% if best.discount > 0 %}
+                                        <span class="discount">{{ best.discount }}%</span>
+                                        <span class="old">{{ best.old_price|intcomma }}</span>
+                                    {% endif %}
+                                    
+                                    <span>{{ best.final_price|intcomma }} ت</span>
+                                </p>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- SPECIAL BOXES -->
+<section class="special-boxes" style="text-align: right;" dir="rtl">
+    <div class="sp-box">
+        <img src="{% static 'img/homepage/7433ecda-a269-4d07-8f7a-6426088677b7.webp' %}">
+        <h3>فروش ویژه</h3>
+        <p>بازی‌های محبوب و الماس‌های پنهان را با تخفیف‌های عالی بخرید.</p>
+        
+    </div>
+
+    <div class="sp-box">
+        <img src="{% static 'img/homepage/8add9d0e-e9aa-453c-97e6-f58755d49b12.webp' %}">
+        <h3>بهترین هدیه‌ها</h3>
+        <p>انتخاب یک بازی فیزیکی هیجان‌انگیز، دوستان و عزیزانتان را سورپرایز کنید.</p>
+       
+    </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section">
+    <h2>ژانر ها <span>›</span></h2>
+    <div class="categories-grid">
+
+        <!-- اصلاح شده: حذف products: از اول Action -->
+        <a href="{% url 'products_by_genre' 'action' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/actionbg.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/action.png' %}" alt="">
+                <span>Action</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'adventure' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/cefb44548aa4f68b25dc98767dccb5e192b031d9.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/fa10b6d8a4d86047ac12ba982cdc9da2496f6a5c.png' %}" alt="">
+                <span>Adventure</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'arcade' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/arcade.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/Arcade_char.png' %}" alt="">
+                <span>Arcade</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'fps' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/FPS.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/FPS_char.png' %}" alt="">
+                <span>FPS</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'fighting' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/fighting.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/fighting_char.png' %}" alt="">
+                <span>Fighting</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'rpg' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/RPG.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/RPG_char.png' %}" alt="">
+                <span>RPG</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'single-player' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/single_player.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/single_player_char.png' %}" alt="">
+                <span>Single‑Player</span>
+            </div>
+        </a>
+
+        <a href="{% url 'products_by_genre' 'vr' %}">
+            <div class="cat-card">
+                <div class="bg-wrap">
+                    <img class="bg" src="{% static 'img/homepage/VR.jpg' %}" alt="">
+                </div>
+                <img class="character" src="{% static 'img/homepage/VR_char.png' %}" alt="">
+                <span>VR</span>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+{% include 'layout/footer.html' %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // تابع تبدیل اعداد انگلیسی به فارسی
+    function toPersianNum(str) {
+        return str.toString().replace(/[0-9]/g, function(w) {
+            return '۰۱۲۳۴۵۶۷۸۹'[parseInt(w)];
+        });
+    }
+    
+    // تابع بازگشتی برای پردازش همه نودهای متنی داخل یک المان
+    function convertElementNumbers(element) {
+        if (element.nodeType === Node.TEXT_NODE) {
+            if (element.textContent.trim() !== '') {
+                element.textContent = toPersianNum(element.textContent);
+            }
+            return;
+        }
+        
+        if (element.nodeType === Node.ELEMENT_NODE) {
+            if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return;
+            
+            var children = Array.from(element.childNodes);
+            children.forEach(function(child) {
+                convertElementNumbers(child);
+            });
+        }
+    }
+    
+    // تبدیل اعداد قیمت‌ها
+    var priceElements = document.querySelectorAll('.hero-price, .price, .old, .discount');
+    priceElements.forEach(function(el) {
+        convertElementNumbers(el);
+    });
+    
+    // Scroll reveal
+    var cards = document.querySelectorAll('.game-card');
+    if (cards.length > 0) {
+        var observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        cards.forEach(card => observer.observe(card));
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const wrappers = document.querySelectorAll('.row-wrapper');
+
+    wrappers.forEach(wrapper => {
+        const cardRow = wrapper.querySelector('.card-row');
+        if (!cardRow) return;
+
+        // ایجاد دکمه‌های چپ و راست
+        const leftBtn = document.createElement('button');
+        leftBtn.className = 'scroll-btn scroll-left';
+        leftBtn.innerHTML = '&#10094;'; // آیکون ❮
+
+        const rightBtn = document.createElement('button');
+        rightBtn.className = 'scroll-btn scroll-right';
+        rightBtn.innerHTML = '&#10095;'; // آیکون ❯
+
+        wrapper.appendChild(leftBtn);
+        wrapper.appendChild(rightBtn);
+
+        // عملکرد کلیک برای اسکرول (اندازه عرض کانتینر اسکرول می‌کند)
+        rightBtn.addEventListener('click', () => {
+            const scrollAmount = cardRow.clientWidth; 
+            cardRow.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        leftBtn.addEventListener('click', () => {
+            const scrollAmount = cardRow.clientWidth;
+            cardRow.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        // تابع برای مخفی و ظاهر کردن فلش‌ها بر اساس موقعیت اسکرول
+        const updateButtons = () => {
+            const maxScrollLeft = cardRow.scrollWidth - cardRow.clientWidth;
+
+            // دکمه چپ
+            if (cardRow.scrollLeft > 5) {
+                leftBtn.classList.add('show');
+            } else {
+                leftBtn.classList.remove('show');
+            }
+
+            // دکمه راست
+            if (cardRow.scrollLeft >= maxScrollLeft - 5) {
+                rightBtn.classList.add('hide');
+            } else {
+                rightBtn.classList.remove('hide');
+            }
+        };
+
+        // چک کردن وضعیت دکمه‌ها هنگام اسکرول کردن کاربر
+        cardRow.addEventListener('scroll', updateButtons);
+        
+        // آپدیت اولیه هنگام لود شدن
+        updateButtons();
+    });
+});
+document.querySelectorAll('.game-card').forEach(card => {
+    // کلیک روی کارت
+    card.addEventListener('click', function(e) {
+        // اگر روی wishlist کلیک شد، نرو (stopPropagation در HTML هم هست)
+        if (e.target.closest('.wishlist')) {
+            e.preventDefault();
+            console.log('Wishlist clicked');
+            return;
+        }
+        
+        window.location.href = this.dataset.href;
+    });
+
+    // پشتیبانی از کیبورد (Enter و Space)
+    card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            window.location.href = this.dataset.href;
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.hero.slide');
+    const dots = document.querySelectorAll('.hero-dots .dot');
+    const prevBtn = document.querySelector('.hero-prev');
+    const nextBtn = document.querySelector('.hero-next');
+    let currentSlide = 0;
+    let slideInterval;
+
+    if (slides.length === 0) return; // اگر اسلایدی نبود اجرا نشود
+
+    // تابع نمایش اسلاید خاص
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        // اگر به آخر رسید برگردد اول و برعکس
+        currentSlide = (index + slides.length) % slides.length;
+
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    // تغییر خودکار هر 3 ثانیه
+    function startAutoPlay() {
+        slideInterval = setInterval(nextSlide, 7000); 
+    }
+
+    // ریست کردن تایمر هنگام کلیک دستی
+    function resetAutoPlay() {
+        clearInterval(slideInterval);
+        startAutoPlay();
+    }
+
+    // رویداد کلیک دکمه‌ها
+    if(nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
+    if(prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
+
+    // رویداد کلیک نقطه‌ها
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+            resetAutoPlay();
+        });
+    });
+
+    // شروع اسلایدر
+    startAutoPlay();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.wishlist-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // این خط جلوی باز شدن صفحه JSON را می‌گیرد
+            
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                // نمایش پیام (اگر تابع showNotification دارید)
+                if (typeof showNotification === "function") {
+                    showNotification(data.message, data.status);
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+function showNotification(msg, type = "success") {
+    const div = document.createElement("div");
+    div.textContent = msg;
+    div.style = `
+        position:fixed;top:20px;right:20px;
+        padding:12px 20px;border-radius:8px;
+        color:white;font-size:14px;z-index:9999;
+        background:${type === "success" ? "#11998e" : "#eb3349"};
+    `;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+/* ── BASE STYLES ── */
+
+
+.main-content {
+    flex: 1;
+    padding: 50px 200px;
+    gap: 24px;
+}
+
+.cart-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* ── CART SECTION & ITEMS ── */
+.cart-section {
+    background: #12142b;
+    border-radius: 20px;
+    flex: 1;
+    padding: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.cart-header {
+    padding: 28px 28px 20px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.cart-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 5px;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    padding: 0 28px 10px 28px;
+}
+
+.cart-item {
+    display: flex;
+    padding: 24px 0;
+    gap: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.item-image {
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #111;
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    padding-bottom: 4px;
+}
+
+.item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.item-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.remove-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.remove-btn:hover {
+    color: #ff4d4d;
+}
+
+.item-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* ── QUANTITY CONTROLS (اصلاح شد بر اساس کلاس‌های شما) ── */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.qty-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.qty-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.qty-input {
+    font-size: 14px;
+    width: 30px;
+    text-align: center;
+    color: #fff;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+/* ── ORDER SUMMARY ── */
+.order-summary {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+    border-radius: 20px;
+    width: 320px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    margin-top:90px ;
+}
+
+.summary-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ── DISCOUNT SECTION (اصلاح شد) ── */
+.discount-code {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.discount-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 8px;
+}
+
+.discount-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.discount-input:focus {
+    outline: none;
+    border-color: #6b728e;
+}
+
+/* ── BUTTONS ── */
+.checkout-btn {
+    width: 100%;
+    background: #1B1A55;
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.checkout-btn:hover {
+    background: #2a2d5f;
+}
+
+.continue-btn {
+    width: 100%;
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 28px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.continue-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── RESPONSIVE DESIGN ── */
+@media (max-width: 850px) {
+    .container {
+        flex-direction: column;
+    }
+    .order-summary {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+/* ستون سمت چپ سبد خرید */
+.cart-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* فاصله بین عنوان و باکس آیتم ها */
+}
+
+/* استایل عنوان (بیرون باکس) */
+.cart-header-outer {
+    padding-bottom: 5px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px 0;
+}
+
+.cart-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+/* باکس اصلی حاوی آیتم ها (رنگ و ظاهر شبیه عکس) */
+.cart-items-container {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+    border-radius: 16px;
+    padding: 25px 30px;
+}
+
+.cart-item {
+    display: flex;
+    padding: 25px 0;
+    gap: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cart-item:first-child {
+    padding-top: 0;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.item-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.item-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.remove-btn {
+    background: transparent;
+    border: none;
+    color: #b0b0c0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.remove-btn:hover {
+    color: #ff4d4d;
+}
+
+.item-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+}
+
+/* تنظیمات دکمه های تعداد (مشابه عکس با رنگ سرمه ای/بنفش تیره) */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    background: #191443; /* رنگ بنفش تیره/سرمه ای مشابه عکس */
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.qty-btn {
+    background: transparent;
+    border: none;
+    color: #8c8ec1;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.qty-btn:hover {
+    color: #fff;
+}
+
+.qty-input {
+    font-size: 14px;
+    width: 25px;
+    text-align: center;
+    color: #fff;
+    background: transparent;
+    border: none;
+    outline: none;
+    pointer-events: none;
+}

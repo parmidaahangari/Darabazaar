@@ -1,0 +1,131 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/app_account/customerwishlist.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app_account/style.css' %}">
+
+  <title>علاقه‌مندی‌ها</title>
+  <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+</head>
+<body>
+
+    {% include "layout/navbar.html" %}
+
+  <main>
+
+    {% if wishlist_products %}
+      <div class="content-panel">
+        {% for product in wishlist_products %}
+          <div class="wish-card">
+            <img src="{{ product.cover_image.url }}" alt="{{ product.name }}" class="wish-img">
+            
+            <div class="wish-content">
+              <div class="wish-header">
+                <span class="wish-title">{{ product.name }}</span>
+                <!-- استفاده از intcomma برای جدا کردن سه رقم سه رقم -->
+                <span class="wish-price">{{ product.price_new|intcomma }} تومان</span> 
+              </div>
+              
+              <div class="wish-actions">
+                <button class="btn-remove" onclick="removeFromWishlist({{ product.id }})">حذف</button>
+                <button class="btn-add-cart" onclick="addToCart({{ product.id }})">اضافه کردن به سبد خرید</button>
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-wishlist">
+        <div class="empty-wishlist-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <h2 class="empty-wishlist-title">لیست علاقه‌مندی خالی است</h2>
+        <p class="empty-wishlist-text">شما هنوز هیچ بازی‌ای به لیست علاقه‌مندی‌های خود اضافه نکرده‌اید. بازی‌های مورد علاقه خود را کشف کنید.</p>
+      </div>
+    {% endif %}
+
+    {% include 'customer_account/paritial/sidebar.html' %}
+
+  </main>
+
+    {% include "layout/footer.html" %}
+
+    
+<script>
+  function removeFromWishlist(productId) {
+    fetch('{% url "remove_from_wishlist" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: `product_id=${productId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.message || 'خطا در حذف محصول');
+      }
+    });
+  }
+
+  function addToCart(productId) {
+    const submitBtn = event.target;
+    submitBtn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('count', 1);
+    formData.append('condition', 'new');
+
+    fetch('{% url "add-to-cart" %}', {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            showNotification(data.message, data.success ? "success" : "error");
+            submitBtn.disabled = false;
+        })
+        .catch(() => {
+            showNotification("خطا در افزودن به سبد خرید", "error");
+            submitBtn.disabled = false;
+        });
+  }
+
+  function showNotification(msg, type = "success") {
+    const div = document.createElement("div");
+    div.textContent = msg;
+    div.style = `
+        position:fixed;top:20px;right:20px;
+        padding:12px 20px;border-radius:8px;
+        color:white;font-size:14px;z-index:9999;
+        background:${type === "success" ? "#11998e" : "#eb3349"};
+    `;
+    document.body.appendChild(div);
+      setTimeout(() => div.remove(), 3000);
+  }
+document.addEventListener("DOMContentLoaded", function() {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while (node = walk.nextNode()) {
+        node.nodeValue = node.nodeValue.replace(/\d/g, x => persianDigits[x]);
+    }
+});
+
+</script>
+
+
+</body>
+</html>

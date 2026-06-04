@@ -1,0 +1,1362 @@
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+         url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --space-xs: 8px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+    --space-xxl: 64px;
+}
+
+/* GENERAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Vazirmatn", sans-serif;
+}
+
+body {
+    background: #070F2B;
+    color: #fff;
+    overflow-x: hidden;
+    
+    
+}
+/* حذف خط زیر لینک‌ها */
+a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+.hero-slider-container {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* یا ارتفاع دلخواه شما برای hero */
+    overflow: hidden;
+}
+
+.hero.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s;
+    z-index: 1;
+    
+}
+
+.hero.slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+/* دکمه‌های اسلایدر */
+.hero-btn {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    
+    /* افکت شیشه‌ای بلور */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    
+    color: white;
+    font-size: 2rem;
+    padding: 50px 20px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 25px;
+    transition: 0.3s ease;
+}
+
+.hero-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-prev {
+    left: 25px;
+}
+
+.hero-next {
+    right: 25px;
+}
+
+/* نقطه‌های پایین اسلایدر */
+.hero-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+
+.hero-dots .dot {
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero-dots .dot.active {
+    background: #fff;
+    transform: scale(1.2);
+}
+
+.categories-grid a,
+.card-row a,
+.special-boxes a {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+    
+}
+
+
+a:hover, a:focus, a:active {
+    text-decoration: none;
+    outline: none;
+}
+
+.cat-card, .game-card, .sp-box {
+    color: inherit;
+}
+
+
+.section,
+.special-boxes,
+.categories {
+    max-width: 1287px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Buttons on right */
+.top-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 239px;
+    height: 45px;
+}
+
+.btn-outline,
+.btn-filled {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 45px;
+    border-radius: 25px;
+    font-family: 'Instrument Sans', 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.btn-outline {
+    width: 100px;
+    padding: 10px 25px;
+    border: 1px solid #FFFFFF;
+    background: transparent;
+}
+
+.btn-filled {
+    width: 129px;
+    padding: 10px 30px;
+    border: none;
+    background: rgba(27, 26, 85, 1);
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-filled:hover {
+    background: #24236d;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 861px;
+    margin: 0 auto;
+    overflow: visible;
+    background: #070F2B;
+}
+
+/* Background image */
+.hero-bg {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 750px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Top shadow */
+/* Top shadow - فید ملایم به سمت پایین */
+.gradient-top {
+    position: absolute;
+    width: 100%;
+    height: 250px;
+    top: 0;
+    left: 0;
+    /* شروع همرنگ نوبار و محو شدن بسیار نرم (Smooth) */
+    background: linear-gradient(
+        to bottom, 
+        #070F2B 0%, 
+        #070F2B 5%, 
+        rgba(7, 15, 43, 0.7) 30%, 
+        rgba(7, 15, 43, 0.2) 65%, 
+        rgba(7, 15, 43, 0) 100%
+    );
+    z-index: 10;
+}
+
+
+.sp-box h3 {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 44px;
+    color: #fff;
+}
+
+.sp-box p {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    color: #fff;
+    opacity: 0.75;
+    max-width: 520px;
+}
+
+/* Bottom shadow - فید ملایم به سمت بالا */
+.gradient-bottom {
+    position: absolute;
+    width: 100%;
+    height: 370px;
+    top: 390px;
+    left: 0;
+    /* حذف زاویه کج و محو شدن تدریجی در پس‌زمینه */
+    background: linear-gradient(
+        to top, 
+        #070F2B 0%, 
+        #070F2B 10%, 
+        rgba(7, 15, 43, 0.8) 40%, 
+        rgba(7, 15, 43, 0.3) 75%, 
+        rgba(7, 15, 43, 0) 100%
+    );
+    z-index: 10;
+}
+
+
+/* Title block */
+.hero-title {
+    position: absolute;
+    left: 208px;
+    top: 156px;
+}
+
+.hero-title h1 {
+    font-family: 'Press Gothic';
+    font-size: 96px;
+    line-height: 0.97;
+    color: #fff;
+    margin: 0;
+    margin-top: -20px;
+}
+
+/* Description */
+.hero-desc {
+    position: absolute;
+    width: 522px;
+    left: 208px;
+    top: 585px;
+    font-family: 'Instrument Sans';
+    font-size: 24px;
+    line-height: 29px;
+    color: #fff;
+    opacity: .5;
+}
+
+/* Price */
+.hero-price {
+    position: absolute;
+    left: 1182px;
+    top: 560px;
+    font-family: 'Instrument Sans';
+    font-size: 20px;
+    color: #fff;
+}
+
+/* CTA buttons container */
+.hero-cta {
+    position: absolute;
+    left: 1023px;
+    top: 587px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    
+}
+
+/* Buy button */
+.btn-buy {
+    width: 236px;
+    height: 52px;
+    background: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #1B1A55;
+    cursor: pointer;
+    
+}
+
+/* Wishlist button */
+.btn-wishlist {
+    width: 100px;
+    height: 30px;
+    font-size: 12px;
+    position: relative;
+    top: -42px;          /* با کم و زیاد کردن این عدد دکمه بالا و پایین می‌رود */
+    margin-left: 90px;   /* با کم و زیاد کردن این عدد دکمه چپ و راست می‌رود */
+}
+
+/* SECTION */
+.section {
+    max-width: 1287px;
+    margin: var(--space-lg) auto;
+    margin-top: 25px;
+}
+
+.section h2 {
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: white;
+    direction: rtl;
+}
+
+/* GAME ROW */
+.card-row {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    padding: 0; 
+    scroll-snap-type: x mandatory; /* اضافه کردن خاصیت اسلایدر */
+    padding-bottom: 20px;
+    /* استایل نوار اسکرول برای ظاهر بهتر */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    
+    width: auto;
+
+}
+
+.card-row::-webkit-scrollbar {
+    height: 8px;
+}
+
+.card-row::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.row-wrapper {
+    position: relative;
+}
+
+/* استایل دکمه‌های اسکرول */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    /* افکت شیشه‌ای بلور */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    
+    color: white;
+    font-size: 2rem;
+    padding: 50px 20px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 25px;
+    transition: 0.3s ease;
+}
+
+/* دکمه راست */
+.scroll-right {
+    right: 25px;
+}
+
+
+.scroll-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+/* دکمه چپ */
+.scroll-left {
+    left: 25px;
+
+    opacity: 0; /* در ابتدا مخفی است چون در ابتدای لیست هستیم */
+}
+.card-row {
+    -ms-overflow-style: none;  /* برای مرورگر Edge و IE */
+    scrollbar-width: none;  /* برای مرورگر Firefox */
+}
+
+.card-row::-webkit-scrollbar {
+    display: none; /* برای مرورگرهای بر پایه WebKit (Chrome, Safari) */
+}
+
+/* استایل دهی به کانتینر نگهدارنده برای افکت شیشه‌ای */
+.row-wrapper {
+    position: relative;
+    width: 100%;
+    /* اگر می‌خواهید افکت از لبه‌ها بیرون نزند، overflow را تنظیم کنید */
+}
+
+
+/* وقتی دکمه چپ نمایان می‌شود */
+.scroll-left.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* وقتی دکمه راست مخفی می‌شود (به انتهای لیست رسیدیم) */
+.scroll-right.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* Card */
+.game-card {
+    position: relative;
+    flex: 0 0 calc((100% - 80px) / 3); 
+    max-width: calc((100% - 80px) / 3);
+    height: 396px;
+    scroll-snap-align: start; /* توقف اسکرول دقیقاً روی کارت */
+    
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2) -60.86%, rgba(255, 255, 255, 0.2) 100%);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.106);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+    transition: 0.2s;
+}
+
+.game-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.wishlist {
+    position: absolute;
+    top: 30px;
+    left: 25px;
+    width: 38px;
+    height: 38px;
+    background: #000;
+    opacity: .5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    /* این دو خط اضافه شود */
+    border: none;
+    cursor: pointer;
+}
+
+.price {
+    position: absolute;
+    bottom: 40px;
+    left: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.discount {
+    background: rgba(146, 144, 195, 1);
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #9CA3AF;
+}
+
+.game-card h3 {
+    position: absolute;
+    left: 25px;
+    top: 294px;
+    font-family: 'Instrument Sans';
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.price, .game-card p.price {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: #fff;
+    margin: 0;
+}
+
+.tag {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: #fff;
+    border: none;
+    border-radius: 25px;
+    color: #1B1A55;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.tag:hover {
+    background: #f0f0f0;
+}
+
+.old {
+    text-decoration: line-through;
+    opacity: .5;
+}
+
+/* SPECIAL BOX */
+.special-boxes {
+    max-width: 1287px;
+    margin: 80px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.sp-box {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.sp-box img {
+    width: 100%;
+    height: 349px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+
+.browse {
+    width: 165px;
+    height: 45px;
+    background: #1B1A55;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* SECTION */
+.categories {
+    width: 100%;
+    max-width: 1284px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* TITLE */
+.categories h2 {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    color: #ffffff;
+    margin-bottom: 40px;
+}
+
+/* GRID */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px 65px;
+
+}
+
+/* CARD */
+.cat-card {
+    position: relative;
+    width: 400;
+    height: 349px;
+    border-radius: 20px;
+    overflow: visible;
+    filter: drop-shadow(0px 5px 8px rgba(0, 0, 0, 0.25));
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    margin: 15px;
+    
+}
+
+
+
+/* BACKGROUND WRAP */
+.bg-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bg-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(27, 26, 85, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+
+}
+
+.cat-card:hover .bg-wrap::after {
+    opacity: 1;
+}
+
+/* BACKGROUND */
+.bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(50%);
+}
+
+/* CHARACTER */
+.character {
+    position: absolute;
+    width: 397px;
+    height: 410px;
+    left: -70px;
+    top: -66px;
+    z-index: 2;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    top: auto;
+    bottom: 0;
+}
+
+/* TITLE */
+.cat-card span {
+    position: absolute;
+    left: 319px;
+    top: 142px;
+    font-family: 'Instrument Sans';
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 49px;
+    color: #FFFFFF;
+    z-index: 3;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+}
+
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cat-card {
+    animation: slideInRight 0.6s ease backwards;
+}
+
+.categories-grid a:nth-child(1) .cat-card { animation-delay: 0.1s; }
+.categories-grid a:nth-child(2) .cat-card { animation-delay: 0.15s; }
+.categories-grid a:nth-child(3) .cat-card { animation-delay: 0.2s; }
+.categories-grid a:nth-child(4) .cat-card { animation-delay: 0.25s; }
+.categories-grid a:nth-child(5) .cat-card { animation-delay: 0.3s; }
+.categories-grid a:nth-child(6) .cat-card { animation-delay: 0.35s; }
+.categories-grid a:nth-child(7) .cat-card { animation-delay: 0.4s; }
+.categories-grid a:nth-child(8) .cat-card { animation-delay: 0.45s; }
+
+/* Smooth transitions for cards */
+.game-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.game-card:hover::before {
+    opacity: 1;
+}
+
+/* Image zoom effect */
+.game-img {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.game-card:hover .game-img {
+    transform: scale(1.05);
+}
+
+/* Price animation */
+.game-price {
+    transition: transform 0.3s ease;
+}
+
+.game-card:hover .game-price {
+    transform: translateX(3px);
+}
+
+.new-price {
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+}
+
+.game-card:hover .new-price {
+    color: #60a5fa;
+    transform: scale(1.05);
+}
+
+/* Banner button animation */
+.banner-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.banner-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.banner-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.banner-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Filter toggle smooth animation */
+.filter-toggle {
+    transition: all 0.3s ease;
+}
+
+.filter-toggle:hover {
+    transform: translateX(3px);
+}
+
+/* Dropdown slide animation */
+.filter-dropdown {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-dropdown.open {
+    max-height: 500px;
+}
+
+/* Checkbox/Radio hover effect */
+.filter-dropdown label {
+    transition: all 0.2s ease;
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.filter-dropdown label:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(4px);
+}
+
+/* Search input focus animation */
+.filter-search {
+    transition: all 0.3s ease;
+}
+
+.filter-search:focus-within {
+    transform: scale(1.02);
+}
+
+/* Reset button pulse */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.reset-btn:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Stagger animation for cards on load */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.game-card {
+    animation: fadeInUp 0.6s ease backwards;
+}
+
+.game-card:nth-child(1) { animation-delay: 0.05s; }
+.game-card:nth-child(2) { animation-delay: 0.1s; }
+.game-card:nth-child(3) { animation-delay: 0.15s; }
+.game-card:nth-child(4) { animation-delay: 0.2s; }
+.game-card:nth-child(5) { animation-delay: 0.25s; }
+.game-card:nth-child(6) { animation-delay: 0.3s; }
+.game-card:nth-child(7) { animation-delay: 0.35s; }
+.game-card:nth-child(8) { animation-delay: 0.4s; }
+
+
+
+/* Mobile - up to 768px */
+@media (max-width: 768px) {
+    /* Hero */
+    .hero {
+        position: relative;
+        width: 100%;
+        height: 100vh; 
+        margin: 0 auto;
+        overflow: visible;
+        background: #070F2B;
+        margin-bottom: 20px;
+    }
+
+
+    .hero-bg {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        width: 100%;
+        height: 350px;
+        background-image: url("/static/img/homepage/slider.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .gradient-top {
+        position: absolute;
+        width: 100%;
+        height: 180px; /* کمی بلندتر برای پخش شدن بهتر شیب و نرمی بیشتر */
+        top: 0;
+        left: 0;
+        background: linear-gradient(
+            to bottom, 
+            #070F2B 0%,          /* نقطه شروع کاملاً همرنگ نوبار */
+            #070F2B 20%,         /* حفظ خلوص رنگ تا ۲۰ درصد برای محو کردن کامل خط مرزی */
+            rgba(7, 15, 43, 0.85) 40%, /* شروع بسیار ملایمِ شفافیت */
+            rgba(7, 15, 43, 0.5) 65%,
+            rgba(7, 15, 43, 0.15) 85%,
+            rgba(7, 15, 43, 0) 100%    /* کاملاً شفاف */
+        );
+        transform: none;
+        z-index: 10;
+        pointer-events: none; /* اضافه شد تا این لایه مانع کلیک روی اسلایدر نشود */
+    }
+
+
+    .hero-slider-container {
+        position: relative;
+        width: 100%;
+        height: 350px; /* یا ارتفاع دلخواه شما برای hero */
+        overflow: hidden;
+    }
+    .hero-btn {
+
+        font-size: 1.2rem;
+        padding: 20px 10px;
+        cursor: pointer;
+        z-index: 10;
+        border-radius: 8px;
+        top: 50%;
+        transition: 0.3s ease;
+    }
+
+    .hero-prev {
+        left: 10px;
+    }
+
+    .hero-next {
+        right: 10px;
+    }
+    .gradient-bottom {
+        height: 110px;
+        top: 250px;
+    }
+
+    .hero-title {
+        left: 60px;
+        top: 100px;
+    }
+
+    .hero-title h1 {
+        font-family: 'Press Gothic';
+        font-size: 36px;
+        line-height: 50px;
+        color: #fff;
+        margin: 0;
+        margin-top: -20px;
+    }
+
+    .hero-desc {
+        width: calc(100% - 40px);
+        left: 20px;
+        top: 220px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .hero-price {
+        left: 25px;
+        top: 232px;
+        font-size: 10px;
+    }
+
+    .hero-cta {
+        left: 20px;
+        top: 250px;
+    }
+
+    .btn-buy {
+        width: 80px;
+        height: 30px;
+        font-size: 12px;
+    
+    }
+
+    .btn-wishlist {
+        width: 100px;
+        height: 30px;
+        font-size: 12px;
+        position: relative;
+        top: -42px;    
+        margin-left: 90px;
+
+    }
+
+    /* Sections */
+    .section {
+        max-width: 100%;
+        padding: 0 20px;
+        margin: 10px auto;
+        margin-top: 4px;
+    }
+
+    .section h2 {
+        font-size: 20px;
+    
+    }
+
+
+    .card-row {
+    display: flex;
+    padding: 0 !important;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+
+            width: 99vw;
+        max-width: 98vw;
+        margin-left: calc(-50vw + 48%);
+    
+    }
+
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        
+        /* افکت شیشه‌ای بلور */
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: none;
+        
+        color: white;
+        font-size: 1rem;
+        padding: 28px 13px;
+        cursor: pointer;
+        z-index: 10;
+        border-radius: 8px;
+        transition: 0.3s ease;
+    }
+
+    /* دکمه راست */
+    .scroll-right {
+        right: 5px;
+        background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+
+    /* دکمه چپ */
+    .scroll-left {
+        left: 5px;
+        background: linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        opacity: 0; /* در ابتدا مخفی است چون در ابتدای لیست هستیم */
+        pointer-events: none;
+    }
+
+    /* وقتی دکمه چپ نمایان می‌شود */
+    .scroll-left.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* وقتی دکمه راست مخفی می‌شود (به انتهای لیست رسیدیم) */
+    .scroll-right.hide {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+
+    .game-card {
+        /* flex-basis را کم کنید (مثلاً از 75vw به 50vw) */
+        flex: 0 0 45vw;
+        
+        /* عرض حداکثری را کم کنید */
+        max-width: 150px; 
+        
+        /* عرض درصدی را کم کنید */
+        width: 60%; 
+        
+        /* ارتفاع را کم کنید */
+        height: 230px;   
+        
+        position: relative; 
+        overflow: hidden; 
+        border-radius: 15px;
+        padding: 0;
+        display: block;
+        transition: transform 0.2s ease;
+    }
+
+
+    .game-card:hover {
+        transform: none;
+    }
+
+    .game-card img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 155px;
+        object-fit: cover;
+        border-radius: 0;
+    }
+
+    .wishlist {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 2;
+        font-size: 11px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .game-card h3 {
+        position: absolute;
+        top: 168px;          /* تنظیم شده زیر تصویر (130px) + فاصله */
+        left: 10px;
+        right: 10px;         /* استفاده از right به جای width برای انعطاف‌پذیری */
+        width: auto;
+        font-size: 11px;
+        line-height: 1.4;    /* فاصله بین خطوط */
+        color: #ffffff;
+        margin: 0;
+        
+        /* تغییرات اصلی برای چندخطی شدن */
+        white-space: normal;           /* اجازه شکستن خط */
+        display: -webkit-box;          /* نمایش باکسی برای line-clamp */
+        -webkit-line-clamp: 2;         /* حداکثر ۲ خط */
+        -webkit-box-orient: vertical;  /* جهت عمودی */
+        overflow: hidden;              /* مخفی کردن اضافی */
+        text-overflow: ellipsis;       /* سه نقطه در انتهای خط دوم */
+        
+        height: auto;                  /* ارتفاع خودکار */
+        max-height: 34px;              /* محدود به ۲ خط (12px * 1.4 * 2 ≈ 34px) */
+    }
+
+    .price, .game-card p.price {
+        position: absolute;
+        bottom: 10px;
+        left: 15px;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .tag {
+        display: none;
+    }
+
+    /* Special boxes */
+    .special-boxes {
+        display: none;
+    }
+
+    .sp-box {
+        width: 100%;
+    }
+
+    .sp-box img {
+        height: 250px;
+    }
+
+    .sp-box h3 {
+        font-size: 28px;
+    }
+
+    .sp-box p {
+        font-size: 18px;
+    }
+
+    /* Categories */
+
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);  
+        gap: 15px;
+    }
+
+    .cat-card {
+        width: 100%;
+        height: 124px;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    /* کاراکتر: موقعیت نزدیک‌تر و حرکت متناسب */
+    .character {
+        width: 120px;          /* کوچکتر از حالت دسکتاپ */
+        height: 120px;
+        left: -10px;           /* فاصله کمتر از لبه، تکون کمتر */
+        bottom: 0;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* حرکت hover ملایم‌تر و متناسب با اندازه کوچک */
+    .cat-card:hover .character {
+        transform: translateX(5px);  /* به جای 20-30px، فقط 5px */
+    }
+
+    /* متن: راست‌چین و موقعیت‌یابی از راست */
+    .cat-card span {
+        left: auto;            /* حذف چپ‌چینی */
+        right: 30px;           /* فاصله از راست */
+        top: 50%;
+        transform: translateY(-50%);  /* فقط وسط عمودی */
+        font-size: 16px;
+        font-weight: 600;
+        text-align: right;     /* راست‌چین */
+        width: 55%;            /* محدود کردن عرض برای عدم تداخل با کاراکتر */
+        z-index: 10;
+        text-shadow: 
+            -2px -2px 4px rgba(0,0,0,0.9),
+            2px 2px 4px rgba(0,0,0,0.9);  /* سایه قوی‌تر برای خوانایی روی کاراکتر */
+        line-height: 1.3;
+    }
+
+    /* حرکت hover متن هم ملایم‌تر */
+    .cat-card:hover span {
+        transform: translateY(-50%) translateX(3px);  /* حرکت کم به راست */
+        color: #899aaf;
+    }
+
+    .game-card p.price {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        right: 10px; /* کشیدن کانتینر به کل عرض کارت */
+        height: 35px; /* دادن ارتفاع ثابت برای قرارگیری دو قیمت روی هم */
+        display: block; /* حذف حالت flex دسکتاپ */
+        margin: 0;
+        padding: 0;
+        width: auto;
+    }
+
+    /* تخفیف: سمت چپ پایین */
+    .discount {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 10px; /* سایز پایه */
+        padding: 1.5px 4px;
+        border-radius: 6px;
+        margin: 0;
+    }
+
+    /* قیمت خط خورده (قدیمی): سمت راست پایین */
+    .old {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 10px; /* سایز پایه */
+        text-decoration: line-through;
+        color: #9CA3AF;
+        margin: 0 !important;
+    }
+
+    /* قیمت نهایی (تگ span که کلاس ندارد): سمت راست بالای قیمت قدیمی */
+    .game-card p.price > span:last-child {
+        position: absolute;
+        bottom: 10px; /* قرار گرفتن بالای قیمت قدیمی */
+        right: 0;
+        font-size: 12px; /* 2 پیکسل بیشتر از قیمت قدیمی */
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    /* در صورتی که بازی تخفیف نداشته باشد و فقط قیمت اصلی نمایش داده شود */
+    .game-card p.price > span:only-child {
+        bottom: 0; /* چسبیدن به پایین */
+        font-size: 13px;
+        }
+
+    .hero-dots {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 10px;
+    }
+
+    .hero-dots .dot {
+        width: 8px;
+        height:8px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+}
+

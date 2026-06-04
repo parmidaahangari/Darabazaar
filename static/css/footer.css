@@ -1,0 +1,146 @@
+/* ── FOOTER ── */
+footer {
+    background-color: #0b0d2a;
+    padding: 50px 60px 0;
+}
+
+.footer-top {
+    display: flex;
+    gap: 60px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #252860;
+}
+
+.footer-brand {
+    flex: 1.5;
+    padding-right: 40px;
+    border-right: 1px solid #252860;
+}
+
+.footer-brand .logo {
+    margin-bottom: 18px;
+}
+
+.footer-brand p {
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.7;
+}
+
+.footer-col {
+    flex: 1;
+}
+
+.footer-col h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 18px;
+}
+
+.footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-col ul li a {
+    text-decoration: none;
+    color: #aaa;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.footer-col ul li a:hover {
+    color: #fff;
+}
+
+.footer-socials {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 24px 0;
+}
+
+.footer-socials a {
+    color: #ccc;
+    font-size: 22px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-socials a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 18px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+    main {
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    nav {
+        padding: 14px 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .nav-links {
+        gap: 20px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-brand {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    footer {
+        padding: 40px 20px 0;
+    }
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #00c8ff, #0077ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 22px;
+    color: #fff;
+    box-shadow: 0 0 14px rgba(0, 180, 255, 0.45);
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}

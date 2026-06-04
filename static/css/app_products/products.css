@@ -1,0 +1,730 @@
+/* ── browse.css ── */
+
+* {
+    box-sizing: border-box;
+    margin: 10px;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+        url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* ── SPECIAL EVENTS ── */
+.browse-main {
+    padding: 40px 60px;
+    flex: 1;
+}
+
+.special-events {
+    margin-bottom: 50px;
+}
+
+.special-events h2 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.banner {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    height: 340px;
+    background-image: url("/static/img/productsbanner.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 36px 40px;
+    max-width: 380px;
+    z-index: 2;
+}
+
+.banner-tag {
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.banner-overlay h3 {
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.banner-date {
+    font-size: 13px;
+    color: #222;
+    margin: 8px 0 10px;
+    font-weight: 600;
+}
+
+.banner-desc {
+    font-size: 12px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.banner-btn {
+    display: inline-block;
+    background: #fff;
+    color: #111;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.banner-btn:hover {
+    background: #e0e0e0;
+}
+
+/* ── BROWSE SECTION ── */
+.browse-section {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* ── GAMES GRID ── */
+.games-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.game-card {
+    position: relative;
+    width: 325px;
+    height: 510px;
+    aspect-ratio: 300 / 500;
+    background: #1E243A;
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: none;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+}
+
+.game-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 77.99%; 
+    overflow: hidden;
+}
+
+.game-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: none;
+}
+
+.game-card:hover .game-img img {
+    transform: none;
+}
+
+.game-info {
+    position: absolute;
+    top: 82.99%; /* همون ارتفاع game-img */
+    left: 12px;
+    right: 12px;
+    padding: 0;
+    display: flex;
+    color: #fff;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.game-info h4 {
+    font-size: 20px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    top: 0;
+}
+
+.game-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.discount-badge {
+    background: rgba(146, 144, 195, 1);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 5px;
+    border-radius: 7px;
+}
+/* کانتینر اصلی بخش قیمت */
+.game-info .price {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* بج (نشان) درصد تخفیف */
+.game-info .price .discount {
+    background-color: rgba(146, 144, 195, 1); /* رنگ آبی مشابه فروشگاه‌های گیم */
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+/* قیمت قدیمی خط‌خورده */
+.game-info .price .old {
+    color: #a0aec0; /* رنگ خاکستری */
+    text-decoration: line-through;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* قیمت نهایی (چون کلاس خاصی ندارد، آخرین span داخل price را هدف می‌گیریم) */
+.game-info .price span:last-child {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #ffffff; /* اگر قالب شما تیره است سفید، اگر روشن است #1a202c بگذارید */
+}
+
+.old-price {
+    font-size: 18px;
+    color: #9CA3AF;
+    text-decoration: line-through;
+}
+
+.new-price {
+    font-size: 18px;
+    font-weight: 200;
+    color: #fff;
+}
+
+/* ── FILTERS SIDEBAR ── */
+.filters-sidebar {
+    width: 180px;
+    min-width: 180px;
+    border-radius: 14px;
+    padding: 24px 15px;
+    position: sticky;
+    top: 100px;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.filters-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.reset-btn {
+    background: none;
+    border: none;
+    color: #00C1F2;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.reset-btn:hover {
+    color: #60a5fa;
+}
+
+.filter-search {
+    display: flex;
+    align-items: center;
+    background: #1B1A55;
+    border-radius: 10px;
+    padding: 9px 12px;
+    gap: 8px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-search:focus-within {
+    border-color: #2e2e2f;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.filter-search svg {
+    color: rgba(255, 255, 255, 0.71);
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.filter-search:focus-within svg:first-child {
+    color: #ffffff;
+}
+
+.filter-search input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 13px;
+    width: 100%;
+    font-family: inherit;
+}
+
+.filter-search input::placeholder {
+    color: #C0C0CD;
+}
+
+.search-clear {
+    background: none;
+    border: none;
+    color: #C0C0CD;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+
+.search-clear:hover {
+    color: #fff;
+}
+
+.search-clear.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Filter Groups */
+.filter-group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 14px 0;
+}
+
+.filter-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.filter-toggle:hover {
+    color: #fff;
+}
+
+.filter-toggle i {
+    font-size: 11px;
+    transition: transform 0.25s;
+}
+
+.filter-toggle.active i {
+    transform: rotate(180deg);
+}
+
+.filter-dropdown {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+    padding-left: 4px;
+}
+
+.filter-dropdown.open {
+    display: flex;
+}
+
+.filter-dropdown label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.filter-dropdown label:hover {
+    color: #fff;
+}
+
+.filter-dropdown input[type="checkbox"],
+.filter-dropdown input[type="radio"] {
+    accent-color: #929292;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+/* In Stock Toggle */
+.filter-stock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+}
+
+.filter-stock span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ccc;
+}
+
+.switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #2a2e6a;
+    border-radius: 22px;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+    background: rgba(255, 255, 255, 0.483);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(18px);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+    .browse-main {
+        padding: 30px 40px;
+        margin-top: 11px;
+    }
+    .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .browse-main {
+        padding: 30px 30px;
+    }
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .filters-sidebar {
+        width: 200px;
+        min-width: 200px;
+
+    }
+}
+@media (max-width: 768px) {
+    .browse-main {
+        padding: 20px 15px;
+    }
+    body{
+    margin-top: 50px;
+    }
+    .special-events { margin-bottom: 25px; }
+    .special-events h2 { font-size: 20px; margin-bottom: 15px; }
+    
+    .banner { height: 200px; border-radius: 12px; }
+    .banner-overlay { padding: 20px; max-width: 260px; }
+    .banner-overlay h3 { font-size: 22px; }
+    .banner-desc { font-size: 11px; margin-bottom: 12px; }
+    .banner-btn { padding: 8px 18px; font-size: 12px; }
+    
+    .browse-section {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+    
+    /* --- MOBILE FILTER REDESIGN --- */
+    .filters-sidebar {
+        width: 100%;
+        max-width: 100%;
+        min-width: unset;
+        position: static;
+        padding: 16px;
+        order: -1;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        border-radius: 12px;
+    }
+    
+    .filters-header, .filter-search {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .filter-group {
+        width: calc(50% - 5px);
+        padding: 8px 10px;
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border-bottom: none;
+    }
+
+        /* کانتینر اصلی بخش قیمت */
+    .game-info .price {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 1.7px;
+    }
+
+    /* بج (نشان) درصد تخفیف */
+    .game-info .price .discount {
+        
+        font-size: 0.55rem;
+        padding: 1px 3px;
+        border-radius: 4px;
+    }
+
+    /* قیمت قدیمی خط‌خورده */
+    .game-info .price .old {
+
+        font-size: 0.65rem;
+    }
+
+    /* قیمت نهایی (چون کلاس خاصی ندارد، آخرین span داخل price را هدف می‌گیریم) */
+    .game-info .price span:last-child {
+        font-size: 0.7rem;
+    }
+
+    .filter-toggle {
+        font-size: 13px;
+        padding: 0;
+    }
+    
+    .games-grid {
+        width: 100%;
+        order: 1;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    /* کارت کوچکتر و کمتر کشیده */
+    .game-card {
+        width: 100%;
+        height: auto; /* این خط اضافه شود تا ارتفاع ثابت لغو شود */
+        aspect-ratio: 2.5 / 4;
+        border-radius: 12px;
+    }
+
+    .game-img {
+        height: 78%; /* افزایش ارتفاع عکس برای پر کردن فضای خالی */
+    }
+
+    .game-info {
+        position: absolute;
+        top: 85%; /* انتقال متن به پایین‌تر */
+        bottom: auto; 
+        left: 8px;
+        right: 8px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3px; 
+    }
+
+    .game-info h4 {
+        font-size: 12px;  /* کوچکتر */
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .game-price {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .discount-badge {
+        font-size: 9px;
+        padding: 2px 3px;
+        border-radius: 4px;
+    }
+
+    .old-price {
+        font-size: 10px;
+    }
+
+    .new-price {
+        font-size: 12px;
+        font-weight: 600;
+    }
+}
+
+@media (max-width: 500px) {
+    .browse-main { 
+        padding: 16px 12px; 
+    }
+    
+    .banner { 
+        height: 160px; 
+        border-radius: 10px; 
+    }
+    .banner-overlay { 
+        padding: 14px; 
+        max-width: 200px; 
+    }
+    .banner-overlay h3 { 
+        font-size: 18px; 
+    }
+    .banner-tag { 
+        font-size: 10px; 
+        padding: 3px 10px; 
+    }
+    .banner-date { 
+        font-size: 10px; 
+        margin: 6px 0 8px; 
+    }
+    .banner-desc { 
+        font-size: 9px; 
+        margin-bottom: 10px; 
+    }
+    .banner-btn { 
+        padding: 6px 14px; 
+        font-size: 11px; 
+    }
+    
+    /* برای موبایل‌های خیلی کوچک دو ستونه */
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .game-card {
+        width: 100%;
+        height: auto; /* این خط اضافه شود */
+        aspect-ratio: 3 / 4;
+        border-radius: 12px;
+    }
+
+
+    .game-info {
+        top: 82%; /* همگام‌سازی با حالت بالا */
+        bottom: auto;
+        left: 10px;
+        right: 10px;
+    }
+
+    .game-info h4 {
+        font-size: 10px;  /* بزرگتر از حالت 3 ستونه */
+    }
+
+    .game-price {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+        font-size: 8;
+    }
+
+    .filter-group {
+        padding: 6px 8px;
+    }
+    
+    .filter-toggle {
+        font-size: 12px;
+    }
+
+    .discount-badge {
+    padding: 1px 2px;
+
+    }
+}
+
+
+@media (max-width: 393px) {
+    .discount-badge {
+
+    padding: 3px 1.5px;
+}
+    
+}

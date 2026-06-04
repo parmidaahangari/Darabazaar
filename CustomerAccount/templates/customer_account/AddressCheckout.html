@@ -1,0 +1,620 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="fa" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آدرس‌ها</title>
+    <link rel="stylesheet" href="{% static 'css/app_account/addresscheckout.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+
+<body>
+    {% include "layout/navbar.html" %}
+
+    <main class="page-content">
+        <div class="checkout-container" style="direction: rtl; text-align: right;">
+            
+            <div class="summary-box glass-box" style="text-align: right;">
+                <h2 style="margin-bottom: 20px;">خلاصه سفارش</h2>
+                
+                {% if cart %}
+                    <div class="summary-row">
+                        <span>مجموع کالاها (<span class="persian-num" data-raw="{{ cart.items_count }}">{{ cart.items_count }}</span> عدد)</span>
+                        <span class="persian-price" data-raw="{{ cart.total_price }}">{{ cart.total_price|intcomma }} تومان</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>تخفیف</span>
+                        <span class="persian-price" data-raw="{{ discount|default:'0' }}">{{ discount|default:"0"|intcomma }} تومان</span>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+                    <div class="summary-row" style="font-weight: bold; font-size: 22px;">
+                        <span>جمع کل</span>
+                        <span class="persian-price" data-raw="{{ final_price }}">{{ final_price|intcomma }} تومان</span>
+                    </div>
+                    
+                    {% if cart.items_count > 0 %}
+                        <button class="btn-confirm" style="margin-top: 20px;" id="payment-btn">ادامه خرید</button>
+                    {% else %}
+                        <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
+                            سبد خرید شما خالی است
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
+                        سبد خرید فعالی یافت نشد
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <div class="main-content glass-box">
+                <h2>انتخاب آدرس</h2>
+                
+                <!-- لیست آدرس‌های موجود -->
+                <div class="addresses-list">
+                    {% for addr in addresses %}
+                    <div class="address-card {% if addr.is_default %}default{% endif %}" 
+                         data-id="{{ addr.id }}"
+                         data-name="{{ addr.users_total_name }}"
+                         data-address="{{ addr.address }}"
+                         data-city="{{ addr.city }}"
+                         data-postal="{{ addr.postal_code }}"
+                         data-phone="{{ addr.phone }}"
+                         data-is-default="{{ addr.is_default|yesno:'true,false' }}">
+                        
+                        <div class="address-content">
+                            <h4><i class="fas fa-user"></i> {{ addr.users_total_name }}</h4>
+                            <p><i class="fas fa-map-pin"></i> {{ addr.address }}</p>
+                            <div class="address-details">
+                                <span><i class="fas fa-city"></i> {{ addr.city }}</span>
+                                <span class="persian-num" data-raw="{{ addr.postal_code }}"><i class="fas fa-mail-bulk"></i> {{ addr.postal_code }}</span>
+                                <span class="persian-num" data-raw="{{ addr.phone }}"><i class="fas fa-phone"></i> {{ addr.phone }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="address-actions">
+                            {% if not addr.is_default %}
+                                <button type="button" class="btn-set-default" onclick="SetAddressDefault({{addr.id}})" title="تنظیم به عنوان پیش‌فرض">
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                            {% endif %}
+                            
+                            <button type="button" class="btn-edit" onclick="openEditModal({{addr.id}})" title="ویرایش">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            
+                            <button type="button" class="btn-delete" onclick="deleteAddress({{ addr.id }})" title="حذف">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>هنوز آدرسی ثبت نکرده‌اید</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- دکمه تغییر وضعیت فرم آدرس جدید -->
+                <button type="button" class="btn-confirm" id="toggle-new-address" style="margin: 20px 0;">
+                    <span><i style="margin-left: 8px;"></i> افزودن آدرس جدید</span>
+                </button>
+
+                <!-- فرم آدرس جدید - به صورت پیش‌فرض hidden است -->
+                <div class="form-container" id="address-form-container" style="display: none;">
+                    <h3 style="margin-bottom: 20px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        ثبت آدرس جدید
+                    </h3>
+                    <form method="POST" id="address-form" action="">
+                        {% csrf_token %}
+                        
+                        <div class="input-group">
+                            <input type="text" placeholder="نام و نام‌خانوادگی" name="users_total_name" 
+                                value="{{ form.users_total_name.value|default:'' }}" required id="input-name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="text" placeholder="آدرس" name="address" 
+                                value="{{ form.address.value|default:'' }}" required id="input-address">
+                        </div>
+                        
+                        <div class="row">
+                            <input type="text" placeholder="شهر" name="city" 
+                                value="{{ form.city.value|default:'' }}" required id="input-city">
+                            <input type="text" placeholder="کد پستی" name="postal_code" 
+                                value="{{ form.postal_code.value|default:'' }}" required id="input-postal" maxlength="10">
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="text" placeholder="شماره تماس" name="phone" 
+                                value="{{ form.phone.value|default:'' }}" required id="input-phone">
+                        </div>
+
+                        <button type="submit" class="btn-confirm" id="submit-btn">
+                            <span>ثبت آدرس</span>
+                        </button>
+                    </form>
+                </div>
+            </div> 
+
+        </div>
+    </main>
+
+    <!-- مودال ویرایش -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-edit"></i> ویرایش آدرس</h3>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="edit-form" onsubmit="submitEditForm(event)">
+                {% csrf_token %}
+                <input type="hidden" name="address_id" id="edit-address-id">
+                
+                <div class="input-group">
+                    <label>نام و نام خانوادگی</label>
+                    <input type="text" name="users_total_name" id="edit-name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>آدرس</label>
+                    <textarea name="address" id="edit-address" rows="3" required></textarea>
+                </div>
+                
+                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>شهر</label>
+                        <input type="text" name="city" id="edit-city" required>
+                    </div>
+                    <div class="input-group">
+                        <label>کد پستی</label>
+                        <input type="text" name="postal_code" id="edit-postal" required maxlength="10">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>شماره تماس</label>
+                    <input type="text" name="phone" id="edit-phone" required>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" name="is_default" id="edit-is-default">
+                    <label for="edit-is-default">این آدرس را به عنوان پیش‌فرض انتخاب کن</label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-confirm">
+                        <i class="fas fa-save"></i> ذخیره تغییرات
+                    </button>
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">
+                        <i class="fas fa-times"></i> انصراف
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% include "layout/footer.html" %}
+
+    <script>
+        // ═══════════════════════════════════════════════════
+        // توابع تبدیل عدد به فارسی (مشابه تمپلیت محصول)
+        // ═══════════════════════════════════════════════════
+        function toPersianNumber(str) {
+            if (!str) return '';
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/[0-9]/g, function(w) {
+                return persianDigits[+w];
+            });
+        }
+
+        function formatPersianPrice(price) {
+            const num = parseInt(price);
+            if (isNaN(num)) return price;
+            // استفاده از toLocaleString برای جداکننده هزارگان
+            const formatted = num.toLocaleString('en-US');
+            return toPersianNumber(formatted);
+        }
+
+        // تبدیل تمام اعداد صفحه به فارسی
+        function convertNumbersToPersian() {
+            // تبدیل قیمت‌ها (با جداکننده)
+            document.querySelectorAll('.persian-price').forEach(el => {
+                const raw = el.getAttribute('data-raw');
+                if (raw) {
+                    el.textContent = formatPersianPrice(raw) + ' تومان';
+                }
+            });
+
+            // تبدیل اعداد معمولی (تعداد کالا، کد پستی، شماره تماس)
+            document.querySelectorAll('.persian-num').forEach(el => {
+                const raw = el.getAttribute('data-raw');
+                if (raw) {
+                    // حفظ آیکن‌ها
+                    const icon = el.querySelector('i');
+                    if (icon) {
+                        const iconHtml = icon.outerHTML;
+                        el.innerHTML = iconHtml + ' ' + toPersianNumber(raw);
+                    } else {
+                        el.textContent = toPersianNumber(raw);
+                    }
+                }
+            });
+        }
+
+        // اجرای تبدیل هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', convertNumbersToPersian);
+
+        // تابع نمایش نوتیفیکیشن
+        function showNotification(message, type = 'success') {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            
+            const div = document.createElement('div');
+            div.className = `notification ${type}`;
+            div.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(div);
+            
+            setTimeout(() => {
+                div.classList.add('show');
+                setTimeout(() => {
+                    div.classList.remove('show');
+                    setTimeout(() => div.remove(), 300);
+                }, 3000);
+            }, 100);
+        }
+
+        // حذف آدرس با تایید
+        function deleteAddress(addressId) {
+            if (!confirm('آیا از حذف این آدرس اطمینان دارید؟')) return;
+
+            fetch(`/my/addresses/delete/${addressId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector(`[data-id="${addressId}"]`).remove();
+                    showNotification(data.message, 'success');
+                    if (document.querySelectorAll('.address-card').length === 0) {
+                        location.reload();
+                    }
+                }
+            })
+            .catch(error => showNotification('خطا در حذف آدرس', 'error'));
+        }
+
+        // تنظیم آدرس پیش‌فرض
+        function SetAddressDefault(addressId) {
+            const url = `/my/addresses/set-default/${addressId}/`; 
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ address_id: addressId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelectorAll('.address-card').forEach(card => {
+                        card.classList.remove('default');
+                        card.dataset.isDefault = 'false';
+                        
+                        const actionsDiv = card.querySelector('.address-actions');
+                        if (!actionsDiv.querySelector('.btn-set-default')) {
+                            const cardId = card.getAttribute('data-id');
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'btn-set-default';
+                            btn.onclick = function() { SetAddressDefault(cardId); };
+                            btn.title = 'تنظیم به عنوان پیش‌فرض';
+                            btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+                            actionsDiv.insertBefore(btn, actionsDiv.firstChild);
+                        }
+                    });
+                    
+                    const selectedCard = document.querySelector(`[data-id="${addressId}"]`);
+                    selectedCard.classList.add('default');
+                    selectedCard.dataset.isDefault = 'true';
+                    
+                    const defaultBtn = selectedCard.querySelector('.btn-set-default');
+                    if (defaultBtn) {
+                        defaultBtn.remove();
+                    }
+                    
+                    showNotification('آدرس پیش‌فرض تنظیم شد', 'success');
+                }
+            })
+            .catch(error => {
+                console.error("ERROR:", error);
+                showNotification('خطا در تنظیم آدرس پیش‌فرض', 'error');
+            });
+        }
+
+        // باز کردن مودال ویرایش
+        function openEditModal(addressId) {
+            const card = document.querySelector(`[data-id="${addressId}"]`);
+            if (!card) return;
+            
+            document.getElementById('edit-address-id').value = addressId;
+            document.getElementById('edit-name').value = card.dataset.name;
+            document.getElementById('edit-address').value = card.dataset.address;
+            document.getElementById('edit-city').value = card.dataset.city;
+            document.getElementById('edit-postal').value = card.dataset.postal;
+            document.getElementById('edit-phone').value = card.dataset.phone;
+            document.getElementById('edit-is-default').checked = card.dataset.isDefault === 'true';
+            
+            document.getElementById('editModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // بستن مودال ویرایش
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('edit-form').reset();
+        }
+
+        // ارسال فرم ویرایش با AJAX
+        function submitEditForm(e) {
+            e.preventDefault();
+            const form = e.target;
+            const addressId = document.getElementById('edit-address-id').value;
+            const formData = new FormData(form);
+            
+            const isDefault = formData.get('is_default') === 'on';
+            
+            console.log('Sending edit request for address:', addressId);
+            console.log('Form data:', Object.fromEntries(formData));
+            
+            fetch(`/checkout/addresses/edit/${addressId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response:', data);
+                
+                if (data.success) {
+                    showNotification('آدرس با موفقیت ویرایش شد', 'success');
+                    updateAddressCard(addressId, {
+                        name: formData.get('users_total_name'),
+                        address: formData.get('address'),
+                        city: formData.get('city'),
+                        postal: formData.get('postal_code'),
+                        phone: formData.get('phone'),
+                        isDefault: isDefault
+                    });
+                    closeEditModal();
+                } else {
+                    const errorMsg = data.errors ? Object.values(data.errors).flat().join('، ') : (data.message || 'خطا در ویرایش آدرس');
+                    showNotification(errorMsg, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                showNotification('خطا در ارتباط با سرور - لطفاً console را چک کنید', 'error');
+            });
+        }
+
+        // به‌روزرسانی کارت آدرس در DOM
+        function updateAddressCard(addressId, data) {
+            const card = document.querySelector(`[data-id="${addressId}"]`);
+            if (!card) {
+                console.error('Card not found:', addressId);
+                return;
+            }
+            
+            // به‌روزرسانی dataset
+            card.dataset.name = data.name;
+            card.dataset.address = data.address;
+            card.dataset.city = data.city;
+            card.dataset.postal = data.postal;
+            card.dataset.phone = data.phone;
+            card.dataset.isDefault = data.isDefault.toString();
+            
+            // به‌روزرسانی نمایش با تبدیل اعداد به فارسی
+            card.querySelector('h4').innerHTML = `<i class="fas fa-user"></i> ${data.name}`;
+            card.querySelector('.address-content p').innerHTML = `<i class="fas fa-map-pin"></i> ${data.address}`;
+            
+            const details = card.querySelector('.address-details');
+            details.innerHTML = `
+                <span><i class="fas fa-city"></i> ${data.city}</span>
+                <span class="persian-num" data-raw="${data.postal}"><i class="fas fa-mail-bulk"></i> ${data.postal}</span>
+                <span class="persian-num" data-raw="${data.phone}"><i class="fas fa-phone"></i> ${data.phone}</span>
+            `;
+            
+            // بعد از آپدیت DOM، اعداد را به فارسی تبدیل کن
+            convertNumbersToPersian();
+            
+            // مدیریت وضعیت پیش‌فرض
+            if (data.isDefault) {
+                document.querySelectorAll('.address-card').forEach(c => {
+                    c.classList.remove('default');
+                    c.dataset.isDefault = 'false';
+                    
+                    const actions = c.querySelector('.address-actions');
+                    if (c.dataset.id !== addressId && !actions.querySelector('.btn-set-default')) {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'btn-set-default';
+                        btn.onclick = () => SetAddressDefault(c.dataset.id);
+                        btn.title = 'تنظیم به عنوان پیش‌فرض';
+                        btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+                        actions.insertBefore(btn, actions.firstChild);
+                    }
+                });
+                
+                card.classList.add('default');
+                
+                const defaultBtn = card.querySelector('.btn-set-default');
+                if (defaultBtn) defaultBtn.remove();
+            }
+        }
+
+        // انتخاب آدرس
+        function selectAddress(id) {
+            document.querySelectorAll('.address-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            const radio = document.getElementById(`addr-${id}`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.address-card').classList.add('selected');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('address-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const paymentBtn = document.getElementById('payment-btn');
+            const toggleBtn = document.getElementById('toggle-new-address');
+            const formContainer = document.getElementById('address-form-container');
+            const originalBtnContent = submitBtn ? submitBtn.innerHTML : '';
+            
+            // تغییر وضعیت نمایش فرم آدرس جدید
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    if (formContainer.style.display === 'none') {
+                        formContainer.style.display = 'block';
+                        this.innerHTML = '<span><i class="fas fa-times" style="margin-left: 8px;"></i> بستن فرم</span>';
+                        formContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        formContainer.style.display = 'none';
+                        this.innerHTML = '<span><i class="fas fa-plus" style="margin-left: 8px;"></i> افزودن آدرس جدید</span>';
+                    }
+                });
+            }
+            
+            // مدیریت ارسال فرم با AJAX
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const inputs = form.querySelectorAll('input[required]');
+                    let isValid = true;
+                    
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.classList.add('input-error');
+                        } else {
+                            input.classList.remove('input-error');
+                        }
+                    });
+                    
+                    if (!isValid) {
+                        showNotification('لطفاً تمام فیلدها را پر کنید', 'error');
+                        const firstEmpty = form.querySelector('input[required]:not([value])') || form.querySelector('input[required][value=""]');
+                        if (firstEmpty) {
+                            firstEmpty.focus();
+                        }
+                        return;
+                    }
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner"></span> در حال ثبت...';
+                    
+                    const formData = new FormData(form);
+                    
+                    fetch(window.location.href, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('خطای سرور');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            showNotification('آدرس با موفقیت ثبت شد', 'success');
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            const errorMessages = data.errors ? Object.values(data.errors).flat().join('، ') : (data.message || 'خطا در ثبت آدرس');
+                            showNotification(errorMessages, 'error');
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnContent;
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('خطا در ارتباط با سرور', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnContent;
+                    });
+                });
+                
+                // حذف حالت خطا هنگام تایپ
+                form.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('input', function() {
+                        this.classList.remove('input-error');
+                    });
+                });
+            }
+            
+            // مدیریت دکمه پرداخت
+            if (paymentBtn) {
+                paymentBtn.addEventListener('click', function() {
+                    const selectedAddress = document.querySelector('input[name="selected_address"]:checked');
+                    
+                    if (!selectedAddress) {
+                        showNotification('لطفاً یک آدرس انتخاب کنید یا آدرس جدید ثبت کنید', 'error');
+                        document.querySelector('.addresses-list').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        if (document.querySelectorAll('.address-card').length === 0 && formContainer.style.display === 'none') {
+                            toggleBtn.click();
+                        }
+                        return;
+                    }
+                    
+                    this.disabled = true;
+                    this.innerHTML = '<span class="spinner"></span> در حال انتقال...';
+                    window.location.href = `/payment/?address_id=${selectedAddress.value}`;
+                });
+            }
+            
+            // بستن مودال با کلیک خارج از آن
+            document.getElementById('editModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeEditModal();
+                }
+            });
+
+            // بستن مودال با کلید Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeEditModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

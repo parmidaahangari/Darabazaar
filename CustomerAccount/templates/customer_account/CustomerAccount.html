@@ -1,0 +1,173 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>دارا بازار</title>
+  
+  <link rel="stylesheet" href="{% static 'css/app_account/customeraccount.css' %}">
+  <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+    {% include "layout/navbar.html" %}
+
+  <!-- MAIN -->
+  <main>
+
+    <section class="content-panel">
+        <h1 id="username" class="form-input">سلام {{ user.username|default:"Gamer-#125412" }}</h1>
+      <p class="subtitle"></p>
+
+      <!-- Desktop Cards Grid -->
+      <div class="cards-grid">
+        <a href="/my/information/">
+          <div class="card" id="card-personal" onclick="highlightCard('personal')">
+            <i class="fas fa-user"></i>
+            <h3>اطلاعات شخصی</h3>
+            <p>ویرایش اطلاعات شخصی</p>
+          </div>
+        </a>
+
+        <a href="/my/orders/">
+          <div class="card" id="card-orders" onclick="highlightCard('orders')">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>سفارش‌های من</h3>
+            <p>مشاهده سفارش‌های قبلی</p>
+          </div>
+        </a>
+
+        <a href="/my/wishlist/">
+          <div class="card" id="card-wishlist" onclick="highlightCard('wishlist')">
+            <i class="fas fa-heart"></i>
+            <h3>علاقه‌مندی‌ها</h3>
+            <p>بازی‌های مورد علاقه شما</p>
+          </div>
+        </a>
+
+        <a href="/my/addresses">
+          <div class="card" id="card-payment" onclick="highlightCard('payment')">
+              <i class="fas fa-map-marker-alt"></i>
+              <h3>لیست آدرس‌ها</h3>
+              <p>مشاهده آدرس‌های ثبت شده</p>
+            </div>
+          </div>
+        </a>
+
+        
+      <!-- Mobile Menu List -->
+      <div class="mobile-menu-list">
+        <a href="/my/orders/">
+          <div class="mobile-menu-item">
+            <div class="mobile-menu-content">
+              <div class="mobile-menu-icon icon-orders">
+                <i class="fas fa-receipt"></i>
+              </div>
+              <div class="mobile-menu-text">
+                <h3>سفارش های من</h3>
+              </div>
+            </div>
+            <div class="mobile-menu-arrow">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+          </div>
+        </a>
+
+        <a href="/my/wishlist/">
+          <div class="mobile-menu-item">
+            <div class="mobile-menu-content">
+              <div class="mobile-menu-icon icon-wishlist">
+                <i class="fas fa-heart"></i>
+              </div>
+              <div class="mobile-menu-text">
+                <h3>لیست علاقه مندی ها</h3>
+              </div>
+            </div>
+            <div class="mobile-menu-arrow">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+          </div>
+        </a>
+
+        <a href="/my/addresses/">
+          <div class="mobile-menu-item">
+            <div class="mobile-menu-content">
+              <div class="mobile-menu-icon icon-address">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="mobile-menu-text">
+                <h3>لیست آدرس ها</h3>
+              </div>
+            </div>
+            <div class="mobile-menu-arrow">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+          </div>
+        </a>
+
+        <a href="/my/information/">
+          <div class="mobile-menu-item">
+            <div class="mobile-menu-content">
+              <div class="mobile-menu-icon icon-info">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="mobile-menu-text">
+                <h3>اطلاعات حساب کاربری</h3>
+              </div>
+            </div>
+            <div class="mobile-menu-arrow">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+          </div>
+        </a>
+
+        <a href="{% url 'logout' %}">
+          <div class="mobile-menu-item">
+            <div class="mobile-menu-content">
+              <div class="mobile-menu-icon icon-logout">
+                <i class="fas fa-sign-out-alt"></i>
+              </div>
+              <div class="mobile-menu-text">
+                <h3>خروج</h3>
+              </div>
+            </div>
+            <div class="mobile-menu-arrow">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- Sidebar -->
+    {% include 'customer_account/paritial/sidebar.html' %}
+
+  </main>
+
+  <!-- FOOTER -->
+    {% include "layout/footer.html" %}
+
+  <script>
+    function highlightCard(type) {
+      document.querySelectorAll('.card').forEach(c => {
+        c.style.background = '';
+        c.style.outline = '';
+      });
+
+      const card = document.getElementById('card-' + type);
+      if (card) {
+        card.style.background = '#2d3480';
+        card.style.outline = '2px solid #4a54c8';
+      }
+    }
+  </script>
+
+  <script src="https://lib.arvancloud.ir/htmx/1.8.5/ext/ajax-header.js"></script>
+  <script src="{% static 'js/sidebar.js' %}"></script>
+
+</body>
+</html>

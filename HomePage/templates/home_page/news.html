@@ -1,0 +1,200 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaming Store</title>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+
+  <link rel="stylesheet" href="{% static 'css/app_homepage/news.css' %}">
+  <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+
+
+  <!-- Vazirmatn Font -->
+  <!-- <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn-font/dist/font-face.css" rel="stylesheet"> -->
+
+  
+</head>
+<body>
+
+    {% include "layout/navbar.html" %}
+
+
+
+  <!-- ═══ HERO ══════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1775171440111-17f97e39c1c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwd2FycmlvciUyMGdhbWluZyUyMGNoYXJhY3RlcnxlbnwxfHx8fDE3NzYyOTQzMDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
+           alt="Gaming hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-overlay-bottom"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Latest News &amp; Game Reviews</h1>
+        <p>Stay updated with the gaming world and in-depth top-rated games</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MAIN ═══════════════════════════════════════════════ -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- ── News ── -->
+      <section>
+        <div class="section-header">
+          <h2>News</h2>
+          <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+
+        <div class="news-grid">
+
+          <article class="news-card">
+            <div class="news-content">
+              <div class="news-image">
+                <img src="https://images.unsplash.com/photo-1673291680859-d1d8690c89eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlYSUyMHNwb3J0cyUyMGZjJTIwMjUlMjBzb2NjZXJ8ZW58MXx8fHwxNzc2Mjk0MzA3fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                     alt="EA SPORTS FC 25">
+              </div>
+              <div class="news-text">
+                <div>
+                  <p class="news-date">2 days ago</p>
+                  <h3 class="news-title">EA SPORTS FC 25 is built first and foremost with the players in mind</h3>
+                  <p class="news-description">EA SPORTS FC™ 25 gives you more ways to win for the club. Team up with friends in your
+                    favorite modes with the new 5v5 Rush, and manage your club to victory as FC IQ delivers more tactical
+                    control than ever before.</p>
+                </div>
+                <button class="read-more-btn">Read More</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <div class="news-content">
+              <div class="news-image">
+                <img src="https://images.unsplash.com/photo-1723539588203-c5a65d91a90b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxndGElMjB2aWNlJTIwY2l0eSUyMGdhbWV8ZW58MXx8fHwxNzc2Mjk0MzA3fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                     alt="GTA VI">
+              </div>
+              <div class="news-text">
+                <div>
+                  <p class="news-date">2 days ago</p>
+                  <h3 class="news-title">GTA VI will feature multiple editions, a full game, and its release date is confirmed</h3>
+                  <p class="news-description">Rockstar Games is finally back with the announcement of a new GTA title. GTA VI will come
+                    with one of the biggest sandbox experiences. From story mode to its enhanced online multiplayer experience,
+                    GTA VI brings insane fidelity.</p>
+                </div>
+                <button class="read-more-btn">Read More</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <div class="news-content">
+              <div class="news-image">
+                <img src="https://images.unsplash.com/photo-1770985272716-8224a8a31847?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3YXIlMjBiYXR0bGUlMjBtaWxpdGFyeSUyMGdhbWV8ZW58MXx8fHwxNzc2Mjk0MzEyfDA&ixlib=rb-4.1.0&q=80&w=1080"
+                     alt="Call of Duty vs Battlefield">
+              </div>
+              <div class="news-text">
+                <div>
+                  <p class="news-date">دو روز پیش</p>
+                  <h3 class="news-title">According to Australia, Call of Duty's "not big in AU" against Battlefield 6</h3>
+                  <p class="news-description">What do you think which one Call of Duty: Black Ops 6 or Battlefield 6 is the more
+                    exciting battle? Delayed by the massive backlash, both titles have received enormous demand from players worldwide.</p>
+                </div>
+                <button class="read-more-btn">Read More</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ── Reviews ── -->
+      <section>
+        <div class="section-header">
+          <h2>Reviews</h2>
+          <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+
+        <div class="reviews-grid">
+
+          <article class="review-card">
+            <div class="review-image">
+              <img src="https://images.unsplash.com/photo-1561629589-2ad460a2d70b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3dWtvbmclMjB3YXJyaW9yJTIwYXNpYW4lMjBnYW1lfGVufDF8fHx8MTc3NjI5NDMxMnww&ixlib=rb-4.1.0&q=80&w=1080"
+                   alt="Black Mass: Wukong">
+            </div>
+            <div class="review-content">
+              <h3 class="review-title">Black Mass: Wukong</h3>
+              <div class="star-rating">
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star empty"  viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="review-text">Black Mass: Wukong is one of the most anticipated action RPG games. It has been released to
+                critical acclaim for its breathtaking 3D graphics, environments, and captivating storyline.</p>
+              <button class="read-more-btn">Read More</button>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <div class="review-image">
+              <img src="https://images.unsplash.com/photo-1669399132163-c67a6d47d6f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZWFkJTIwYnklMjBkYXlsaWdodCUyMGdhbWV8ZW58MXx8fHwxNzc2MjkyNjk4fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                   alt="Dead by Dark">
+            </div>
+            <div class="review-content">
+              <h3 class="review-title">Dead by Dark</h3>
+              <div class="star-rating">
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star empty"  viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star empty"  viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="review-text">Dead by Dark is a multiplayer horror game where one player takes on the role of a brutal killer
+                and four players are survivors trying to escape.</p>
+              <button class="read-more-btn">Read More</button>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <div class="review-image">
+              <img src="https://images.unsplash.com/photo-1636056471685-1cfdfa9d2e4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWZpYSUyMGdhbmdzdGVyJTIwZ2FtZSUyMG5vaXJ8ZW58MXx8fHwxNzc2Mjk0MzA4fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                   alt="The Old Chronicle">
+            </div>
+            <div class="review-content">
+              <h3 class="review-title">The Old Chronicle</h3>
+              <div class="star-rating">
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star empty"  viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="review-text">The Old Chronicle delivers an immersive experience with its richly detailed world and compelling
+                narrative that keeps you engaged from start to finish.</p>
+              <button class="read-more-btn">Read More</button>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+
+    {% include "layout/footer.html" %}
+
+
+</body>
+</html>

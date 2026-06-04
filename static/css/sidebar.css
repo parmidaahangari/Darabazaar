@@ -14,119 +14,152 @@
 }
 
 .sidebar {
-    background: linear-gradient(180deg, #2a2f72 0%, #1a1e50 50%, #14172e 100%);
-    border-radius: 16px;
-    width: 280px;
+    background: #1B1A55;    
+    border-radius: 25px;
+    width: 290px;
     flex-shrink: 0;
     overflow: hidden;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.sidebar-header {
-    background: linear-gradient(135deg, #3d4394 0%, #2e3480 50%, #252a6a 100%);
-    padding: 24px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-}
-
-.sidebar-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255,255,255,0.25) 50%, 
-        transparent 100%
-    );
-}
-
-.sidebar-header h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.3px;
-}
-
-.sidebar-header p {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.55);
-    margin-top: 4px;
-    font-weight: 400;
-}
 
 .sidebar-item {
     padding: 20px 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     cursor: pointer;
     transition: all 0.25s ease;
     position: relative;
     background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Active state indicator - left + right borders */
+.sidebar-item::before,
+.sidebar-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 7px;
+    background: #9290C3;
+    opacity: 0;
+    transition: opacity 0.25s ease;
 }
 
 .sidebar-item::before {
-    content: '';
-    position: absolute;
     right: 0;
-    top: 0;
-    bottom: 0;
-    width: 0;
-    background: linear-gradient(270deg, 
-        rgba(74, 84, 200, 0.4) 0%, 
-        rgba(74, 84, 200, 0.15) 50%,
-        transparent 100%
-    );
-    transition: width 0.25s ease;
+}
+
+.sidebar-item::after {
+    left: 0;
+}
+.sidebar-item.active::before,
+.sidebar-item.active::after {
+    opacity: 1;
+}
+.sidebar-item:hover::before,
+.sidebar-item:hover::after {
+    opacity: 0.6;
+}
+.sidebar-item.active::before,
+.sidebar-item.active::after {
+    opacity: 1;
+}
+/* Active state */
+.sidebar-item.active {
+    background: #9290c346;
+}
+
+.sidebar-item.active::before {
+    opacity: 1;
+}
+
+/* Hover state */
+.sidebar-item:hover {
+    background: #9290c30b;
 }
 
 .sidebar-item:hover::before {
-    width: 100%;
-}
-
-.sidebar-item:hover {
-    background: linear-gradient(270deg, 
-        rgba(58, 64, 160, 0.35) 0%, 
-        rgba(46, 52, 128, 0.2) 60%,
-        transparent 100%
-    );
-    border-top-color: rgba(255, 255, 255, 0.08);
+    opacity: 0.6;
 }
 
 .sidebar-item h3 {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 4px;
+    margin: 0 0 4px 0;
     position: relative;
     z-index: 1;
     letter-spacing: -0.2px;
 }
 
 .sidebar-item p {
-    font-size: 12px;
+    font-size: 14px;
     color: rgba(255, 255, 255, 0.5);
     line-height: 1.4;
     position: relative;
     z-index: 1;
     font-weight: 400;
+    margin: 0;
 }
 
 .sidebar-item:first-of-type {
     border-top: none;
 }
 
-
-
 @font-face {
-  font-family: 'Vazirmatn';
-  src: url('/static/css/app_account/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
-       url('/static/css/app_account/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'Vazirmatn';
+    src: url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+        url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
+
 body, button, input, select, textarea {
-  font-family: 'Vazirmatn', sans-serif !important;
+    font-family: 'Vazirmatn', sans-serif !important;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transform: translateY(-100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                background 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+header.at-top {
+    position: relative;
+    transform: translateY(0);
+}
+
+header.nav-hidden {
+    transform: translateY(-100%);
+}
+
+header.nav-visible {
+    transform: translateY(0);
+    background: rgba(10, 14, 39, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.my-page .search-container {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar{
+        display: none;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .sidebar{
+        display: none;
+    }
 }

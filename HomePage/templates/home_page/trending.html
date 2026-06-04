@@ -1,0 +1,331 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>ترند ها</title>
+
+<link rel="stylesheet" href="{% static 'css/app_homepage/trending.css' %}">
+<link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+
+</head>
+<body>
+
+<!-- CSRF Token برای ارسال درخواست POST -->
+{% csrf_token %}
+
+<a href="/" class="home-icon">
+    <i class="fas fa-home"></i>
+</a>
+
+<div class="hero">
+
+<div class="right">
+
+<h2>Trend Games</h2>
+
+<div class="slider-wrapper">
+
+<div class="arrow left" onclick="slideLeft()">❮</div>
+<div class="arrow right" onclick="slideRight()">❯</div>
+
+<div class="slider-container" id="slider">
+
+    {% for trend in trending %}
+        {% for product in trend.product.all %}
+            <!-- اضافه کردن data-id و data-condition -->
+                <div class="card" 
+                    data-id="{{ product.id }}"
+                    data-bg="{{ trend.gamebg.url }}" 
+                    data-name="{{ product.name }}"
+                    data-summary="{{ product.summary }}"
+                    data-price="{{ product.price_new|intcomma }}"
+                    data-url="/products/{{ product.slug }}"
+                    data-condition="new" style="background-image:url('{{ trend.gameimage.url }}')">
+                    <div class="title">{{ product.name }}</div>
+                </div>
+
+        {% endfor %}
+    {% endfor %}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="left">
+    {% with first_trend=trending.first %}
+        {% with first_product=first_trend.product.all.first %}
+            <h1 id="game-name" style="direction: rtl; text-align: center;">{{ first_product.name }}</h1>
+
+            <p class="desc" id="game-summary" style="direction: rtl; text-align: right;">{{ first_product.summary }}</p>
+
+            <div class="price-box">
+                <span class="new-price" id="game-price">{{ first_product.price_new|intcomma }}</span>
+            </div>
+        {% endwith %}
+    {% endwith %}
+    
+    <div class="cta" style="direction: rtl; text-align: right;">
+        <button class="review" onclick="goToProduct()">مشاهده</button>
+        <button class="buy" onclick="addToCart()">افزودن به سبد خرید</button>
+    </div>
+
+</div>
+
+</div>
+
+<script>
+// دریافت CSRF Token از کوکی
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const slider = document.getElementById("slider");
+const body = document.body;
+const cards = document.querySelectorAll(".card");
+
+const gameName = document.getElementById("game-name");
+const gameSummary = document.getElementById("game-summary");
+const gamePrice = document.getElementById("game-price");
+
+let currentIndex = 0;
+let autoSlideInterval;
+let isAnimating = false;
+
+/* arrows */
+function slideLeft(){
+    slider.scrollBy({ left: -250, behavior: 'smooth' }); 
+}
+
+function slideRight(){
+    slider.scrollBy({ left: 250, behavior: 'smooth' });
+}
+
+/* background */
+function setBackground(bg){
+    body.style.background =
+    `linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.3)), url('${bg}') center/cover no-repeat fixed`;
+}
+
+/* update game info with animation */
+function updateGameInfo(card, callback){
+    const elements = [
+        document.getElementById("game-name"),
+        document.getElementById("game-summary"), 
+        document.getElementById("game-price")
+    ];
+    
+    elements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(15px)';
+    });
+    
+    setTimeout(() => {
+        elements[0].textContent = card.getAttribute("data-name");
+        elements[1].textContent = card.getAttribute("data-summary");
+        elements[2].textContent = card.getAttribute("data-price");
+        
+        elements.forEach((el, index) => {
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+        
+        if(callback) {
+            setTimeout(callback, 600);
+        }
+    }, 400);
+}
+
+/* select card */
+function selectCard(index){
+    if(isAnimating) return;
+    
+    cards.forEach(c => c.classList.remove("selected"));
+    let card = cards[index];
+    card.classList.add("selected");
+    
+    isAnimating = true;
+    
+    updateGameInfo(card, () => {
+        isAnimating = false;
+    });
+    
+    let bg = card.getAttribute("data-bg");
+    setBackground(bg);
+    
+    card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    localStorage.setItem("selectedGame", index);
+    currentIndex = index;
+}
+
+/* navigate to product page */
+function goToProduct(){
+    if(cards[currentIndex]){
+        const url = cards[currentIndex].getAttribute("data-url");
+        if(url && url !== 'None'){
+            window.location.href = url;
+        } else {
+            console.error("URL for this product not found");
+        }
+    }
+}
+
+/* add to cart - نسخه اصلاح شده با AJAX */
+function addToCart(){
+    if(!cards[currentIndex]) return;
+    
+    const card = cards[currentIndex];
+    const productId = card.getAttribute("data-id");
+    const condition = card.getAttribute("data-condition") || "new";
+    const productName = card.getAttribute("data-name");
+    
+    // اعتبارسنجی
+    if(!productId || productId === 'None'){
+        alert('خطا: شناسه محصول نامعتبر است');
+        return;
+    }
+    
+    // آماده‌سازی دکمه برای حالت Loading
+    const btn = document.querySelector('.buy');
+    const originalText = btn.textContent;
+    btn.textContent = 'در حال افزودن...';
+    btn.disabled = true;
+    
+    // ساخت FormData مطابق با NewOrderForm
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('count', 1);
+    formData.append('condition', condition);
+    
+    fetch("{% url 'add-to-cart' %}", {  
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if(data.status === 'success'){
+            // نمایش موفقیت
+            btn.textContent = '✓ اضافه شد';
+            btn.style.background = '#28a745';
+            
+            // نمایش نوتیفیکیشن (اختیاری)
+            showNotification(data.message, 'success');
+        } else {
+            // نمایش خطای سرور
+            btn.textContent = '⚠ خطا';
+            btn.style.background = '#dc3545';
+            showNotification(data.message || 'خطا در افزودن به سبد خرید', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        btn.textContent = '⚠ خطا';
+        btn.style.background = '#dc3545';
+        showNotification('خطا در ارتباط با سرور', 'error');
+    })
+    .finally(() => {
+        // بازگرداندن دکمه به حالت اولیه پس از 2 ثانیه
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 2000);
+    });
+}
+
+/* نمایش نوتیفیکیشن (اختیاری - برای UX بهتر) */
+function showNotification(message, type) {
+    // اگر المنت نوتیفیکیشن وجود ندارد، بساز
+    let notif = document.getElementById('cart-notification');
+    if(!notif) {
+        notif = document.createElement('div');
+        notif.id = 'cart-notification';
+        notif.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            z-index: 10000;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-20px);
+        `;
+        document.body.appendChild(notif);
+    }
+    
+    notif.textContent = message;
+    notif.style.background = type === 'success' ? '#28a745' : '#dc3545';
+    notif.style.opacity = '1';
+    notif.style.transform = 'translateY(0)';
+    
+    setTimeout(() => {
+        notif.style.opacity = '0';
+        notif.style.transform = 'translateY(-20px)';
+    }, 3000);
+}
+
+/* click event on cards */
+cards.forEach((card, index) => {
+    card.addEventListener("click", () => {
+        clearInterval(autoSlideInterval);
+        selectCard(index);
+    });
+});
+
+/* load saved */
+window.addEventListener("load", () => {
+    let saved = localStorage.getItem("selectedGame");
+    if(saved !== null){
+        selectCard(parseInt(saved));
+    }
+    startAutoSlide();
+});
+
+/* auto slider */
+function autoSlide(){
+    currentIndex++;
+    if(currentIndex >= cards.length){
+        currentIndex = 0;
+    }
+    selectCard(currentIndex);
+}
+
+function startAutoSlide(){
+    autoSlideInterval = setInterval(autoSlide, 2500);
+}
+
+</script>
+
+</body>
+</html>

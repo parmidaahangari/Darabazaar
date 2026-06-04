@@ -1,0 +1,324 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>اطلاعات حساب کاربری</title>
+
+  <link rel="stylesheet" href="{% static 'css/app_account/customeraccount.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app_account/customerinfo.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app_account/style.css' %}">
+  <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+  
+</head>
+<body>
+
+  <!-- NAVBAR -->
+    {% include "layout/navbar.html" %}
+
+  <!-- MAIN -->
+  <main>
+
+    <section class="content-panel">
+
+    <div class="form-container">
+      <form method="POST" >
+            {% csrf_token %}
+
+            <h2 class="form-title">نام کاربری</h2>
+            
+            <div class="form-group full-width">
+                <input type="text" id="username" name="username"  value="{{ form.username.value|default:'' }}" placeholder="Gamer-#125412" class="form-input">
+            </div>
+
+            
+            <div class="form-row">
+                
+                <div class="form-group">
+                    <h3 class="form-subtitle">ایمیل</h3>
+                    <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}" placeholder="emailaddress@gmail.com" class="form-input">
+                    <span class="verified-text">ایمیل تایید شد</span>
+                </div>
+
+                <div class="form-group">
+                    <h3 class="form-subtitle">شماره موبایل</h3>
+                    <input type="tel" id="phone" name="phone" value="{{ form.phone.value|default:'' }}" placeholder="09123456789" class="form-input">
+                    <span class="verified-text">شماره موبایل تایید شد</span>
+                </div>
+
+            </div>
+
+            <h3 class="form-subtitle password-title">رمز عبور</h3>
+              <a href="#" class="recover-link" onclick="openModal(); return false;">رمز جدید</a>
+
+            <button type="submit" class="save-btn">ذخیره</button>
+        </form>
+    </div>
+
+    </section>
+
+
+
+    <!-- Sidebar -->
+    {% include 'customer_account/paritial/sidebar.html' %}
+
+  </main>
+
+
+  <!-- FOOTER -->
+    {% include "layout/footer.html" %}
+
+
+
+
+<!-- Password Modal -->
+<!-- Password Modal -->
+<div class="modal-overlay" id="passwordModal">
+  <div class="modal-box">
+    
+    <div class="modal-header">
+      <h2 class="modal-title">تغییر رمز عبور</h2>
+      <button class="modal-close" onclick="closeModal()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+
+    <form method="POST" action="{% url 'change-password' %}" id="change-password-form">
+      {% csrf_token %}
+      
+      <div class="modal-body">
+        <!-- نمایش خطاهای فرم -->
+        <div id="password-errors" class="alert alert-danger" style="display: none; background: #e74c3c; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px;">
+        </div>
+
+        {% if password_form.errors %}
+          <div class="alert alert-danger" style="background: #e74c3c; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px;">
+            {% for field, errors in password_form.errors.items %}
+              {% for error in errors %}
+                <div style="margin: 5px 0;">{{ error }}</div>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-success" style="background: #2ecc71; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px;">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="modal-form-group">
+          <label class="modal-label">رمز عبور فعلی</label>
+          <div class="input-wrapper">
+            <input type="password" name="currentPassword" id="currentPassword" placeholder="رمز عبور فعلی را وارد کنید" class="form-input modal-input">
+            <button type="button" class="toggle-eye" onclick="togglePass('currentPassword', this)">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-form-group">
+          <label class="modal-label">رمز عبور جدید</label>
+          <div class="input-wrapper">
+            <input type="password" name="newPassword" id="newPassword" placeholder="رمز عبور جدید را وارد کنید" class="form-input modal-input">
+            <button type="button" class="toggle-eye" onclick="togglePass('newPassword', this)">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-strength" id="strengthBar">
+            <div class="strength-fill" id="strengthFill"></div>
+          </div>
+          <span class="strength-label" id="strengthLabel"></span>
+        </div>
+
+        <div class="modal-form-group">
+          <label class="modal-label">تکرار رمز عبور جدید</label>
+          <div class="input-wrapper">
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="رمز عبور جدید را تکرار کنید" class="form-input modal-input">
+            <button type="button" class="toggle-eye" onclick="togglePass('confirmPassword', this)">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <span class="match-msg" id="matchMsg"></span>
+        </div>
+      </div>
+    </form>
+
+    <div class="modal-footer">
+      <button class="modal-cancel-btn" onclick="closeModal()">انصراف</button>
+      <button type="button" class="modal-save-btn" onclick="submitPassword()">ذخیره رمز</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+<script>
+  // Existing
+  function highlightCard(type) {
+    document.querySelectorAll('.card').forEach(c => {
+      c.style.background = '';
+      c.style.outline = '';
+    });
+    const card = document.getElementById('card-' + type);
+    if (card) {
+      card.style.background = '#2d3480';
+      card.style.outline = '2px solid #4a54c8';
+    }
+  }
+
+  // Modal
+  function openModal() {
+    document.getElementById('passwordModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // پاک کردن خطاهای قبلی
+    document.getElementById('password-errors').style.display = 'none';
+    document.getElementById('password-errors').innerHTML = '';
+  }
+
+  // Open modal if there are errors after reload
+  {% if show_password_modal %}
+    window.addEventListener('load', function() {
+      openModal();
+    });
+  {% endif %}
+
+  function closeModal() {
+    document.getElementById('passwordModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close on overlay click
+  document.getElementById('passwordModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Toggle password visibility
+  function togglePass(id, btn) {
+    const input = document.getElementById(id);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  }
+
+  // Password strength
+  document.getElementById('newPassword').addEventListener('input', function() {
+    const val = this.value;
+    const fill = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    let strength = 0;
+    if (val.length >= 8) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+    const levels = [
+      { w: '0%',   color: 'transparent', text: '' },
+      { w: '25%',  color: '#e74c3c',     text: 'ضعیف' },
+      { w: '50%',  color: '#f39c12',     text: 'متوسط' },
+      { w: '75%',  color: '#3498db',     text: 'خوب' },
+      { w: '100%', color: '#2ecc71',     text: 'عالی' },
+    ];
+
+    fill.style.width = levels[strength].w;
+    fill.style.background = levels[strength].color;
+    label.textContent = levels[strength].text;
+    label.style.color = levels[strength].color;
+
+    checkMatch();
+  });
+
+  // Match check
+  document.getElementById('confirmPassword').addEventListener('input', checkMatch);
+
+  function checkMatch() {
+    const np = document.getElementById('newPassword').value;
+    const cp = document.getElementById('confirmPassword').value;
+    const msg = document.getElementById('matchMsg');
+    if (!cp) { msg.textContent = ''; return; }
+    if (np === cp) {
+      msg.textContent = '✓ رمزها مطابقت دارند';
+      msg.style.color = '#2ecc71';
+    } else {
+      msg.textContent = '✗ رمزها مطابقت ندارند';
+      msg.style.color = '#e74c3c';
+    }
+  }
+
+  function submitPassword() {
+    const form = document.getElementById('change-password-form');
+    const errorDiv = document.getElementById('password-errors');
+    
+    const currentPass = document.getElementById('currentPassword').value;
+    const newPass = document.getElementById('newPassword').value;
+    const confirmPass = document.getElementById('confirmPassword').value;
+    
+    if (!currentPass || !newPass || !confirmPass) {
+        errorDiv.textContent = 'لطفاً تمام فیلدها را پر کنید.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    
+    if (newPass !== confirmPass) {
+        errorDiv.textContent = 'رمز عبور جدید و تکرار آن مطابقت ندارند.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    
+    if (newPass.length < 8) {
+        errorDiv.textContent = 'رمز عبور باید حداقل ۸ کاراکتر باشد.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    const formData = new FormData(form);
+    const saveBtn = document.querySelector('.modal-save-btn');
+    const originalBtnText = saveBtn.textContent;
+    
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'در حال ذخیره...';
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(async response => {
+        const data = await response.json();
+        if (response.ok && data.success) {
+            alert('رمز عبور با موفقیت تغییر کرد.');
+            location.reload(); // برای نمایش پیام موفقیت در صفحه اصلی
+        } else {
+            errorDiv.textContent = data.error || 'خطا در تغییر رمز عبور';
+            errorDiv.style.display = 'block';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        errorDiv.textContent = 'خطای سیستمی رخ داده است.';
+        errorDiv.style.display = 'block';
+    })
+    .finally(() => {
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalBtnText;
+    });
+}
+
+</script>
+
+
+</body>
+</html>

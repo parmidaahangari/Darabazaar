@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/app_account/customerorder.css' %}">
+    <link rel="stylesheet" href="{% static 'css/app_account/style.css' %}">
+    <title>سفارش های من</title>
+
+    <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+
+</head>
+<body>
+
+    <!-- ══════════ NAVBAR ══════════ -->
+    {% include "layout/navbar.html" %}
+
+
+    <!-- ══════════ MAIN ══════════ -->
+    <main>
+
+
+    <!-- ── CONTENT: ORDERS ── -->
+
+    {% if orders and orders|length > 0 %}
+        {% for item in orders %}
+            {% if item.details|length > 0 %}
+            <div class="content-panel">
+                <div class="content-panel order-wrapper">
+
+                    <!-- Order Header -->
+                    <div class="order-header" onclick="toggleOrder(this)">
+                        <div class="header-info">
+
+                            <div class="info-group">
+                                <span class="label">Total</span>
+                                <span class="value">{{ item.total_price }} تومان</span>
+                            </div>
+                            <div class="info-group">
+                                <span class="label">Order Number</span>
+                                <span class="value">#{{ item.order.id }}</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down order-expand"></i>
+                    </div>
+
+                    <!-- Order Details (Collapsible) -->
+                    <div class="order-details">
+                        {% for detail in item.details %}
+                            <div class="order-details-item">
+                                <!-- Product Image -->
+                                <div class="product-cover">
+                                    {% if detail.product.cover_image %}
+                                        <img src="{{ detail.product.cover_image.url }}" alt="{{ detail.product.name }}">
+                                    {% else %}
+                                        <div class="no-image"><i class="fas fa-gamepad"></i></div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Product Info -->
+                                <div class="product-info">
+                                    <div class="product-title">{{ detail.product.name }} <span class="product-condition">({{ detail.get_condition_display }})</span></div>
+                                    <div class="product-meta">
+                                        <span class="product-qty">{{ detail.count }}x Total</span>
+                                        <div class="product-price-action">
+                                            <span class="product-price">{{ detail.price }} تومان</span>
+                                            
+                                            <!-- Existing Backend Delete Button -->
+                                            <form method="post" action="{% url 'remove_from_cart' detail.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" style="background: none; border: none; cursor: pointer; margin-left: 15px;">
+                                                    <i class="fas fa-trash-alt" style="color: #ffffffca;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if not forloop.last %}
+                                <div class="item-separator"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+
+        {% if not orders.0.details or orders.0.details|length == 0 %}
+            <div class="empty-orders">
+                <div class="empty-orders-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h2 class="empty-orders-title">سبد خرید شما خالی است</h2>
+                <p class="empty-orders-text">شما هنوز هیچ محصولی به سبد خرید اضافه نکرده‌اید.</p>
+                <a href="/products/" class="empty-orders-btn">
+                    
+                    مشاهده فروشگاه
+                </a>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="empty-orders">
+            <div class="empty-orders-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <h2 class="empty-orders-title">سبد خرید شما خالی است</h2>
+            <p class="empty-orders-text">شما هنوز هیچ محصولی به سبد خرید اضافه نکرده‌اید.</p>
+            <a href="/products/" class="empty-orders-btn">
+                <i class="fas fa-gamepad"></i>
+                مشاهده فروشگاه
+            </a>
+        </div>
+    {% endif %}
+
+
+    {% include 'customer_account/paritial/sidebar.html' %}
+
+
+    </main>
+
+    <!-- ══════════ FOOTER ══════════ -->
+    {% include "layout/footer.html" %}
+   
+
+<script>
+    function toggleOrder(headerElement) {
+        const details = headerElement.nextElementSibling;
+        headerElement.classList.toggle('expanded');
+        details.classList.toggle('show');
+    }
+</script>
+
+</body>
+</html>

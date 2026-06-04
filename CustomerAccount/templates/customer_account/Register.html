@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ورود / ثبت‌نام</title>
+
+<link rel="stylesheet" href="{% static 'css/app_account/register.css' %}">
+
+<link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="forms-container">
+<div class="signin-signup">
+
+<!-- فرم ورود -->
+<form class="sign-in-form" method="POST" action="{% url 'login' %}" id="loginForm">
+    {% csrf_token %}
+    
+    <h2 class="title">خوش آمدید</h2>
+    <p class="subtitle">به حساب خود وارد شوید</p>
+
+    <div class="input-field">
+        <i class="fas fa-user field-icon"></i>
+        <input type="text" placeholder="نام کاربری یا ایمیل" name="username" required>
+    </div>
+
+    <div class="input-field">
+        <i class="fas fa-lock field-icon"></i>
+        <input type="password" id="signin-password" placeholder="رمز عبور" name="password" required>
+        <i class="fas fa-eye toggle-password" onclick="togglePassword('signin-password',this)"></i>
+    </div>
+
+    <button class="btn" type="submit">ورود</button>
+
+    <p class="social-text">یا وارد شوید با</p>
+
+    <div class="social-media">
+        <div class="social-icon"><i class="fab fa-google"></i></div>
+        <div class="social-icon"><i class="fab fa-discord"></i></div>
+        <div class="social-icon"><i class="fab fa-steam"></i></div>
+    </div>
+
+    <!-- دکمه موبایل -->
+    <div class="mobile-toggle">
+        حساب کاربری ندارید؟<button type="button" onclick="switchMode(true)">ثبت‌نام کنید</button>
+    </div>
+</form>
+
+<!-- فرم ثبت‌نام -->
+<form class="sign-up-form" method="POST" action="{% url 'register' %}" id="signupForm">
+    {% csrf_token %}
+    
+    <h2 class="title">ثبت نام</h2>
+    <p class="subtitle">ساخت حساب جدید</p>
+
+    <div class="input-field">
+        <i class="fas fa-user field-icon"></i>
+        <input type="text" placeholder="نام کاربری" name="username" required>
+    </div>
+
+    <div class="input-field">
+        <i class="fas fa-envelope field-icon"></i>
+        <input type="email" placeholder="ایمیل" name="email" required>
+    </div>
+
+    <div class="input-field">
+        <i class="fas fa-phone field-icon"></i>
+        <input type="tel" placeholder="شماره همراه" name="phone">
+    </div>
+
+    <div class="input-field">
+        <i class="fas fa-lock field-icon"></i>
+        <input type="password" id="signup-password" placeholder="رمز عبور" name="password" required>
+        <i class="fas fa-eye toggle-password" onclick="togglePassword('signup-password',this)"></i>
+    </div>
+
+    <button class="btn" type="submit">ثبت‌نام</button>
+
+    <!-- دکمه موبایل -->
+    <div class="mobile-toggle">
+        قبلاً ثبت‌نام کرده‌اید؟<button type="button" onclick="switchMode(false)">وارد شوید</button>
+    </div>
+</form>
+
+</div>
+</div>
+
+<div class="panels-container">
+
+<div class="panel right-panel">
+    <h3>کاربر جدید هستید؟</h3>
+    <p>برای دسترسی به تمام features سایت، همین حالا ثبت‌نام کنید</p>
+    <button class="btn-transparent" onclick="switchMode(true)">ثبت نام</button>
+</div>
+
+<div class="panel left-panel">
+    <h3>قبلاً ثبت نام کرده‌اید؟</h3>
+    <p>اگر حساب کاربری دارید، برای ادامه وارد شوید</p>
+    <button class="btn-transparent" onclick="switchMode(false)">ورود</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+// مدیریت حالت فرم
+function switchMode(isSignUp) {
+    const container = document.querySelector('.container');
+    if(isSignUp) {
+        container.classList.add('sign-up-mode');
+    } else {
+        container.classList.remove('sign-up-mode');
+    }
+}
+
+// نمایش/مخفی کردن رمز عبور
+function togglePassword(id, icon) {
+    const input = document.getElementById(id);
+    if(input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+}
+
+// اعتبارسنجی فرم ثبت‌نام با AJAX
+const signupForm = document.getElementById('signupForm');
+if(signupForm) {
+    signupForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('.btn');
+        const originalText = btn.textContent;
+        
+        btn.disabled = true;
+        btn.textContent = 'در حال ثبت...';
+        
+        try {
+            const formData = new FormData(this);
+            const response = await fetch(this.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            });
+            
+            const data = await response.json();
+            
+            if(response.ok && data.success) {
+                showNotification(data.message || "ثبت‌نام موفق بود", "success");
+                setTimeout(() => {
+                    window.location.href = data.redirect_url || "{% url 'home' %}";
+                }, 1000);
+            } else {
+                // نمایش خطا
+                this.classList.add('shake');
+                setTimeout(() => this.classList.remove('shake'), 500);
+                
+                if(data.errors) {
+                    data.errors.forEach(err => showNotification(err, "error"));
+                } else {
+                    showNotification(data.message || "خطا در ثبت‌نام", "error");
+                }
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        } catch(error) {
+            showNotification("خطا در ارتباط با سرور", "error");
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    });
+}
+
+// سیستم نوتیفیکیشن
+function showNotification(msg, type = "success") {
+    // حذف نوتیف قبلی اگر وجود دارد
+    const existing = document.querySelector('.custom-notification');
+    if(existing) existing.remove();
+    
+    const div = document.createElement("div");
+    div.className = 'custom-notification';
+    div.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+        <span>${msg}</span>
+    `;
+    div.style.cssText = `
+        position:fixed;
+        top:20px;
+        left:20px;
+        padding:15px 25px;
+        border-radius:12px;
+        color:white;
+        font-size:14px;
+        z-index:9999;
+        background:${type === "success" ? "rgba(16,185,129,0.95)" : "rgba(239,68,68,0.95)"};
+        backdrop-filter:blur(10px);
+        border:1px solid rgba(255,255,255,0.2);
+        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        display:flex;
+        align-items:center;
+        gap:10px;
+        animation:slideIn 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        font-family:'Vazirmatn',sans-serif;
+        direction:rtl;
+    `;
+    
+    document.body.appendChild(div);
+    
+    setTimeout(() => {
+        div.style.animation = 'slideOut 0.4s cubic-bezier(0.4, 0.0, 0.2, 1) forwards';
+        setTimeout(() => div.remove(), 400);
+    }, 4000);
+}
+
+// اضافه کردن انیمیشن‌های CSS برای نوتیف
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(-120%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(-120%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+
+// پشتیبانی از کلید Escape برای بازگشت
+document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') {
+        const container = document.querySelector('.container');
+        if(container.classList.contains('sign-up-mode')) {
+            switchMode(false);
+        }
+    }
+});
+</script>
+
+</body>
+</html>

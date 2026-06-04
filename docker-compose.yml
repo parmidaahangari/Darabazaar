@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - ./.env
+
+  redis:
+    image: redis:6-alpine
+
+  web:
+    # اصلاح شد: آدرس مستقیم و استاندارد داکر ریجستر گیت‌هاب شما
+    image: ghcr.io/parmidaahangari/darabazaar/django-app:latest
+    command: gunicorn FirstGame.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - web_static:/app/staticfiles
+      - web_media:/app/media
+    env_file:
+      - ./.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=FirstGame.settings.production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  celery_worker:
+    # اصلاح شد: دقیقاً همان ایمیج وب را استفاده می‌کند
+    image: ghcr.io/parmidaahangari/darabazaar/django-app:latest
+    command: celery -A FirstGame worker -l info
+    env_file:
+      - ./.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=FirstGame.settings.production
+    depends_on:
+      - db
+      - redis
+      - web
+
+  celery_beat:
+    # اصلاح شد: دقیقاً همان ایمیج وب را استفاده می‌کند
+    image: ghcr.io/parmidaahangari/darabazaar/django-app:latest
+    command: celery -A FirstGame beat -l info --scheduler django_celery_beat.schedulers.DatabaseScheduler
+    env_file:
+      - ./.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=FirstGame.settings.production
+    depends_on:
+      - db
+      - redis
+      - web
+
+volumes:
+  postgres_data:
+  web_static:
+  web_media:

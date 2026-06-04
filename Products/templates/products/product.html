@@ -1,0 +1,555 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }}</title>
+
+    <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
+    
+    <!-- لینک فایل‌های استایل شما -->
+    <link rel="stylesheet" href="{% static 'css/app_products/product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER (متصل به بیس کدهای شما) -->
+    {% include "layout/navbar.html" %}
+
+    <!-- TITLE -->
+    <div class="title">{{ product.name }}</div>
+    <b><div class="price" data-raw="{{ product.price_new }}">{{ product.price_new|intcomma }} تومان</div></b>
+    
+    <!-- HERO + RIGHT -->
+    <div class="main">
+
+        <!-- بخش سمت چپ: عکس و ویدیو -->
+        <div class="left">
+            <div class="hero">
+                <div class="hero-cover" onclick="playHeroVideo()">
+                    {% if product.media.all %}
+                        <img src="{{ product.media.all.0.file.url }}" class="cover-img" alt="{{ product.name }}">
+                    {% endif %}
+                    <div class="play-icon"><i class="fas fa-play"></i></div>
+                    
+                </div>
+
+                <video id="heroVideo" controls muted loop playsinline poster="{{ product.media.all.0.thumbnail.url }}" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    {% if product.media.all %}
+                        <source src="{{ product.media.all.0.file.url }}" type="video/mp4">
+                    {% endif %}
+                </video>
+
+            </div>
+            
+            <div class="thumbs">
+                {% for media in product.media.all %}
+                    <div class="thumb {% if forloop.first %}active{% endif %}" 
+                        onclick="changeMedia('{{ media.file.url }}', '{{ media.media_type }}', this, '{% if media.thumbnail %}{{ media.thumbnail.url }}{% endif %}')">
+                        
+                        {% if media.media_type == 'video' %}
+                            <!-- برای ویدیو: نمایش thumbnail -->
+                            {% if media.thumbnail %}
+                                <img src="{{ media.thumbnail.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                                <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                                    <source src="{{ media.file.url }}" type="video/mp4">
+                                </video>
+                            {% endif %}
+                            <div class="thumb-play-icon"><i class="fas fa-play"></i></div>
+                        {% else %}
+                            <!-- برای عکس: نمایش عادی -->
+                            <img src="{{ media.file.url }}" alt="{{ product.name }} - {{ forloop.counter }}">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+
+        <!-- بخش سمت راست: خرید و وضعیت -->
+        <div class="right">
+            {% if product.logo %}
+                <img src="{{ product.logo.url }}" class="game-logo" alt="{{ product.name }}" />
+            {% else %}
+                <img src="{% static 'images/default-logo.png' %}" class="game-logo" alt="Default Logo" />
+            {% endif %}
+            
+            <div class="condition-fancy">
+                <!-- وضعیت نو -->
+                <div class="fancy-item {% if product.stock_new > 0 %}active{% else %}out-of-stock{% endif %}" 
+                    data-price="{{ product.discounted_price_new }}" 
+                    data-condition="new"
+                    {% if product.stock_new > 0 %}onclick="selectCondition(this)"{% endif %}>
+                    آکبند
+                    <div class="price-wrapper">
+                        {% if product.discount_new > 0 %}
+                            <span class="discount" data-raw="{{ product.price_new }}">{{ product.price_new|intcomma }}</span>
+                            <span class="final-price" data-raw="{{ product.discounted_price_new }}">{{ product.discounted_price_new|intcomma }}</span>
+                        {% else %}
+                            <span class="final-price" data-raw="{{ product.price_new }}">{{ product.price_new|intcomma }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- وضعیت کارکرده -->
+                <div class="fancy-item {% if product.stock_used == 0 %}out-of-stock{% endif %}" 
+                    data-price="{{ product.discounted_price_used }}" 
+                    data-condition="used"
+                    {% if product.stock_used > 0 %}onclick="selectCondition(this)"{% endif %}>
+                    کارکرده
+                    <div class="price-wrapper">
+                        {% if product.discount_used > 0 %}
+                            <span class="discount" data-raw="{{ product.price_used }}">{{ product.price_used|intcomma }}</span>
+                            <span class="final-price" data-raw="{{ product.discounted_price_used }}">{{ product.discounted_price_used|intcomma }}</span>
+                        {% else %}
+                            <span class="final-price" data-raw="{{ product.price_used }}">{{ product.price_used|intcomma }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="game-desc"  style="direction: rtl; text-align: right;">
+                {{ product.summary|truncatewords:20 }}
+            </div>
+
+            <!-- فرم‌های خرید -->
+            <div class="buy-buttons" style="display: flex; flex-direction: column; gap: 15px;">
+
+                <!-- فرم سبد خرید و خرید سریع -->
+                <form method="POST" action="{% url 'add-to-cart' %}" id="addToCartForm" style="display: flex; flex-direction: column; gap: 15px; margin: 0;">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="condition" id="selectedCondition" value="new">
+                    <input type="hidden" name="count" value="1">
+                    
+                    <button type="submit" class="buy-btn add-cart" style="width: 100%;">افزودن به سبد</button>
+                </form>
+
+                <!-- فرم علاقه‌مندی -->
+                <form method="POST" action="{% url 'add_new_wishlist' %}" id="wishlistForm" style="margin: 0;">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit" class="buy-btn wishlist" style="width: 100%;">افزودن به علاقه‌مندی‌ها</button>
+                </form>
+                
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" data-tab="description">Description</div>
+        <div class="tab" data-tab="addons">Add-Ons</div>
+        <div class="tab" data-tab="reviews">Reviews</div>
+    </div>
+
+    <!-- DESCRIPTION SECTION -->
+    <section id="description" class="tab-section active-section" >
+        <div class="about-wrapper">
+
+            <!-- LEFT (ABOUT) -->
+            <div class="about-section" style="width: 840px;">
+                <div class="about-short" style="direction: rtl; text-align: right;">
+                    {{ product.summary|linebreaksbr }}
+                </div>
+
+                {% if product.about_main_image %}
+                    <img class="about-main-image" src="{{ product.about_main_image.url }}" alt="{{ product.name }}">
+                {% endif %}
+
+                <div class="about-extra" style="direction: rtl; text-align: right;">
+                    {% for feature in product.about_features.all %}
+                        <h3>• {{ feature.title }}</h3>
+                        <p>{{ feature.description|linebreaksbr }}</p>
+                        {% if feature.image %}
+                            <img src="{{ feature.image.url }}" alt="{{ feature.title }}">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <button class="show-toggle" onclick="toggleAbout()">Show More</button>
+            </div>
+
+            <!-- RIGHT (INFO) -->
+            <div class="about-right">
+                <div class="info-box">
+                    <div class="info-label">Developer</div>
+                    <div class="info-value">{{ product.developer|default:"N/A" }}</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Publisher</div>
+                    <div class="info-value">{{ product.publisher|default:"N/A" }}</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Release Date</div>
+                    <div class="info-value">{{ product.release_date|default:"N/A" }}</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Genres</div>
+                    <div class="info-value">
+                        {% for genre in product.genres.all %}
+                            {{ genre.label }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            N/A
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">File Size</div>
+                    <div class="info-value" data-raw="{{ product.file_size_gb }}">{{ product.file_size_gb }} GB</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ADD-ONS SECTION -->
+    <section id="addons" class="addons-section tab-section" style="padding: 0 48px;">
+        <h2 class="addons-title">Add-Ons</h2>
+        <div class="addons-divider"></div>
+
+        <div class="addon-box">
+            <h3>Black Myth: Wukong Deluxe Edition Upgrade</h3>
+            <p class="addon-note">*Requires Base Game*</p>
+            <p class="addon-desc">
+                This upgrade allows owners of Black Myth: Wukong Digital Standard Edition to access Black Myth: 
+                Wukong Digital Deluxe Edition content...
+            </p>
+            <div class="addon-card">
+                <div class="addon-img" style="background-image:url('{% static 'images/a5ce3c61b1664bfeac299669e2b84b1143ac2323.jpg' %}');"></div>
+                <div class="addon-price-box">
+                    <div class="addon-price" data-raw="10">$10.00</div>
+                    <button class="btn-primary">Add To Cart</button>
+                    <button class="btn-outline">Add To Wishlist</button>
+                </div>
+            </div>
+            <div class="addon-list">
+                <p class="addon-list-title">The Deluxe Edition Upgrade includes:</p>
+                <ul>
+                    <li>Weapon: Bronzecloud Staff</li>
+                    <li>Equipment: Folk Opera Mask Piece, Folk Opera Aimsight Armor</li>
+                    <li>Curio: Wind Chime</li>
+                    <li>Selected Digital Soundtrack</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section id="reviews" class="tab-section" style="padding:40px 48px;">
+        <h2>Reviews</h2>
+        <p style="opacity:0.7; margin-top:10px;">No reviews yet.</p>
+    </section>
+
+    <!-- FOOTER -->
+    {% include "layout/footer.html" %}
+
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'js/add_cart.js' %}"></script>
+
+<script>
+// ═══════════════════════════════════════════════════
+// تبدیل اعداد لاتین به فارسی
+// ═══════════════════════════════════════════════════
+function toPersianNumber(str) {
+    if (!str) return '';
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return str.toString().replace(/[0-9]/g, function(w) {
+        return persianDigits[+w];
+    });
+}
+
+// تابع کمکی برای فرمت قیمت با جداکننده هزارگان فارسی
+function formatPersianPrice(price) {
+    // تبدیل به عدد و فرمت با جداکننده
+    const num = parseInt(price);
+    if (isNaN(num)) return price;
+    
+    // استفاده از toLocaleString برای فارسی
+    return num.toLocaleString('fa-IR');
+}
+
+// تبدیل تمام اعداد صفحه به فارسی
+function convertNumbersToPersian() {
+    // تبدیل قیمت‌های اصلی
+    document.querySelectorAll('.price').forEach(el => {
+        const raw = el.getAttribute('data-raw');
+        if (raw) {
+            el.textContent = formatPersianPrice(raw) + ' تومان';
+        } else {
+            // اگر data-raw نداشت، محتوای فعلی را تبدیل کن
+            el.textContent = toPersianNumber(el.textContent);
+        }
+    });
+
+    // تبدیل قیمت‌های داخل fancy-item
+    document.querySelectorAll('.fancy-item .price').forEach(el => {
+        const raw = el.getAttribute('data-raw');
+        if (raw) {
+            el.textContent = formatPersianPrice(raw);
+        }
+    });
+
+    // تبدیل اطلاعات باکس سمت راست (File Size و ...)
+    document.querySelectorAll('.info-value').forEach(el => {
+        const raw = el.getAttribute('data-raw');
+        if (raw) {
+            el.textContent = toPersianNumber(raw) + ' GB';
+        } else if (el.textContent.includes('GB') || !isNaN(parseInt(el.textContent))) {
+            // اگر GB داشت یا عدد بود
+            el.textContent = toPersianNumber(el.textContent);
+        }
+    });
+
+    // تبدیل قیمت addon (اگر عدد باشد)
+    document.querySelectorAll('.addon-price').forEach(el => {
+        const raw = el.getAttribute('data-raw');
+        if (raw) {
+            // فرض می‌کنیم قیمت به دلار است ولی عدد را فارسی می‌کنیم
+            el.textContent = '$' + toPersianNumber(raw) + '.۰۰';
+        }
+    });
+}
+
+// اجرای تبدیل هنگام بارگذاری صفحه
+document.addEventListener('DOMContentLoaded', convertNumbersToPersian);
+
+function playHeroVideo() {
+    const video = document.getElementById("heroVideo");
+    const cover = document.querySelector(".hero-cover");
+
+    cover.style.display = "none";
+    video.style.display = "block";
+    video.play();
+}
+
+function selectCondition(el) {
+    // پاک کردن کلاس اکتیو از بقیه
+    document.querySelectorAll('.fancy-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+
+    // آپدیت اینپوت مخفی برای فرم افزودن به سبد خرید
+    const condition = el.getAttribute("data-condition");
+    document.getElementById("selectedCondition").value = condition;
+    
+    // آپدیت قیمت نمایش داده شده در بالای صفحه با انیمیشن
+    const price = el.getAttribute("data-price");
+    const mainPriceEl = document.querySelector('.container > .price');
+    if (mainPriceEl && price) {
+        mainPriceEl.style.opacity = '0';
+        setTimeout(() => {
+            mainPriceEl.setAttribute('data-raw', price);
+            mainPriceEl.textContent = formatPersianPrice(price) + ' تومان';
+            mainPriceEl.style.opacity = '1';
+        }, 200);
+    }
+}
+
+function toggleAbout() {
+    const extra = document.querySelector(".about-extra");
+    const btn = document.querySelector(".show-toggle");
+
+    if (extra.style.display === "block" || extra.style.display === "") {
+        extra.style.display = "none";
+        btn.textContent = "Show More";
+    } else {
+        extra.style.display = "block";
+        btn.textContent = "Show Less";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const tabs = document.querySelectorAll(".tab");
+    const sections = document.querySelectorAll(".tab-section");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            sections.forEach(sec => sec.classList.remove("active-section"));
+
+            const targetID = tab.getAttribute("data-tab");
+            const targetSection = document.getElementById(targetID);
+
+            if (targetSection) targetSection.classList.add("active-section");
+        });
+    });
+});
+
+function showNotification(msg, type = "success") {
+    const div = document.createElement("div");
+    div.textContent = msg;
+    div.style = `
+        position:fixed;top:20px;right:20px;
+        padding:12px 20px;border-radius:8px;
+        color:white;font-size:14px;z-index:9999;
+        background:${type === "success" ? "#11998e" : "#eb3349"};
+    `;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('addToCartForm');
+    
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            // اگر کاربر لاگین نیست، به صفحه register هدایت می‌شود
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.message, 'error');
+            }
+        } catch (error) {
+            showNotification('خطایی رخ داده است', 'error');
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('wishlistForm');
+    
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+            
+            const data = await response.json();
+            showNotification(data.message, data.status);
+        } catch (error) {
+            showNotification('خطایی رخ داده است', 'error');
+        }
+    });
+});
+
+function changeMedia(mediaUrl, mediaType, thumbElement, thumbnailUrl = '') {
+    const video = document.getElementById("heroVideo");
+    const cover = document.querySelector(".hero-cover");
+    const coverImg = cover.querySelector('.cover-img');
+    const playIcon = cover.querySelector('.play-icon');
+    
+    // مخفی کردن ویدیو
+    video.style.display = "none";
+    video.pause();
+    
+    // نمایش cover
+    cover.style.display = "flex";
+    
+    if (mediaType === 'video') {
+        // برای ویدیو: نمایش thumbnail به عنوان عکس کاور
+        if (thumbnailUrl) {
+            coverImg.src = thumbnailUrl;
+            video.setAttribute('poster', thumbnailUrl);
+        } else {
+            // اگر thumbnail نداشت، از فریم اول ویدیو استفاده کن
+            coverImg.src = mediaUrl;
+        }
+        playIcon.style.display = "flex";
+        
+        // آپدیت سورس ویدیو
+        const videoSource = video.querySelector('source');
+        videoSource.src = mediaUrl;
+        video.load();
+    } else {
+        // اگر عکس بود
+        coverImg.src = mediaUrl;
+        playIcon.style.display = "none";
+    }
+    
+    // اضافه کردن استایل active
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumbElement.classList.add('active');
+}
+
+// تنظیم thumbnail اولیه برای ویدیو در بارگذاری صفحه
+document.addEventListener('DOMContentLoaded', function() {
+    const heroVideo = document.getElementById('heroVideo');
+    const firstThumb = document.querySelector('.thumb');
+    
+    if (heroVideo && firstThumb) {
+        const thumbnailUrl = firstThumb.getAttribute('onclick');
+        
+        // استخراج thumbnail از onclick attribute
+        const match = thumbnailUrl.match(/'([^']*)',\s*'([^']*)',\s*this,\s*'([^']*)'/);
+        
+        if (match) {
+            const mediaType = match[2];
+            const thumbnail = match[3];
+            
+            if (mediaType === 'video' && thumbnail) {
+                heroVideo.setAttribute('poster', thumbnail);
+                
+                // تنظیم cover image نیز
+                const coverImg = document.querySelector('.cover-img');
+                if (coverImg) {
+                    coverImg.src = thumbnail;
+                }
+            }
+        }
+    }
+});
+    document.querySelectorAll('.fancy-item .discount, .fancy-item .final-price').forEach(el => {
+        const raw = el.getAttribute('data-raw');
+        if (raw) {
+            el.textContent = formatPersianPrice(raw);
+        } else {
+            // برای اطمینان اگر data-raw نداشت
+            el.textContent = toPersianNumber(el.textContent);
+        }
+    });
+</script>
+
+</body>
+</html>

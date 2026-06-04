@@ -1,5 +1,4 @@
-FROM python:3.10-slim-bookworm
-
+FROM python:3.12-slim-bookworm
 # اصلاح فرمت متغیرهای محیطی برای رفع وارنینگ‌ها
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

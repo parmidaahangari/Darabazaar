@@ -58,10 +58,10 @@
 
         <!-- Filters Sidebar -->
         <form method="get" action="{% url 'products' %}" id="filterForm">
-            <aside class="filters-sidebar">
+            <aside class="filters-sidebar" dir="rtl">
                 <div class="filters-header">
-                    <h3>Filters (<span id="filterCount">0</span>)</h3>
-                    <button type="button" class="reset-btn" id="resetFilters">reset</button>
+                    <h3>فیلتر ها(<span id="filterCount">0</span>)</h3>
+                    <button type="button" class="reset-btn" id="resetFilters">ریست</button>
                 </div>
 
                 <div class="filter-search">
@@ -69,7 +69,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                    <input type="text" name="keyword" placeholder="Keywords..." id="keywordInput" value="{{ request.GET.keyword|default:'' }}" />
+                    <input type="text" name="keyword" placeholder="جستجو..." id="keywordInput" value="{{ request.GET.keyword|default:'' }}" />
                     <button type="button" class="search-clear" id="clearKeyword" aria-label="Clear">
                         <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -81,61 +81,61 @@
                 <!-- Sort -->
                 <div class="filter-group">
                     <button type="button" class="filter-toggle" data-target="sortDropdown">
-                        Sort by <i class="fas fa-chevron-down"></i>
+                        مرتب کردن بر اساس <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="filter-dropdown {% if request.GET.sort %}open{% endif %}" id="sortDropdown">
-                        <label><input type="radio" name="sort" value="newest" {% if request.GET.sort == 'newest' %}checked{% endif %}> Newest</label>
-                        <label><input type="radio" name="sort" value="price-low" {% if request.GET.sort == 'price-low' %}checked{% endif %}> Price: Low to High</label>
-                        <label><input type="radio" name="sort" value="price-high" {% if request.GET.sort == 'price-high' %}checked{% endif %}> Price: High to Low</label>
-                        <label><input type="radio" name="sort" value="name" {% if request.GET.sort == 'name' %}checked{% endif %}> Name A–Z</label>
+                        <label><input type="radio" name="sort" value="newest" {% if request.GET.sort == 'newest' %}checked{% endif %}> جدید‌ترین</label>
+                        <label><input type="radio" name="sort" value="price-low" {% if request.GET.sort == 'price-low' %}checked{% endif %}> ارزان‌ترین</label>
+                        <label><input type="radio" name="sort" value="price-high" {% if request.GET.sort == 'price-high' %}checked{% endif %}> گران‌ترین</label>
+                        <label><input type="radio" name="sort" value="name" {% if request.GET.sort == 'name' %}checked{% endif %}> الفبا</label>
                     </div>
                 </div>
 
                 <!-- Genres -->
                 <div class="filter-group">
                     <button type="button" class="filter-toggle" data-target="genreDropdown">
-                        Genres <i class="fas fa-chevron-down"></i>
+                        ژانر <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="filter-dropdown {% if selected_genres %}open{% endif %}" id="genreDropdown">
                         <label>
                             <input type="checkbox" name="genre" value="all" 
                                 {% if not selected_genres or 'all' in selected_genres %}checked{% endif %}> 
-                            All Games
+                            همه بازی‌ها
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="action" 
                                 {% if 'action' in selected_genres %}checked{% endif %}> 
-                            Action
+                            اکشن
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="adventure" 
                                 {% if 'adventure' in selected_genres %}checked{% endif %}> 
-                            Adventure
+                            ماجراجویی
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="arcade" 
                                 {% if 'arcade' in selected_genres %}checked{% endif %}> 
-                            Arcade
+                            آرکید
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="fps" 
                                 {% if 'fps' in selected_genres %}checked{% endif %}> 
-                            FPS
+                            اول‌شخص
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="rpg" 
                                 {% if 'rpg' in selected_genres %}checked{% endif %}> 
-                            RPG
+                            
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="strategy" 
                                 {% if 'strategy' in selected_genres %}checked{% endif %}> 
-                            Strategy
+                            استراتژی
                         </label>
                         <label>
                             <input type="checkbox" name="genre" value="sports" 
                                 {% if 'sports' in selected_genres %}checked{% endif %}> 
-                            Sports
+                            ورزشی
                         </label>
                     </div>
                 </div>
@@ -143,42 +143,41 @@
                 <!-- Price -->
                 <div class="filter-group">
                     <button type="button" class="filter-toggle" data-target="priceDropdown">
-                        Price <i class="fas fa-chevron-down"></i>
+                        قیمت
+                        <i class="fas fa-chevron-down"></i>
                     </button>
-                    <div class="filter-dropdown {% if selected_prices %}open{% endif %}" id="priceDropdown">
-                        <label>
-                            <input type="checkbox" name="price" value="free" 
-                                {% if 'free' in selected_prices %}checked{% endif %}> 
-                            Free
-                        </label>
-                        <label>
-                            <input type="checkbox" name="price" value="under10" 
-                                {% if 'under10' in selected_prices %}checked{% endif %}> 
-                            Under $10
-                        </label>
-                        <label>
-                            <input type="checkbox" name="price" value="under30" 
-                                {% if 'under30' in selected_prices %}checked{% endif %}> 
-                            Under $30
-                        </label>
-                        <label>
-                            <input type="checkbox" name="price" value="under60" 
-                                {% if 'under60' in selected_prices %}checked{% endif %}> 
-                            Under $60
-                        </label>
-                        <label>
-                            <input type="checkbox" name="price" value="above60" 
-                                {% if 'above60' in selected_prices %}checked{% endif %}> 
-                            $60+
-                        </label>
-                    </div>
+                        <div class="filter-dropdown {% if selected_prices %}open{% endif %}" id="priceDropdown">
+                            <label>
+                                <input type="checkbox" name="price" value="under10"
+                                    {% if 'under10' in selected_prices %}checked{% endif %}>
+                                کمتر از ۱,۰۰۰,۰۰۰,۰۰۰
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="price" value="under30"
+                                    {% if 'under30' in selected_prices %}checked{% endif %}>
+                                کمتر از ۲,۰۰۰,۰۰۰,۰۰۰
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="price" value="under60"
+                                    {% if 'under60' in selected_prices %}checked{% endif %}>
+                                کمتر از ۴,۰۰۰,۰۰۰,۰۰۰
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="price" value="above60"
+                                    {% if 'above60' in selected_prices %}checked{% endif %}>
+                                بیشتر از ۴,۰۰۰,۰۰۰,۰۰۰
+                            </label>
+                        </div>
                 </div>
 
 
 
                 <!-- Stock -->
-                <div class="filter-group filter-stock">
-                    <span>In stock</span>
+                <div class="filter-group filter-stock" dir="rtl">
+                    <span>موجود</span>
                     <label class="switch">
                         <input type="checkbox" name="instock" id="inStockToggle" {% if request.GET.instock %}checked{% endif %} />
                         <span class="slider"></span>

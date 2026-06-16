@@ -42,6 +42,8 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      text-decoration: none; /* حذف خط زیر لینک */
+      color: inherit;   
     }
 
     .logo-circle {
@@ -148,7 +150,7 @@
         overflow-y: auto;
         z-index: 1000;
         border: 1px solid rgba(255,255,255,0.1);
-        /* gap: 15; حذف شد چون اینجا کاربرد ندارد */
+     
     }
     
     .search-item {
@@ -160,7 +162,7 @@
         border-bottom: 1px solid rgba(255,255,255,0.05);
         text-decoration: none;
         color: inherit;
-        gap: 15px; /* فاصله بین عکس و بخش اطلاعات (اسم و قیمت) */
+        gap: 15px; 
     }
     
     .search-item:last-child {
@@ -252,7 +254,7 @@ header.nav-hidden {
 /* وقتی اسکرول میکنیم به بالا: navbar نرم میاد پایین */
 header.nav-visible {
     transform: translateY(0);
-    background: rgba(10, 14, 39, 0.92);
+    background: #070F2B;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);

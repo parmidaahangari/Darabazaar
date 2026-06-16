@@ -40,7 +40,7 @@
                     
                 </div>
 
-                <video id="heroVideo" controls muted loop playsinline poster="{{ product.media.all.0.thumbnail.url }}" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                <video id="heroVideo" controls muted loop playsinline {% if product.media.all.0.thumbnail %}poster="{{ product.media.all.0.thumbnail.url }}"{% endif %} style="width: 100%; height: 100%; object-fit: cover; display: none;">
                     {% if product.media.all %}
                         <source src="{{ product.media.all.0.file.url }}" type="video/mp4">
                     {% endif %}

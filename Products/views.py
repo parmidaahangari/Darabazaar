@@ -40,16 +40,14 @@ class ProductsView(View):
         if selected_prices:
             price_q = Q()
             for price_range in selected_prices:
-                if price_range == 'free':
-                    price_q |= Q(price_used=0)
-                elif price_range == 'under10':
-                    price_q |= Q(price_used__gt=0, price_used__lt=10)
+                if price_range == 'under10':
+                    price_q |= Q(price_used__gt=0, price_used__lt=1000000000)
                 elif price_range == 'under30':
-                    price_q |= Q(price_used__gte=10, price_used__lt=30)
+                    price_q |= Q(price_used__gte=10, price_used__lt=2000000000)
                 elif price_range == 'under60':
-                    price_q |= Q(price_used__gte=30, price_used__lt=60)
+                    price_q |= Q(price_used__gte=30, price_used__lt=4000000000)
                 elif price_range == 'above60':
-                    price_q |= Q(price_used__gte=60)
+                    price_q |= Q(price_used__gte=4000000000)
             if price_q:
                 products = products.filter(price_q)
         

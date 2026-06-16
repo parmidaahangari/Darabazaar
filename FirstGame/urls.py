@@ -24,7 +24,7 @@ from Products.views import SearchSuggestionsView
 
 urlpatterns = [
     path('', include('HomePage.urls')),
-    path('admin/', admin.site.urls), # URL امن برای پنل ادمین
+    path('happyadminchillingqxs9g1~qxs9g1~qxs9g/', admin.site.urls), 
     path('my/', include('CustomerAccount.urls')),
     path('products/', include('Products.urls')),
     path('login/', LoginView.as_view(), name='login'),

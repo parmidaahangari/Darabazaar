@@ -6,9 +6,10 @@
 
     <div class="containers">
         <div class="header-content">
-        <div class="logo-area">
-            <div class="logo-circle">D</div>
-        </div>
+            <a href="{% url 'home' %}" class="logo-area">
+                <div class="logo-circle">D</div>
+                <span class="logo-text">Darabazar</span>
+            </a>
 
             <div class="search-wrapper" style="position: relative; width: 100%; max-width: 400px;">
                 <form action="{% url 'products' %}" method="get" class="search-containers" style="position: relative; width: 100%;">
@@ -43,7 +44,6 @@
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">خانه</a>     
             <a href="/products/" class="{% if '/products' in request.path %}active{% endif %}">محصولات</a>            
             <a href="/news/" class="{% if '/home/news' in request.path %}active{% endif %}">اخبار</a> 
-            <a href="#">درباره ما</a>
         </nav>
 
         <div class="header-icons">

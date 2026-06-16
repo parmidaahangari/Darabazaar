@@ -1,8 +1,9 @@
 from .base import *
-
+import os
+import environ
 DEBUG = True
 
-SECRET_KEY = 'django-insecure-LOKAL_TEST_KEY_ONLY'  # مهم نیست چون روی سیستم خودته
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = ['darabazaar.com', 'www.darabazaar.com', '127.0.0.1', 'localhost', "192.168.100.7"]
 

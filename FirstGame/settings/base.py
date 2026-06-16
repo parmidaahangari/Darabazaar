@@ -14,9 +14,9 @@ env = environ.Env(
 # فقط KEY=value — خطوطی مثل ALLOWED_HOSTS = [...] را از .env حذف کنید
 environ.Env.read_env(BASE_DIR / '.env', overwrite=False)
 
-SECRET_KEY = 'CHANGE_ME_IN_ENV_OR_CHILD_SETTINGS'
+SECRET_KEY =  os.environ.get('SECRET_KEY')
 
-DEBUG = True 
+DEBUG = True
 
 ALLOWED_HOSTS = ['darabazaar.com', 'www.darabazaar.com', '127.0.0.1', 'localhost', "192.168.100.7"]
 
@@ -29,17 +29,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django_celery_beat',
-    'admin_ip_whitelist',
     'CustomerAccount',
     'HomePage',
     'Products',
 ]
 
-
-ADMIN_IP_WHITELIST = [
-    '127.0.0.1',        
-    '192.168.100.7',     
-]
 
 CACHES = {
     'default': {
@@ -58,8 +52,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'admin_ip_whitelist.middleware.AdminIPWhitelistMiddleware',
+    'FirstGame.middleware.AdminIPWhitelistMiddleware',
 ]
+
 
 ROOT_URLCONF = 'FirstGame.urls'
 
@@ -84,11 +79,16 @@ WSGI_APPLICATION = 'FirstGame.wsgi.application'
 
 # Database configuration
 DATABASES = {
-    'default': env.db(
-        'DATABASE_URL',
-        default='postgres://postgres:postgres@db:5432/firstgame'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB', default='firstgame'),
+        'USER': env('POSTGRES_USER', default='firstgame'),
+        'PASSWORD': env('POSTGRES_PASSWORD', default=''),
+        'HOST': env('POSTGRES_HOST', default='db'),
+        'PORT': env('POSTGRES_PORT', default='5432'),
+    }
 }
+
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 

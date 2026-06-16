@@ -370,7 +370,7 @@ a:hover, a:focus, a:active {
 }
 
 .section h2 {
-    font-size: 48px;
+    font-size: 43px;
     font-weight: 600;
     margin-bottom: 20px;
     color: white;
@@ -1059,10 +1059,8 @@ a:hover, a:focus, a:active {
 
     /* Sections */
     .section {
-        max-width: 100%;
-        padding: 0 20px;
-        margin: 10px auto;
-        margin-top: 4px;
+        max-width: none;
+        padding: 0;
     }
 
     .section h2 {
@@ -1071,17 +1069,17 @@ a:hover, a:focus, a:active {
     }
 
 
-    .card-row {
-    display: flex;
-    padding: 0 !important;
-    gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 20px;
+    .row-wrapper {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        position: relative;
+    }
 
-            width: 99vw;
-        max-width: 98vw;
-        margin-left: calc(-50vw + 48%);
-    
+    .card-row {
+        width: 100%;
+        max-width: none;
+        padding: 0 20px 20px;
+        box-sizing: border-box;
     }
 
     .scroll-btn {

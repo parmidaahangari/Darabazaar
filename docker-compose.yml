@@ -20,8 +20,7 @@ services:
       extra_hosts:
         - "deb.debian.org:194.33.42.142"          # آی‌پی میرور ایرانی برای دور زدن فیلتر دبیان
         - "debian.map.fastlydns.net:194.33.42.142"
-    entrypoint: /app/entrypoint.prod.sh
-    command: gunicorn FirstGame.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120
+    command: gunicorn FirstGame.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
       - web_static:/app/staticfiles

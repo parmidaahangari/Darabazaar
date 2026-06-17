@@ -99,7 +99,7 @@ a {
 /* نقطه‌های پایین اسلایدر */
 .hero-dots {
     position: absolute;
-    bottom: 30px;
+    bottom: 114px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -113,14 +113,16 @@ a {
     background: rgba(255, 255, 255, 0.4);
     border-radius: 50%;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .hero-dots .dot.active {
     background: #fff;
-    transform: scale(1.2);
+    width: 30px;
+    border-radius: 6px;
+    transform: scale(1.1);
 }
-
+ 
 .categories-grid a,
 .card-row a,
 .special-boxes a {
@@ -151,6 +153,18 @@ a:hover, a:focus, a:active {
     padding-left: 20px;
     padding-right: 20px;
 }
+.card-row {
+    width: 100%;
+    margin: 0;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    align-items: flex-start;
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+}
+
 
 /* Buttons on right */
 .top-buttons {
@@ -217,7 +231,7 @@ a:hover, a:focus, a:active {
     top: 10px;
     left: 0;
     width: 100%;
-    height: 750px;
+    height: 680px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -273,7 +287,7 @@ a:hover, a:focus, a:active {
     position: absolute;
     width: 100%;
     height: 370px;
-    top: 390px;
+    top: 325px;
     left: 0;
     /* حذف زاویه کج و محو شدن تدریجی در پس‌زمینه */
     background: linear-gradient(
@@ -379,18 +393,16 @@ a:hover, a:focus, a:active {
 
 /* GAME ROW */
 .card-row {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+
     display: flex;
     gap: 40px;
     overflow-x: auto;
-    padding: 0; 
-    scroll-snap-type: x mandatory; /* اضافه کردن خاصیت اسلایدر */
-    padding-bottom: 20px;
-    /* استایل نوار اسکرول برای ظاهر بهتر */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    
-    width: auto;
 
+    padding-inline: 25px;
+    box-sizing: border-box;
 }
 
 .card-row::-webkit-scrollbar {
@@ -400,10 +412,6 @@ a:hover, a:focus, a:active {
 .card-row::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-}
-
-.row-wrapper {
-    position: relative;
 }
 
 /* استایل دکمه‌های اسکرول */
@@ -425,23 +433,32 @@ a:hover, a:focus, a:active {
     z-index: 10;
     border-radius: 25px;
     transition: 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-/* دکمه راست */
 .scroll-right {
-    right: 25px;
+    left: calc(100% + 75px); 
+    opacity: 1;
+    pointer-events: auto;
 }
-
+ 
+.scroll-right.hide {
+    opacity: 0;
+    pointer-events: none;
+}
 
 .scroll-btn:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-
 /* دکمه چپ */
 .scroll-left {
-    left: 25px;
-
+    right: calc(100% + 75px);  
+    pointer-events: none;
     opacity: 0; /* در ابتدا مخفی است چون در ابتدای لیست هستیم */
 }
 .card-row {
@@ -453,14 +470,6 @@ a:hover, a:focus, a:active {
     display: none; /* برای مرورگرهای بر پایه WebKit (Chrome, Safari) */
 }
 
-/* استایل دهی به کانتینر نگهدارنده برای افکت شیشه‌ای */
-.row-wrapper {
-    position: relative;
-    width: 100%;
-    /* اگر می‌خواهید افکت از لبه‌ها بیرون نزند، overflow را تنظیم کنید */
-}
-
-
 /* وقتی دکمه چپ نمایان می‌شود */
 .scroll-left.show {
     opacity: 1;
@@ -470,15 +479,23 @@ a:hover, a:focus, a:active {
 /* وقتی دکمه راست مخفی می‌شود (به انتهای لیست رسیدیم) */
 .scroll-right.hide {
     opacity: 0;
-    pointer-events: none;
+    pointer-events: auto;
 }
+
+/* استایل دهی به کانتینر نگهدارنده برای افکت شیشه‌ای */
+.row-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
+}
+
 
 
 /* Card */
 .game-card {
     position: relative;
-    flex: 0 0 calc((100% - 80px) / 3); 
-    max-width: calc((100% - 80px) / 3);
+    flex: 0 0 395px;
+    max-width: 395px;
     height: 396px;
     scroll-snap-align: start; /* توقف اسکرول دقیقاً روی کارت */
     
@@ -1059,79 +1076,49 @@ a:hover, a:focus, a:active {
 
     /* Sections */
     .section {
+        width: 100%;
         max-width: none;
         padding: 0;
     }
 
     .section h2 {
         font-size: 20px;
+        margin-right: 20px;
     
-    }
-
-
-    .row-wrapper {
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        position: relative;
     }
 
     .card-row {
         width: 100%;
-        max-width: none;
-        padding: 0 20px 20px;
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        padding-inline: 10px;
+        margin: 0;
         box-sizing: border-box;
     }
 
-    .scroll-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        
-        /* افکت شیشه‌ای بلور */
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: none;
-        
-        color: white;
-        font-size: 1rem;
-        padding: 28px 13px;
-        cursor: pointer;
-        z-index: 10;
-        border-radius: 8px;
-        transition: 0.3s ease;
+
+    .hero-btn{
+        display: none;
     }
 
     /* دکمه راست */
     .scroll-right {
-        right: 5px;
-        background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
+        display: none;
     }
 
     /* دکمه چپ */
     .scroll-left {
-        left: 5px;
-        background: linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        opacity: 0; /* در ابتدا مخفی است چون در ابتدای لیست هستیم */
-        pointer-events: none;
+        display: none;
     }
 
-    /* وقتی دکمه چپ نمایان می‌شود */
-    .scroll-left.show {
-        opacity: 1;
-        pointer-events: auto;
+ 
+ 
+    .row-wrapper {
+        position: relative;
+        width: 100%;
+        z-index: 10;
     }
-
-    /* وقتی دکمه راست مخفی می‌شود (به انتهای لیست رسیدیم) */
-    .scroll-right.hide {
-        opacity: 0;
-        pointer-events: none;
-    }
-
 
     .game-card {
         /* flex-basis را کم کنید (مثلاً از 75vw به 50vw) */
@@ -1241,6 +1228,8 @@ a:hover, a:focus, a:active {
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);  
         gap: 15px;
+        margin-right: 20px;
+        margin-left: 20px;
     }
 
     .cat-card {

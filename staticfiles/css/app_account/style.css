@@ -1,0 +1,55 @@
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: rgba(7, 15, 43, 1);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+        url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, button, input, select, textarea {
+    font-family: 'Vazirmatn', sans-serif !important;
+}
+
+/* ── MAIN ── */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 270px;
+    gap: 24px;
+    justify-content: flex-end;
+}
+
+/* ── CONTENT PANEL ── */
+.content-panel {
+    background: #1B1A55;
+    border-radius: 25px;
+    flex: 1;
+    padding: 36px 40px;
+    text-align: right;
+    direction: rtl;
+}
+
+.content-panel h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.content-panel .subtitle {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 6px;
+    margin-bottom: 30px;
+}

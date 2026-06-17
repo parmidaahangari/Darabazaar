@@ -1,0 +1,443 @@
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ── WISH CARD ── */
+.wish-card {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+
+}
+
+.wish-card:last-child {
+    border-bottom: none;
+}
+
+.wish-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+    border-radius: 15px;
+
+}
+
+.wish-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6px 0; /* Aligns inner content beautifully with the image bounds */
+}
+
+.wish-header {
+    display: flex;
+    flex-direction: column; /* قرار دادن المان‌ها زیر هم */
+    align-items: flex-end; /* در سایت‌های راست‌چین (RTL) این مقدار المان‌ها را به سمت چپ می‌برد */
+    gap: 10px; /* فاصله بین تایتل و قیمت */
+    width: 100%;
+}
+
+.wish-title, .wish-price {
+    text-align: left; /* اطمینان از چپ‌چین شدن خود متن */
+    direction: ltr; /* در صورتی که نیاز است متن انگلیسی/اعداد چپ‌چین بمانند */
+}
+
+.wish-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.wish-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* ── ACTIONS ── */
+.wish-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    align-items: center;
+}
+
+.btn-remove {
+    width: 150px;
+    background: #1B1A55;
+    color: #fff;
+    padding: 10px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+}
+.btn-remove:hover { background: rgba(255, 255, 255, 0.2); }
+
+
+.btn-add-cart {
+
+    width: 200px;
+    background: #ffffff;
+    color: #2D2C62;
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+
+
+/* ── EMPTY STATE ── */
+.empty-wishlist {
+    background: #1B1A55;
+    border-radius: 25px;
+    flex: 1;
+    padding: 80px 40px;
+    min-height: 400px;
+    text-align: center;
+    direction: rtl;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.empty-wishlist-icon {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(104, 82, 155, 0.15), rgba(99, 102, 241, 0.15));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.empty-wishlist-icon::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: rgba(104, 82, 155, 0.15);
+    filter: blur(20px);
+    z-index: -1;
+}
+
+.empty-wishlist-icon i {
+    font-size: 72px;
+    background: #9290C3;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.empty-wishlist-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+}
+
+.empty-wishlist-text {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 500px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.empty-wishlist-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background: #1B1A55 !important;
+    color: #fff;
+    border: 1px solid #1B1A55;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.empty-wishlist-btn:hover {
+    background: #2a2d5f !important;
+}
+
+.empty-wishlist-btn i {
+    font-size: 18px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+    main {
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+
+    .content-panel,
+    .empty-wishlist {
+        width: 100%;
+    }
+
+    .empty-wishlist {
+        padding: 60px 24px;
+    }
+
+    .empty-wishlist-icon {
+        width: 140px;
+        height: 140px;
+    }
+
+    .empty-wishlist-icon i {
+        font-size: 64px;
+    }
+
+    .empty-wishlist-title {
+        font-size: 28px;
+    }
+
+    .empty-wishlist-text {
+        font-size: 15px;
+    }
+
+    .empty-wishlist-btn {
+        padding: 14px 36px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 900px) {
+    main {
+        flex-direction: column;
+        padding: 50px 200px;
+    }
+    .wish-card {
+        flex-direction: row; /* حفظ حالت افقی */
+        align-items: center;
+        gap: 15px;
+    }
+
+    .wish-header {
+        align-items: flex-end; /* در سایت راست‌چین (RTL)، محتوا را به سمت چپ می‌برد */
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .wish-actions {
+        justify-content: flex-end; /* دکمه‌ها در سمت چپ */
+    }
+
+
+    .wish-price {
+        margin-right: 0;
+    }
+
+    footer {
+        padding: 40px 20px 0;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-brand {
+        border-right: none;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    main {
+        padding: 20px 16px;
+    }
+
+    .content-panel,
+    .empty-wishlist {
+        padding: 20px;
+    }
+
+    .empty-wishlist {
+        padding: 40px 16px;
+    }
+
+    .empty-wishlist-icon {
+        width: 120px;
+        height: 120px;
+    }
+
+    .empty-wishlist-icon i {
+        font-size: 56px;
+    }
+
+    .empty-wishlist-title {
+        font-size: 24px;
+    }
+
+    .empty-wishlist-text {
+        font-size: 14px;
+    }
+
+    .empty-wishlist-btn {
+        padding: 12px 28px;
+        font-size: 14px;
+    }
+
+    .wish-card {
+        flex-direction: row; /* همچنان افقی بماند */
+        align-items: center;
+        gap: 10px;
+    }
+
+    .wish-img {
+        width: 90px; /* عکس بسیار کوچکتر برای موبایل */
+        height: 90px;
+        border-radius: 10px;
+    }
+
+    .wish-content {
+        align-items: flex-end; /* بردن کل محتوای متنی و دکمه‌ها به سمت چپ */
+        justify-content: center;
+        padding: 0;
+    }
+
+    .wish-header {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .wish-title {
+        font-size: 14px; /* سایز ریزتر برای اسم */
+    }
+
+    .wish-price {
+        font-size: 13px; /* سایز ریزتر برای قیمت */
+    }
+
+    .wish-actions {
+        width: 100%;
+        flex-direction: column; /* دکمه‌ها در موبایل زیر هم قرار بگیرند تا جا بشوند */
+        align-items: flex-end; /* دکمه‌ها سمت چپ بمانند */
+        gap: 6px;
+    }
+
+    .btn-remove,
+    .btn-add-cart {
+        width: 120px; /* دکمه‌های جمع و جورتر */
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .wish-title {
+        font-size: 16px; /* کوچکتر شدن اسم */
+    }
+
+    .wish-price {
+        font-size: 15px; /* کوچکتر شدن قیمت */
+    }
+    
+    .btn-remove, .btn-add-cart {
+        font-size: 12px;
+        padding: 8px 10px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        padding: 16px 12px;
+    }
+
+    .wish-card {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    padding: 8px 0;
+
+
+    }
+    .content-panel,
+    .empty-wishlist {
+        padding: 16px;
+    }
+
+    .empty-wishlist {
+        padding: 32px 12px;
+    }
+
+    .empty-wishlist-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .empty-wishlist-icon i {
+        font-size: 48px;
+    }
+
+    .empty-wishlist-title {
+        font-size: 20px;
+    }
+
+    .empty-wishlist-text {
+        font-size: 13px;
+    }
+
+    .empty-wishlist-btn {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+
+    .wish-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wish-img {
+        width: 100%;
+        height: 160px;
+
+    }
+
+    .wish-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .btn-remove,
+    .btn-add-cart {
+        width: 100%;
+        font-size: 12px;
+        padding: 9px;
+    }
+
+    .wish-content{
+        align-items: center;
+    }
+}

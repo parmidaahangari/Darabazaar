@@ -9,6 +9,7 @@ footer {
     gap: 60px;
     padding-bottom: 40px;
     border-bottom: 1px solid #252860;
+    direction: rtl;
 }
 
 .footer-brand {
@@ -29,6 +30,7 @@ footer {
 
 .footer-col {
     flex: 1;
+    
 }
 
 .footer-col h4 {

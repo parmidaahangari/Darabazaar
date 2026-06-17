@@ -1,0 +1,264 @@
+*{box-sizing:border-box;margin:0;padding:0;direction:ltr;}
+
+body{
+  font-family: 'Vazirmatn', sans-serif !important;
+  background:
+  linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.3));
+  overflow-x:hidden;
+  transition:0.5s;
+}
+
+body, button, input, select, textarea {
+  font-family: 'Vazirmatn', sans-serif !important;
+}
+
+/* HERO */
+.hero{
+  width:100%;
+  height:100vh;
+  padding:100px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.left {
+    width: 420px;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    color: #fff;
+    opacity: 1;
+    transform: translateY(0);
+}
+#game-name, #game-summary, #game-price {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+
+.left.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.left h1{
+  font-size:46px;
+  margin-bottom:20px;
+}
+
+.desc{
+  line-height:26px;
+  margin-bottom:25px;
+  opacity:.9;
+}
+
+.row{
+  display:flex;
+  gap:20px;
+  margin-bottom:20px;
+}
+
+.price-box{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:25px;
+}
+
+.old-price{
+  color:#aaa;
+  text-decoration:line-through;
+  font-size:18px;
+}
+
+.new-price{
+  font-size:30px;
+  font-weight:bold;
+  color:#fff;
+}
+
+.discount{
+  background:rgba(146, 144, 195, 1);
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:14px;
+  color:#fff;
+}
+
+
+.cta{
+  display:flex;
+  gap:12px;
+}
+
+.buy{
+background: #1e0b3b;
+  padding:10px 24px;
+  border-radius:20px;
+  border:none;
+  color:#fff;
+}
+
+.review{
+  background:transparent;
+  padding:10px 24px;
+  border-radius:20px;
+  border:2px solid rgb(255, 255, 255);;
+  color:rgb(255, 255, 255);;
+}
+
+/* RIGHT */
+.right{
+  width:100%;
+  max-width:750px;
+  margin:0 auto;
+  text-align:center;
+  position:relative;
+}
+
+.right h2{
+  color:#fff;
+  margin-bottom:25px;
+}
+
+.right span{
+  color:rgb(255, 255, 255);
+}
+
+/* SLIDER WRAPPER */
+.slider-wrapper{
+  position:relative;
+  width:100%;
+}
+
+/* SLIDER */
+.slider-container {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  /* Increased top/bottom padding to prevent clipping when card scales up */
+  padding: 40px 10px; 
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  align-items: center; /* Keeps cards vertically centered */
+}
+
+.slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* CARD */
+.card {
+  min-width: 160px;
+  height: 240px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+  /* Added ease-in-out and included margin in the transition */
+  transition: transform 0.4s ease-in-out, filter 0.4s ease-in-out, margin 0.4s ease-in-out;
+  filter: saturate(0.8) brightness(0.9);
+  scroll-snap-align: center;
+  margin: 0;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  filter: saturate(1.1) brightness(1);
+}
+
+.card.selected {
+  border: 3px solid rgba(146, 144, 195, 1);
+  /* Made the selected card noticeably bigger */
+  transform: scale(1.3); 
+  /* Adds space around the bigger card to push others away smoothly */
+  margin: 0 20px; 
+  filter: saturate(1.2) brightness(1.1);
+  z-index: 10;
+}
+body, button, input, select, textarea {
+  font-family: 'Vazirmatn', sans-serif !important;
+}
+
+.card .title{
+  position:absolute;
+  bottom:8px;
+  left:8px;
+  background:rgba(0,0,0,0.6);
+  color:#fff;
+  font-size:13px;
+  padding:4px 8px;
+  border-radius:4px;
+  z-index:1;
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  border-radius:inherit;
+  transition:0.5s;
+}
+
+.card:hover::after{
+  background:rgba(0,0,0,0.1);
+}
+
+.card.selected::after{
+  background:rgba(0,0,0,0);
+}
+
+/* ── NAVBAR ── */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0; /* <--- تغییر اصلی */
+    padding: 20px 40px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 1000;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+}
+
+
+.home-icon {
+    position: fixed;
+    top: 20px;
+    right: 40px; /* فاصله از سمت راست */
+    font-size: 28px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    color: #fff;
+    z-index: 1001;
+}
+
+.home-icon:hover {
+    transform: scale(1.2);
+}
+
+/* ARROWS */
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:42px;
+  height:42px;
+  border:1px solid #fff;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  background:rgba(0,0,0,0.4);
+}
+
+.arrow.left{left:-50px;}
+.arrow.right{right:-50px;}
+
+.arrow:hover{
+  background: #1e0b3b;
+}

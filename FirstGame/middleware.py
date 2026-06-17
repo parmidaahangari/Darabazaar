@@ -6,7 +6,8 @@ ALLOWED_IPS = [
     '127.0.0.1',
 
     '66.79.99.116',
-
+    '151.235.128.242',
+    '172.19.0.1',
 ]
 
 class AdminIPWhitelistMiddleware:

@@ -1,3 +1,4 @@
+
     * {
       margin: 0;
       padding: 0;
@@ -295,7 +296,7 @@ body[data-path*="/checkout/"] .logo-area {
         position: fixed;
         top: 0;
         transform: translateY(0) !important;
-        background: rgba(10, 14, 39, 0.95);
+        background: #070F2B;
         backdrop-filter: blur(14px);
         padding: 0.4rem 0;
     }
@@ -326,7 +327,7 @@ body[data-path*="/checkout/"] .logo-area {
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(10, 14, 39, 0.95);
+        background: #070F2B;
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
         border-top: 1px solid rgba(255, 255, 255, 0.1);

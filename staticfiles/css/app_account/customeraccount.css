@@ -1,0 +1,259 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: rgba(7, 15, 43, 1);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+        url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, button, input, select, textarea {
+    font-family: 'Vazirmatn', sans-serif !important;
+}
+
+/* ── MAIN ── */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 270px;
+    gap: 24px;
+    justify-content: flex-end;
+}
+
+/* ── CONTENT PANEL ── */
+.content-panel {
+    background: #1B1A55;
+    border-radius: 16px;
+    flex: 1;
+    padding: 36px 40px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: right;
+    direction: rtl;
+}
+
+.content-panel h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.content-panel .subtitle {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 6px;
+    margin-bottom: 30px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.card {
+    background: #474675;
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-1px);
+}
+
+.card i {
+    font-size: 46px;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.card p {
+    font-size: 13px;
+    color: #aaa;
+}
+
+/* Mobile Menu - Hidden on Desktop */
+.mobile-menu-list {
+    display: none;
+}
+
+
+a {
+  text-decoration: none; 
+  color: inherit; 
+}
+
+a:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+  cursor: default; 
+  text-decoration: none;  
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+    main {
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+    
+    .content-panel {
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        margin: 0;
+        width: 100%;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    nav {
+        padding: 14px 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .nav-links {
+        gap: 20px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-brand {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    footer {
+        padding: 40px 20px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hide desktop elements */
+    .cards-grid {
+        display: none;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    main {
+        padding: 20px 16px;
+    }
+
+    .content-panel {
+        padding: 20px 16px;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+    }
+
+    .content-panel h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* Show mobile menu */
+    .mobile-menu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(7, 15, 43, 1);
+        border-radius: 12px;
+        overflow: hidden;
+        
+    }
+
+    .mobile-menu-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        background: rgba(7, 15, 43, 1);
+        transition: background 0.2s;
+        border-bottom: 1px solid #a9a9a960; 
+    }
+
+    .mobile-menu-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .mobile-menu-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .mobile-menu-icon {
+        background: #949494aa;
+        color: #ffffff;
+    }
+
+    .icon-logout {
+        background: #ffccbc;
+        color: #ff5622;
+    }
+
+    .mobile-menu-text h3 {
+        font-size: 15px;
+        font-weight: 500;
+        color: #f4f4f4;
+        margin: 0;
+    }
+
+    .mobile-menu-arrow {
+        color: #999;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 500px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+}

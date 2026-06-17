@@ -1,0 +1,110 @@
+/* Vazirmatn Font Family */
+
+
+/* Variable font (weight axis 100–900) */
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn[wght].woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* Static weights */
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('Vazirmatn/webfonts/Vazirmatn-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* Font utility classes */
+
+.vazir {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: normal;
+}
+
+.vazir-light {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 300;
+}
+
+.vazir-medium {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 500;
+}
+
+.vazir-bold {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: bold;
+}

@@ -13,7 +13,7 @@ server {
     client_max_body_size 100M;
 
 
-    # Gzip
+
     gzip on;
     gzip_vary on;
     gzip_proxied any;
@@ -30,6 +30,7 @@ server {
         application/rss+xml
         application/atom+xml
         image/svg+xml;
+
 
 
     location /.well-known/acme-challenge/ {

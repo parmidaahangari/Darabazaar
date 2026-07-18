@@ -1,31 +1,156 @@
- {% load static %}
- <footer>
+{% load static %}
+<footer>
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-    <div class="footer-socials">
-      <a href="#"><i class="fab fa-facebook"></i></a>
-      <a href="#"><i class="fab fa-x-twitter"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-discord"></i></a>
+
+    <div class="footer-container">
+
+        <!-- ردیف بالا: دکمه بازگشت به بالا + لوگو و اطلاعات تماس -->
+        <div class="footer-top-bar">
+            <button class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                <i class="fas fa-chevron-up"></i>
+                بازگشت به بالا
+            </button>
+
+            <div class="footer-brand-info">
+                <div class="footer-contact-text" dir="rtl">
+                    <span>۷ روز هفته، ۲۴ ساعته پاسخگوی شما هستیم</span>
+                    <span class="phone-number">۰۲۱-۹۱۰۰۰۱۰۰</span>
+                </div>
+                <a href="{% url 'home' %}" class="logo-area">
+                    <div class="logo-circle">
+                        <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo-img">
+                    </div>
+                    <span class="brand-name">دارا بازار</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ردیف تماس با پشتیبانی (فقط موبایل) -->
+        <div class="footer-contact-row">
+            <div class="contact-row-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="contact-row-text">
+                <span class="contact-row-title">تماس با پشتیبانی</span>
+                <span class="contact-row-sub">۷ روز هفته، ۲۴ ساعت</span>
+            </div>
+            <button class="contact-btn" type="button">تماس</button>
+        </div>
+
+        <!-- نمادهای اعتماد -->
+        <div class="trust-badges">
+            <div class="trust-item">
+                <i class="fas fa-shield-halved"></i>
+                <span>ضمانت اصالت کالا</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-rotate-left"></i>
+                <span>هفت روز ضمانت بازگشت کالا</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-headset"></i>
+                <span>پشتیبانی ۲۴ ساعته، ۷ روز هفته</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-hand-holding-dollar"></i>
+                <span>امکان پرداخت در محل</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-truck-fast"></i>
+                <span>ارسال سریع و مطمئن</span>
+            </div>
+        </div>
+
+        <!-- ستون‌های اصلی (اکاردئون در موبایل) -->
+        <div class="footer-columns" dir="rtl">
+
+            <div class="footer-col footer-social-col">
+                <button class="accordion-header" type="button">
+                    <i class="fas fa-chevron-down"></i>
+                    <h4>با دارا بازار</h4>
+                </button>
+                <div class="accordion-content">
+                    <div class="footer-socials">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+
+                    <p class="newsletter-label">با ثبت ایمیل، از جدیدترین تخفیف‌ها باخبر شوید</p>
+                    <form class="newsletter-form" method="POST" action="#">
+                        {% csrf_token %}
+                        <button type="submit">ثبت</button>
+                        <input type="email" name="email" placeholder="ایمیل شما" required>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <button class="accordion-header" type="button">
+                    <i class="fas fa-chevron-down"></i>
+                    <h4>خدمات مشتریان</h4>
+                </button>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="#">پاسخ به پرسش‌های متداول</a></li>
+                        <li><a href="#">رویه‌های بازگرداندن کالا</a></li>
+                        <li><a href="#">شرایط استفاده</a></li>
+                        <li><a href="#">حریم خصوصی</a></li>
+                        <li><a href="#">گزارش باگ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <button class="accordion-header" type="button">
+                    <i class="fas fa-chevron-down"></i>
+                    <h4>راهنمای خرید از دارا بازار</h4>
+                </button>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="#">نحوه ثبت سفارش</a></li>
+                        <li><a href="#">رویه ارسال سفارش</a></li>
+                        <li><a href="#">شیوه‌های پرداخت</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <button class="accordion-header" type="button">
+                    <i class="fas fa-chevron-down"></i>
+                    <h4>حساب کاربری</h4>
+                </button>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="/my/dashboard/">حساب کاربری</a></li>
+                        <li><a href="/my/orders/">سفارش‌های من</a></li>
+                        <li><a href="#">درباره دارا بازار</a></li>
+                        <li><a href="#">تماس با ما</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- پایین: کپی‌رایت + اینماد -->
+        <div class="footer-bottom">
+            <span>Copyright darabazaar.com 2025, all rights reserved</span>
+            <a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=6797703&Code=GzqCwGYTby89eZkf1zmaF2tUAw2aKULd">
+                <img referrerpolicy="origin" src="https://trustseal.enamad.ir/logo.aspx?id=6797703&Code=GzqCwGYTby89eZkf1zmaF2tUAw2aKULd" alt="" style="cursor:pointer" code="GzqCwGYTby89eZkf1zmaF2tUAw2aKULd">
+            </a>
+        </div>
+
     </div>
+</footer>
 
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="#" class="logo" dir="rtl">
-          <div class="logo-icon">D</div>
-          <span class="logo-text">DaraBazaar</span>
-        </a>
-        <p dir="rtl">دارا بازار، مرجع تخصصی خرید بازی‌های فیزیکی پلی‌استیشن است. ما اینجا هستیم تا جدیدترین و محبوب‌ترین عناوین بازی‌ها را با ضمانت اصالت، مناسب‌ترین قیمت و ارسال سریع به دست شما گیمرهای عزیز برسانیم. تجربه یک خرید امن و راحت، اولویت ماست.</p>
-      </div>
-
-      <div class="footer-col">
-        <h4>My Account</h4>
-        <ul>
-          <li><a href="/my/dashboard/">حساب کاربری</a></li>
-          <li><a href="/my/orders/">سفارش های من</a></li>
-        </ul>
-      </div>
-
-    <div class="footer-bottom">
-      Copyright darabazaar.com 2025, all rights reserved
-    </div>
-  </footer>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.footer-col .accordion-header').forEach(function (header) {
+        header.addEventListener('click', function () {
+            const col = header.closest('.footer-col');
+            col.classList.toggle('open');
+        });
+    });
+});
+</script>

@@ -1,7 +1,7 @@
 {% load static %}
 {% load humanize %}
 <!DOCTYPE html>
-<html lang="fa" dir="ltr">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,41 +15,8 @@
     {% include "layout/navbar.html" %}
 
     <main class="page-content">
-        <div class="checkout-container" style="direction: rtl; text-align: right;">
+        <div class="checkout-container" style="direction: ltr; text-align: right;">
             
-            <div class="summary-box glass-box" style="text-align: right;">
-                <h2 style="margin-bottom: 20px;">خلاصه سفارش</h2>
-                
-                {% if cart %}
-                    <div class="summary-row">
-                        <span>مجموع کالاها (<span class="persian-num" data-raw="{{ cart.items_count }}">{{ cart.items_count }}</span> عدد)</span>
-                        <span class="persian-price" data-raw="{{ cart.total_price }}">{{ cart.total_price|intcomma }} تومان</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>تخفیف</span>
-                        <span class="persian-price" data-raw="{{ discount|default:'0' }}">{{ discount|default:"0"|intcomma }} تومان</span>
-                    </div>
-                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-                    <div class="summary-row" style="font-weight: bold; font-size: 22px;">
-                        <span>جمع کل</span>
-                        <span class="persian-price" data-raw="{{ final_price }}">{{ final_price|intcomma }} تومان</span>
-                    </div>
-                    
-                    {% if cart.items_count > 0 %}
-                        <button class="btn-confirm" style="margin-top: 20px;" id="payment-btn">ادامه خرید</button>
-                    {% else %}
-                        <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
-                            سبد خرید شما خالی است
-                        </div>
-                    {% endif %}
-                {% else %}
-                    <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
-                        سبد خرید فعالی یافت نشد
-                    </div>
-                {% endif %}
-            </div>
-
-
             <div class="main-content glass-box">
                 <h2>انتخاب آدرس</h2>
                 
@@ -141,6 +108,40 @@
                 </div>
             </div> 
 
+            
+            <div class="summary-box glass-box" style="text-align: right;">
+                <h2 style="margin-bottom: 20px;">خلاصه سفارش</h2>
+                
+                {% if cart %}
+                    <div class="summary-row">
+                        <span>مجموع کالاها (<span class="persian-num" data-raw="{{ cart.items_count }}">{{ cart.items_count }}</span> عدد)</span>
+                        <span class="persian-price" data-raw="{{ cart.total_price }}">{{ cart.total_price|intcomma }} تومان</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>تخفیف</span>
+                        <span class="persian-price" data-raw="{{ discount|default:'0' }}">{{ discount|default:"0"|intcomma }} تومان</span>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+                    <div class="summary-row" style="font-weight: bold; font-size: 22px;">
+                        <span>جمع کل</span>
+                        <span class="persian-price" data-raw="{{ final_price }}">{{ final_price|intcomma }} تومان</span>
+                    </div>
+                    
+                    {% if cart.items_count > 0 %}
+                        <button class="btn-confirm" style="margin-top: 20px;" id="payment-btn">تسویه حساب</button>
+                    {% else %}
+                        <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
+                            سبد خرید شما خالی است
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
+                        سبد خرید فعالی یافت نشد
+                    </div>
+                {% endif %}
+            </div>
+
+
         </div>
     </main>
 
@@ -197,8 +198,6 @@
             </form>
         </div>
     </div>
-
-    {% include "layout/footer.html" %}
 
     <script>
         // ═══════════════════════════════════════════════════

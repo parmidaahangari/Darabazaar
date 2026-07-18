@@ -280,6 +280,7 @@ a:hover, a:focus, a:active {
     color: #fff;
     opacity: 0.75;
     max-width: 520px;
+    
 }
 
 /* Bottom shadow - فید ملایم به سمت بالا */
@@ -380,7 +381,9 @@ a:hover, a:focus, a:active {
 .section {
     max-width: 1287px;
     margin: var(--space-lg) auto;
-    margin-top: 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
 }
 
 .section h2 {
@@ -440,27 +443,37 @@ a:hover, a:focus, a:active {
     flex-shrink: 0;
 }
 
+/* دکمه راست - در RTL شروع باید مخفی باشد */
 .scroll-right {
     left: calc(100% + 75px); 
+    opacity: 0;
+    pointer-events: none; /* شروع: غیرفعال */
+}
+.scroll-right.show {
     opacity: 1;
     pointer-events: auto;
 }
- 
-.scroll-right.hide {
+
+/* دکمه چپ - در RTL شروع باید نمایش داده شود */
+.scroll-left {
+    right: calc(100% + 75px);  
+    opacity: 1; /* شروع: نمایش */
+    pointer-events: auto;
+}
+
+.scroll-left.hide {
     opacity: 0;
     pointer-events: none;
 }
 
+.card-row {
+    direction: rtl;
+}
 .scroll-btn:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* دکمه چپ */
-.scroll-left {
-    right: calc(100% + 75px);  
-    pointer-events: none;
-    opacity: 0; /* در ابتدا مخفی است چون در ابتدای لیست هستیم */
-}
+
 .card-row {
     -ms-overflow-style: none;  /* برای مرورگر Edge و IE */
     scrollbar-width: none;  /* برای مرورگر Firefox */
@@ -470,23 +483,14 @@ a:hover, a:focus, a:active {
     display: none; /* برای مرورگرهای بر پایه WebKit (Chrome, Safari) */
 }
 
-/* وقتی دکمه چپ نمایان می‌شود */
-.scroll-left.show {
-    opacity: 1;
-    pointer-events: auto;
-}
 
-/* وقتی دکمه راست مخفی می‌شود (به انتهای لیست رسیدیم) */
-.scroll-right.hide {
-    opacity: 0;
-    pointer-events: auto;
-}
+
 
 /* استایل دهی به کانتینر نگهدارنده برای افکت شیشه‌ای */
 .row-wrapper {
     position: relative;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 4px;
 }
 
 
@@ -618,6 +622,7 @@ a:hover, a:focus, a:active {
 .special-boxes {
     max-width: 1287px;
     margin: 80px auto;
+    margin-top: -15px;
     display: flex;
     justify-content: space-between;
     gap: 40px;
@@ -628,6 +633,7 @@ a:hover, a:focus, a:active {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    align-items: center;
 }
 
 .sp-box img {
@@ -961,7 +967,14 @@ a:hover, a:focus, a:active {
         margin-bottom: 20px;
     }
 
+.special-boxes {
+	gap:2px;
+    margin: 8px auto;
+    margin-top: -15px;
 
+}
+
+	
     .hero-bg {
         position: absolute;
         top: 10px;
@@ -1203,20 +1216,18 @@ a:hover, a:focus, a:active {
     }
 
     /* Special boxes */
-    .special-boxes {
-        display: none;
-    }
-
+    
     .sp-box {
         width: 100%;
+    	gap: 4px;
     }
 
     .sp-box img {
-        height: 250px;
+        height: 113px;
     }
 
     .sp-box h3 {
-        font-size: 28px;
+        font-size: 14px;
     }
 
     .sp-box p {
@@ -1228,8 +1239,8 @@ a:hover, a:focus, a:active {
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);  
         gap: 15px;
-        margin-right: 20px;
-        margin-left: 20px;
+        margin-right: 20px !important;
+        margin-left: 20px !important;
     }
 
     .cat-card {

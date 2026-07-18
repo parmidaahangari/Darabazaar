@@ -150,9 +150,8 @@
 
     <!-- TABS -->
     <div class="tabs">
-        <div class="tab active" data-tab="description">Description</div>
-        <div class="tab" data-tab="addons">Add-Ons</div>
-        <div class="tab" data-tab="reviews">Reviews</div>
+        <div class="tab active" data-tab="description">مشخصات</div>
+        <div class="tab" data-tab="reviews">دیدگاه کاربران</div>
     </div>
 
     <!-- DESCRIPTION SECTION -->
@@ -179,28 +178,28 @@
                     {% endfor %}
                 </div>
 
-                <button class="show-toggle" onclick="toggleAbout()">Show More</button>
+                <button class="show-toggle" onclick="toggleAbout()">مشاهده بیشتر</button>
             </div>
 
             <!-- RIGHT (INFO) -->
-            <div class="about-right">
+            <div class="about-right" dir="rtl">
                 <div class="info-box">
-                    <div class="info-label">Developer</div>
+                    <div class="info-label">تولید کننده</div>
                     <div class="info-value">{{ product.developer|default:"N/A" }}</div>
                 </div>
 
                 <div class="info-box">
-                    <div class="info-label">Publisher</div>
+                    <div class="info-label">ناشر</div>
                     <div class="info-value">{{ product.publisher|default:"N/A" }}</div>
                 </div>
 
                 <div class="info-box">
-                    <div class="info-label">Release Date</div>
+                    <div class="info-label">تاریخ انتشار</div>
                     <div class="info-value">{{ product.release_date|default:"N/A" }}</div>
                 </div>
 
                 <div class="info-box">
-                    <div class="info-label">Genres</div>
+                    <div class="info-label">ژانر</div>
                     <div class="info-value">
                         {% for genre in product.genres.all %}
                             {{ genre.label }}{% if not forloop.last %}, {% endif %}
@@ -211,7 +210,7 @@
                 </div>
 
                 <div class="info-box">
-                    <div class="info-label">File Size</div>
+                    <div class="info-label">حجم</div>
                     <div class="info-value" data-raw="{{ product.file_size_gb }}">{{ product.file_size_gb }} GB</div>
                 </div>
             </div>
@@ -369,10 +368,10 @@ function toggleAbout() {
 
     if (extra.style.display === "block" || extra.style.display === "") {
         extra.style.display = "none";
-        btn.textContent = "Show More";
+        btn.textContent = "مشاهده بیشتر";
     } else {
         extra.style.display = "block";
-        btn.textContent = "Show Less";
+        btn.textContent = "مشاهده کمتر";
     }
 }
 

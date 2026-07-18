@@ -1,40 +1,121 @@
 /* ── FOOTER ── */
 footer {
-    background-color: #0b0d2a;
-    padding: 50px 60px 0;
+    background-color: #070F2B;
+    padding: 30px 0 0;
+    border-top: 1px solid #1B1A55;
 }
 
-.footer-top {
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ردیف بالا */
+.footer-top-bar {
     display: flex;
-    gap: 60px;
-    padding-bottom: 40px;
-    border-bottom: 1px solid #252860;
-    direction: rtl;
+    align-items: center;
+    justify-content: flex-start;
+    padding-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.footer-brand {
-    flex: 1.5;
-    padding-right: 40px;
-    border-right: 1px solid #252860;
+.back-to-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid #2c2f6b;
+    color: #cfd0e6;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
 
-.footer-brand .logo {
-    margin-bottom: 18px;
+.back-to-top:hover {
+    background: #1B1A55;
+    color: #fff;
 }
 
-.footer-brand p {
-    font-size: 13px;
-    color: #aaa;
-    line-height: 1.7;
+.footer-brand-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-inline-start: auto;
+    flex-shrink: 0;
+}
+
+.footer-contact-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #9ea0c4;
+    white-space: nowrap;
+}
+
+.footer-contact-text .phone-number {
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.brand-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+/* نمادهای اعتماد */
+.trust-badges {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 28px 0;
+    border-top: 1px solid #1B1A55;
+    border-bottom: 1px solid #1B1A55;
+}
+
+.trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+}
+
+.trust-item i {
+    font-size: 1.8rem;
+    color: #42417a;
+}
+
+.trust-item span {
+    font-size: 0.8rem;
+    color: #cfd0e6;
+}
+
+/* ستون‌ها */
+.footer-columns {
+    display: flex;
+    gap: 40px;
+    padding: 36px 0;
+    flex-wrap: wrap;
 }
 
 .footer-col {
     flex: 1;
-    
+    min-width: 180px;
 }
 
 .footer-col h4 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #fff;
     margin-bottom: 18px;
@@ -45,12 +126,14 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 0;
+    margin: 0;
 }
 
 .footer-col ul li a {
     text-decoration: none;
-    color: #aaa;
-    font-size: 14px;
+    color: #9ea0c4;
+    font-size: 13.5px;
     transition: color 0.2s;
 }
 
@@ -58,16 +141,16 @@ footer {
     color: #fff;
 }
 
+/* شبکه‌های اجتماعی */
 .footer-socials {
     display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-    padding: 24px 0;
+    gap: 16px;
+    margin-bottom: 22px;
 }
 
 .footer-socials a {
-    color: #ccc;
-    font-size: 22px;
+    color: #cfd0e6;
+    font-size: 20px;
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -76,73 +159,427 @@ footer {
     color: #fff;
 }
 
+/* فرم خبرنامه */
+.newsletter-label {
+    font-size: 13px;
+    color: #9ea0c4;
+    margin-bottom: 12px;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 8px;
+}
+
+.newsletter-form input {
+    flex: 1;
+    background: #1B1A55;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.newsletter-form input::placeholder {
+    color: #7d7fa8;
+}
+
+.newsletter-form button {
+    background: #42417a;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    color: #070F2B;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.newsletter-form button:hover {
+    opacity: 0.85;
+}
+
+/* پایین فوتر */
 .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 20px 0;
+    border-top: 1px solid #1B1A55;
     text-align: center;
-    padding: 18px 0;
     font-size: 13px;
     color: #666;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-    main {
-        flex-direction: column;
-        padding: 30px 20px;
-    }
 
-    .sidebar {
-        width: 100%;
-    }
-
-    nav {
-        padding: 14px 20px;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .nav-links {
-        gap: 20px;
-    }
-
-    .footer-top {
-        flex-direction: column;
-        gap: 30px;
-    }
-
-    .footer-brand {
-        border-right: none;
-        padding-right: 0;
-    }
-
-    footer {
-        padding: 40px 20px 0;
-    }
+/* ── FOOTER ── */
+footer {
+    background-color: #070F2B;
+    padding: 30px 0 0;
+    border-top: 1px solid #1B1A55;
 }
 
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
 
-.logo {
+/* ردیف بالا */
+.footer-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.back-to-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid #2c2f6b;
+    color: #cfd0e6;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.back-to-top:hover {
+    background: #1B1A55;
+    color: #fff;
+}
+
+.footer-brand-info {
     display: flex;
     align-items: center;
     gap: 10px;
-    text-decoration: none;
+    margin-inline-start: auto;
+    flex-shrink: 0;
 }
 
-.logo-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #00c8ff, #0077ff);
-    border-radius: 50%;
+.footer-contact-text {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 22px;
-    color: #fff;
-    box-shadow: 0 0 14px rgba(0, 180, 255, 0.45);
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #9ea0c4;
+    white-space: nowrap;
 }
 
-.logo-text {
-    font-size: 20px;
+.footer-contact-text .phone-number {
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.brand-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+/* ردیف تماس با پشتیبانی - پیش‌فرض مخفی، فقط موبایل */
+.footer-contact-row {
+    display: none;
+}
+
+/* نمادهای اعتماد */
+.trust-badges {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 28px 0;
+    border-top: 1px solid #1B1A55;
+    border-bottom: 1px solid #1B1A55;
+}
+
+.trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+}
+
+.trust-item i {
+    font-size: 1.8rem;
+    color: #42417a;
+}
+
+.trust-item span {
+    font-size: 0.8rem;
+    color: #cfd0e6;
+}
+
+/* ستون‌ها */
+.footer-columns {
+    display: flex;
+    gap: 40px;
+    padding: 36px 0;
+    flex-wrap: wrap;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 180px;
+}
+
+.footer-col h4 {
+    font-size: 15px;
     font-weight: 700;
     color: #fff;
+    margin-bottom: 18px;
+}
+
+.footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li a {
+    text-decoration: none;
+    color: #9ea0c4;
+    font-size: 13.5px;
+    transition: color 0.2s;
+}
+
+.footer-col ul li a:hover {
+    color: #fff;
+}
+
+/* هدر اکاردئون - دسکتاپ: مثل قبل رفتار کنه، فلش مخفی */
+.accordion-header {
+    display: contents;
+}
+
+.accordion-header i {
+    display: none;
+}
+
+.accordion-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* شبکه‌های اجتماعی */
+.footer-socials {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.footer-socials a {
+    color: #cfd0e6;
+    font-size: 20px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-socials a:hover {
+    color: #fff;
+}
+
+/* فرم خبرنامه */
+.newsletter-label {
+    font-size: 13px;
+    color: #9ea0c4;
+    margin-bottom: 12px;
+}
+
+.newsletter-form {
+    width: 100%;
+    max-width: 320px;
+}
+
+.newsletter-form input {
+    flex: 1;
+    background: #1B1A55;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.newsletter-form input::placeholder {
+    color: #7d7fa8;
+}
+
+.newsletter-form button {
+    background: #42417a;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    color: #070F2B;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.newsletter-form button:hover {
+    opacity: 0.85;
+}
+
+/* پایین فوتر */
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 20px 0;
+    border-top: 1px solid #1B1A55;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+}
+
+/* ══════════════ RESPONSIVE (موبایل) ══════════════ */
+@media (max-width: 900px) {
+    .footer-top-bar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-brand-info {
+        margin-inline-start: 0;
+    }
+
+    /* ردیف تماس با پشتیبانی */
+    .footer-contact-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 16px 0;
+        border-bottom: 1px solid #1B1A55;
+        direction: rtl;
+    }
+
+    .contact-row-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #1B1A55;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #9ea0c4;
+        font-size: 1.1rem;
+    }
+
+    .contact-row-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .contact-row-title {
+        font-size: 0.85rem;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .contact-row-sub {
+        font-size: 0.75rem;
+        color: #9ea0c4;
+    }
+
+    .contact-btn {
+        background: transparent;
+        border: 1px solid #2c2f6b;
+        color: #cfd0e6;
+        border-radius: 999px;
+        padding: 8px 20px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .trust-badges {
+        justify-content: center;
+    }
+
+    /* اکاردئون ستون‌ها */
+    .footer-columns {
+        flex-direction: column;
+        gap: 0;
+        padding: 10px 0 0;
+
+    }
+
+    .footer-col {
+        min-width: 100%;
+        border-bottom: 1px solid #1B1A55;
+    }
+
+    .accordion-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 18px 0;
+        cursor: pointer;
+        direction: rtl;
+    }
+
+    .accordion-header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .accordion-header i {
+        display: inline-block;
+        color: #9ea0c4;
+        font-size: 0.85rem;
+        transition: transform 0.25s ease;
+    }
+
+    .footer-col.open .accordion-header i {
+        transform: rotate(180deg);
+    }
+
+    .accordion-content {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        align-items: center;
+    }
+
+    .footer-col.open .accordion-content {
+        max-height: 500px;
+        padding-bottom: 18px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
 }

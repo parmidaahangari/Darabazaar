@@ -4,10 +4,10 @@ from django.http import HttpResponseForbidden
 ALLOWED_IPS = [
 
     '127.0.0.1',
+    '172.20.10.2',
+    '91.92.238.133',
+    '2.147.198.83',
 
-    '66.79.99.116',
-    '151.235.128.242',
-    '172.19.0.1',
 ]
 
 class AdminIPWhitelistMiddleware:

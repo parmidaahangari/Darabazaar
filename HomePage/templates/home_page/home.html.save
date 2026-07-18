@@ -4,7 +4,6 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8" />
-    <meta name="enamad" content="77873837" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>دارا بازار | خرید دیسک بازی PS5، PS4 و Xbox</title>
     <link rel="stylesheet" href="{% static 'css/app_homepage/home.css' %}">
@@ -12,8 +11,7 @@
 
 </head>
 <body>
-
-
+{% include 'layout/loading.html' %}
 {% include 'layout/navbar.html' %}
 
 <div class="hero-slider-container">
@@ -23,40 +21,14 @@
         <div class="hero-bg" style="background-image: url('{{ hero.image.url }}');"></div>
         <div class="gradient-top"></div>
         <div class="gradient-bottom"></div>
-
+        
         <div class="hero-title">
             {% if hero.text %}
                 <h1>{{ hero.text|linebreaksbr }}</h1>
             {% endif %}
         </div>
 
-        {% if hero.product %}
-            {% with best=hero.product.best_price_info %}
-                {% if best %}
-                <div class="hero-price">
-                    {% if best.discount > 0 %}
-                        <span class="discount">{{ best.discount }}%</span>
-                        <span class="old">{{ best.old_price|intcomma }}</span>
-                    {% endif %}
-                    <span>{{ best.final_price|intcomma }} ت</span>
-                </div>
-                {% endif %}
-            {% endwith %}
 
-            <div class="hero-cta">
-                <a href="{% url 'product' hero.product.slug %}" class="btn-buy">
-                    مشاهده محصول
-                </a>
-
-                <form method="POST" action="{% url 'add_new_wishlist' %}" class="hero-wishlist-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ hero.product.id }}">
-                    <button type="submit" class="btn-wishlist">
-                        <i class="fas fa-heart"></i> افزودن به علاقه‌مندی
-                    </button>
-                </form>
-            </div>
-        {% endif %}
     </section>
     {% endfor %}
 
@@ -95,7 +67,7 @@
                     <h3>{{product.name}}</h3>
                         {% with best=product.best_price_info %}
                             {% if best %}
-                                <p class="price" dir="ltr">
+                                <p class="price">
                                     {% if best.discount > 0 %}
                                         <span class="discount">{{ best.discount }}%</span>
                                         <span class="old">{{ best.old_price|intcomma }}</span>
@@ -233,15 +205,17 @@
 <!-- SPECIAL BOXES -->
 <section class="special-boxes" style="text-align: right;" dir="rtl">
     <div class="sp-box">
-        <img src="{% static 'img/IMG_0015.png' %}">
-        <h3>بازی دو نفره و چند نفره</h3>
-                
+        <img src="{% static 'img/homepage/7433ecda-a269-4d07-8f7a-6426088677b7.webp' %}">
+        <h3>فروش ویژه</h3>
+        <p>بازی‌های محبوب و الماس‌های پنهان را با تخفیف‌های عالی بخرید.</p>
+        
     </div>
 
     <div class="sp-box">
-        <img src="{% static 'img/IMG_0018.png' %}">
-        <h3>بازی و کنسول دست دوم</h3>
-               
+        <img src="{% static 'img/homepage/8add9d0e-e9aa-453c-97e6-f58755d49b12.webp' %}">
+        <h3>بهترین هدیه‌ها</h3>
+        <p>انتخاب یک بازی فیزیکی هیجان‌انگیز، دوستان و عزیزانتان را سورپرایز کنید.</p>
+       
     </div>
 </section>
 
@@ -405,48 +379,43 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapper.appendChild(leftBtn);
         wrapper.appendChild(rightBtn);
 
-        // عملکرد کلیک برای اسکرول
-        leftBtn.addEventListener('click', () => {
-            const scrollAmount = cardRow.clientWidth; 
-            cardRow.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
-
+        // عملکرد کلیک برای اسکرول (اندازه عرض کانتینر اسکرول می‌کند)
         rightBtn.addEventListener('click', () => {
-            const scrollAmount = cardRow.clientWidth;
+            const scrollAmount = cardRow.clientWidth; 
             cardRow.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         });
 
-        // تابع آپدیت دکمه‌ها
+        leftBtn.addEventListener('click', () => {
+            const scrollAmount = cardRow.clientWidth;
+            cardRow.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        // تابع برای مخفی و ظاهر کردن فلش‌ها بر اساس موقعیت اسکرول
         const updateButtons = () => {
-            const maxScroll = cardRow.scrollWidth - cardRow.clientWidth;
-            const currentScroll = Math.abs(cardRow.scrollLeft);
-            
-            // دکمه چپ: نمایش وقتی می‌توان به چپ رفت (هنوز به انتها نرسیده)
-            if (currentScroll < maxScroll - 5) {
-                leftBtn.classList.remove('hide');
+            const maxScrollLeft = cardRow.scrollWidth - cardRow.clientWidth;
+
+            // دکمه چپ
+            if (cardRow.scrollLeft > 5) {
+                leftBtn.classList.add('show');
             } else {
-                leftBtn.classList.add('hide');
+                leftBtn.classList.remove('show');
             }
 
-            // دکمه راست: نمایش وقتی می‌توان به راست برگشت (از ابتدا فاصله گرفته)
-            if (currentScroll > 5) {
-                rightBtn.classList.add('show');
+            // دکمه راست
+            if (cardRow.scrollLeft >= maxScrollLeft - 5) {
+                rightBtn.classList.add('hide');
             } else {
-                rightBtn.classList.remove('show');
+                rightBtn.classList.remove('hide');
             }
         };
 
-        // شنوایی اسکرول
-        cardRow.addEventListener('scroll', updateButtons, { passive: true });
-
-        // آپدیت اولیه
+        // چک کردن وضعیت دکمه‌ها هنگام اسکرول کردن کاربر
+        cardRow.addEventListener('scroll', updateButtons);
+        
+        // آپدیت اولیه هنگام لود شدن
         updateButtons();
-
-        // آپدیت در صورت تغییر سایز
-        window.addEventListener('resize', updateButtons);
     });
 });
-
 document.querySelectorAll('.game-card').forEach(card => {
     // کلیک روی کارت
     card.addEventListener('click', function(e) {
@@ -527,9 +496,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.wishlist-form, .hero-wishlist-form').forEach(form => {
+    document.querySelectorAll('.wishlist-form').forEach(form => {
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
+            e.preventDefault(); // این خط جلوی باز شدن صفحه JSON را می‌گیرد
             
             const formData = new FormData(form);
             
@@ -573,6 +542,7 @@ function showNotification(msg, type = "success") {
     document.body.appendChild(div);
     setTimeout(() => div.remove(), 3000);
 }
+
 </script>
 </body>
 </html>

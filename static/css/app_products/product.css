@@ -976,7 +976,7 @@ body {
     .title {
         font-size: 24px;
         padding-left: 16px;
-        margin-top: 70px;
+        margin-top: 80px;
     }
 
     .price {
@@ -1203,7 +1203,7 @@ body {
 @media (max-width: 480px) {
     .container {
         padding: 0 12px;
-        margin: 35px auto;
+        margin: 52px auto;
     }
 
     .header {

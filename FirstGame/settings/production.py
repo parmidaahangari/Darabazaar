@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['darabazaar.com', 'www.darabazaar.com', '127.0.0.1', 'localhost', 'web'] # 'web' is the service name in docker-compose
+ALLOWED_HOSTS = ['darabazaar.com', 'www.darabazaar.com', '127.0.0.1', 'localhost', 'web', '192.168.100.7'] # 'web' is the service name in docker-compose
 
 # Security settings - uncomment and configure for production
 # SECURE_SSL_REDIRECT = True

@@ -20,3 +20,10 @@ class BestDeals(models.Model):
 class Hero(models.Model):
     text = models.TextField(max_length=50, blank=True)
     image = models.ImageField(upload_to='hero', blank=True, null=None, verbose_name="هیرو هوم")
+    product = models.OneToOneField(
+        Product,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name='hero'
+    )

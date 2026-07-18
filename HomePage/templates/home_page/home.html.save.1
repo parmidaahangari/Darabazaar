@@ -95,7 +95,7 @@
                     <h3>{{product.name}}</h3>
                         {% with best=product.best_price_info %}
                             {% if best %}
-                                <p class="price" dir="ltr">
+                                <p class="price">
                                     {% if best.discount > 0 %}
                                         <span class="discount">{{ best.discount }}%</span>
                                         <span class="old">{{ best.old_price|intcomma }}</span>
@@ -235,13 +235,14 @@
     <div class="sp-box">
         <img src="{% static 'img/IMG_0015.png' %}">
         <h3>بازی دو نفره و چند نفره</h3>
-                
+        
     </div>
 
     <div class="sp-box">
         <img src="{% static 'img/IMG_0018.png' %}">
-        <h3>بازی و کنسول دست دوم</h3>
-               
+        <h3>بهترین هدیه‌ها</h3>
+
+       
     </div>
 </section>
 

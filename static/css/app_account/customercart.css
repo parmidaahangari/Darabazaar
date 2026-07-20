@@ -709,25 +709,19 @@ a {
 
     .cart-items-container {
         width: 100%;
-        padding: 10px 35px;
+        padding: 12px 20px;
         
     }
 
     main, .main-content {
-        padding: 15px 5px; /* کمترین فاصله از لبه‌های گوشی */
-    }
-
-    .cart-item {
-        flex-direction: row; /* جلوگیری از ستونی شدن کل کارت */
-        align-items: flex-start;
-        gap: 15px; /* فاصله کمی کمتر بین عکس و متن در موبایل */
+        padding: 15px 10px; /* کمترین فاصله از لبه‌های گوشی */
     }
 
     .item-image {
         width: 110px; /* عکس را به جای 100%، یک سایز ثابت و کوچک‌تر می‌دهیم */
         height: auto; 
         flex-shrink: 0; /* برای اینکه عکس توسط متن‌ها فشرده نشود */
-        height: 100px;
+        height: 118px;
     }
 
     .item-bottom {
@@ -770,6 +764,10 @@ a {
         font-size: 13px;
     }
 
+    .cart-item {
+        padding:12px 0;
+
+    }
     .wish-card {
         flex-direction: column;
         align-items: flex-start;

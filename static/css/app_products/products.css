@@ -115,6 +115,7 @@ a:hover {
     display: flex;
     gap: 30px;
     align-items: flex-start;
+    margin-bottom: 25px;
 }
 
 /* ── GAMES GRID ── */
@@ -477,8 +478,10 @@ a:hover {
         margin-top: 11px;
     }
     .games-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(6, 1fr);
+        gap: 5px;
     }
+    
 }
 
 @media (max-width: 1024px) {
@@ -486,7 +489,7 @@ a:hover {
         padding: 30px 30px;
     }
     .games-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(6, 1fr);
     }
     .filters-sidebar {
         width: 200px;

@@ -345,8 +345,8 @@ a:hover, a:focus, a:active {
 /* CTA buttons container */
 .hero-cta {
     position: absolute;
-    left: 1023px;
-    top: 587px;
+    right: 100px;
+    top: 454px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -1067,7 +1067,7 @@ a:hover, a:focus, a:active {
 
     .hero-cta {
         left: 20px;
-        top: 250px;
+        top: 236px;
     }
 
     .btn-buy {

@@ -20,3 +20,27 @@
     ::-webkit-scrollbar-thumb:hover {
       background: white;
     }
+
+    @media (max-width: 768px) {
+    ::selection {
+        background-color: #070F2B;
+        color: #1B1A55;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #070F2B;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #fff;
+        border-radius: 1px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #fff;
+    }
+  }

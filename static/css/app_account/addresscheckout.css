@@ -39,7 +39,7 @@ a, a:hover, a:visited, a:active {
 .page-content {
     flex: 1;
     max-width: 1400px;
-    margin:0 auto;
+    margin:7px auto;
     padding-top:9px;
     
 }

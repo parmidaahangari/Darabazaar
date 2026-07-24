@@ -1,8 +1,4 @@
 
-body {
-  background-color: white; /* Ensure the iframe has a white background */
-}
-
                 /* ── BASE & RESET ── */
 * {
     margin: 0;
@@ -42,9 +38,10 @@ a, a:hover, a:visited, a:active {
 /* ── LAYOUT ── */
 .page-content {
     flex: 1;
-    padding: 50px 5%;
     max-width: 1400px;
-    margin: 0 auto;
+    margin:0 auto;
+    padding-top:9px;
+    
 }
 
 .cart-header-outer {
@@ -52,7 +49,7 @@ a, a:hover, a:visited, a:active {
 }
 .checkout-container {
     max-width: 1100px;
-    margin: 0 auto;
+    margin: 18px auto;
     display: flex;
     gap: 30px;
     align-items: flex-start;
@@ -118,8 +115,8 @@ a, a:hover, a:visited, a:active {
     grid-template-columns: 1fr;
     gap: 15px;
     margin-bottom: 20px;
-    max-height: 500px;
-    overflow-y: auto;
+    max-height: none;
+    overflow: visible;
 }
 
 /* ── ADDRESS CARD ── */
@@ -522,7 +519,7 @@ textarea {
 .modal-content {
     width: 90%;
     max-width: 550px;
-    max-height: 112vh;
+    max-height: 90vh;
     overflow-y: auto;
     position: relative;
     animation: modalSlideIn 0.3s ease;

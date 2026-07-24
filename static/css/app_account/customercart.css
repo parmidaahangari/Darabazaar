@@ -20,9 +20,11 @@ a {
 /* ── LAYOUT ── */
 .main-content {
     flex: 1;
-    padding: 50px 5%;
     max-width: 1400px;
-    margin: 0 auto;
+    margin:0 auto;
+    padding-top:9px;
+    padding-bottom:15px;
+
 }
 
 .cart-container {
@@ -231,7 +233,7 @@ a {
     padding: 28px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     margin-top: 90px;
-    position: sticky;
+    /* position: sticky; */
     top: 30px;
 }
 
@@ -655,7 +657,7 @@ a {
 
     main, .main-content {
         padding: 20px 10px; /* کاهش پدینگ صفحه برای دادن فضای بیشتر به کانتینر */
-        width:fit-content;
+        width:100%;
     }
 
     .cart-items-container {

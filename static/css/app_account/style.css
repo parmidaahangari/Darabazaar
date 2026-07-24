@@ -28,7 +28,6 @@ main {
     align-items: flex-start;
     padding: 50px 270px;
     gap: 24px;
-    justify-content: flex-end;
 }
 
 /* ── CONTENT PANEL ── */

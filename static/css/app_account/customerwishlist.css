@@ -1,4 +1,56 @@
 
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: rgba(7, 15, 43, 1);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff2') format('woff2'),
+        url('/static/css/fonts/Vazirmatn/webfonts/Vazirmatn-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, button, input, select, textarea {
+    font-family: 'Vazirmatn', sans-serif !important;
+}
+/* ── MAIN ── */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 270px;
+    gap: 24px;
+}
+
+/* ── CONTENT PANEL ── */
+.content-panel {
+    background: #1B1A55;
+    border-radius: 25px;
+    flex: 1;
+    padding: 36px 40px;
+    text-align: right;
+    direction: rtl;
+}
+
+.content-panel h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.content-panel .subtitle {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 6px;
+    margin-bottom: 30px;
+}
 a {
     text-decoration: none;
     color: inherit;
@@ -277,7 +329,7 @@ a {
     }
 
     main {
-        padding: 20px 16px;
+        padding: 30px 17px;
     }
 
     .content-panel,
@@ -285,46 +337,20 @@ a {
         padding: 20px;
     }
 
-    .empty-wishlist {
-        padding: 40px 16px;
-    }
-
-    .empty-wishlist-icon {
-        width: 120px;
-        height: 120px;
-    }
-
-    .empty-wishlist-icon i {
-        font-size: 56px;
-    }
-
-    .empty-wishlist-title {
-        font-size: 24px;
-    }
-
-    .empty-wishlist-text {
-        font-size: 14px;
-    }
-
-    .empty-wishlist-btn {
-        padding: 12px 28px;
-        font-size: 14px;
-    }
-
     .wish-card {
-        flex-direction: row; /* همچنان افقی بماند */
+        flex-direction: row;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
     }
 
     .wish-img {
-        width: 90px; /* عکس بسیار کوچکتر برای موبایل */
-        height: 90px;
+        width: 110px;
+        height: 110px;
         border-radius: 10px;
     }
 
     .wish-content {
-        align-items: flex-end; /* بردن کل محتوای متنی و دکمه‌ها به سمت چپ */
+        align-items: flex-end;
         justify-content: center;
         padding: 0;
     }
@@ -335,109 +361,77 @@ a {
     }
 
     .wish-title {
-        font-size: 14px; /* سایز ریزتر برای اسم */
+        font-size: 16px;
     }
 
     .wish-price {
-        font-size: 13px; /* سایز ریزتر برای قیمت */
+        font-size: 14px;
     }
 
     .wish-actions {
-        width: 100%;
-        flex-direction: column; /* دکمه‌ها در موبایل زیر هم قرار بگیرند تا جا بشوند */
-        align-items: flex-end; /* دکمه‌ها سمت چپ بمانند */
-        gap: 6px;
+        width: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
     }
 
     .btn-remove,
     .btn-add-cart {
-        width: 120px; /* دکمه‌های جمع و جورتر */
+        width: auto;
+        white-space: nowrap;
         font-size: 12px;
-        padding: 6px;
-    }
-
-    .wish-title {
-        font-size: 16px; /* کوچکتر شدن اسم */
-    }
-
-    .wish-price {
-        font-size: 15px; /* کوچکتر شدن قیمت */
-    }
-    
-    .btn-remove, .btn-add-cart {
-        font-size: 12px;
-        padding: 8px 10px !important;
+        padding: 10px 16px;
     }
 }
 
 @media (max-width: 480px) {
     main {
-        padding: 16px 12px;
+        padding:70px 12px;
     }
 
-    .wish-card {
-    display: flex;
-    align-items: stretch;
-    gap: 20px;
-    padding: 8px 0;
-
-
-    }
     .content-panel,
     .empty-wishlist {
         padding: 16px;
     }
 
-    .empty-wishlist {
-        padding: 32px 12px;
-    }
-
-    .empty-wishlist-icon {
-        width: 100px;
-        height: 100px;
-    }
-
-    .empty-wishlist-icon i {
-        font-size: 48px;
-    }
-
-    .empty-wishlist-title {
-        font-size: 20px;
-    }
-
-    .empty-wishlist-text {
-        font-size: 13px;
-    }
-
-    .empty-wishlist-btn {
-        padding: 10px 24px;
-        font-size: 13px;
-    }
-
     .wish-card {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;      
+        align-items: center;
+        gap: 10px;
     }
 
     .wish-img {
-        width: 100%;
-        height: 160px;
+        width: 85px;              
+        height: 85px;
+        border-radius: 10px;
+    }
 
+    .wish-content {
+        align-items: flex-end;   
+    }
+
+    .wish-title {
+        font-size: 13px;
+    }
+
+    .wish-price {
+        font-size: 12px;
     }
 
     .wish-actions {
-        width: 100%;
-        flex-direction: column;
+        width: auto;               
+        flex-direction: row;      
+        gap: 6px;
     }
 
     .btn-remove,
     .btn-add-cart {
-        width: 100%;
-        font-size: 12px;
-        padding: 9px;
-    }
-
-    .wish-content{
-        align-items: center;
+        width: auto;                
+        flex: 1;                   
+        font-size: 8px;
+        padding: 8px 24px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

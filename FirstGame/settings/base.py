@@ -144,12 +144,6 @@ USE_TZ = True
 
 LOGIN_URL = '/login/'
 
-# در prod می‌تونیم این‌ها رو override کنیم
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-SECURE_SSL_REDIRECT = False
-SECURE_HSTS_SECONDS = 0
-
 csrf_trusted = os.environ.get('CSRF_TRUSTED_ORIGINS')
 if csrf_trusted:
     CSRF_TRUSTED_ORIGINS = csrf_trusted.split(',')

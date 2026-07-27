@@ -29,6 +29,9 @@
                 <a href="{% url 'product' product.slug %}" style="display: block; height: 100%; width: 100%;">
                     <div class="game-img">
                         <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                        <span class="system-badge">
+                            {{ product.get_system_display }}
+                        </span>
                     </div>                
                     <div class="game-info">
                         <h4>{{ product.name }}</h4>

@@ -35,6 +35,16 @@ class Genre(models.Model):
 
 
 class Product(models.Model):
+    systems = [
+        ("ps1", "ps1"),
+        ("ps2", "ps2"),
+        ("ps3", "ps3"),
+        ("ps4", "ps4"),
+        ("ps5", "ps5"),
+        ("xbox", "xbox"),
+        ("Nintendo", "Nintendo")
+    ]
+
     slug = models.SlugField(unique=True, blank=True)
     name = models.CharField(max_length=100)
 
@@ -51,7 +61,9 @@ class Product(models.Model):
     publisher = models.CharField(max_length=100, blank=True, default='')
     release_date = models.IntegerField(blank=True, null=True)
     file_size_gb = models.FloatField(blank=True, null=True)
-    
+    system = models.CharField(max_length=4, choices=systems, default="ps5")
+
+ 
     # بخش About
     summary = models.TextField(blank=True, default='', verbose_name="متن کوتاه About")
     about_main_image = models.ImageField(upload_to=product_about_image_upload_path, blank=True, null=True, verbose_name="عکس اصلی About")

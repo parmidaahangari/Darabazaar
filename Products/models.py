@@ -61,7 +61,7 @@ class Product(models.Model):
     publisher = models.CharField(max_length=100, blank=True, default='')
     release_date = models.IntegerField(blank=True, null=True)
     file_size_gb = models.FloatField(blank=True, null=True)
-    system = models.CharField(max_length=4, choices=systems, default="ps5")
+    system = models.CharField(max_length=8, choices=systems, default="ps5")
 
  
     # بخش About

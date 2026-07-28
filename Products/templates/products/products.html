@@ -75,6 +75,19 @@
                     </button>
                 </div>
 
+                <!-- system filter-->
+                <div class="filter-group">
+                    <button type="button" class="filter-toggle" data-target="sortDropdown">
+                        سیستم<i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown {% if request.GET.sort %}open{% endif %}" id="sortDropdown">
+                        <label><input type="radio" name="system" value="ps4" {% if request.GET.sort == 'ps4' %}checked{% endif %}> Ps4</label>
+                        <label><input type="radio" name="system" value="ps5" {% if request.GET.sort == 'ps5' %}checked{% endif %}> Ps5</label>
+                        <label><input type="radio" name="system" value="xbox" {% if request.GET.sort == 'xbox' %}checked{% endif %}> Xbox</label>
+                        <label><input type="radio" name="system" value="Nintendo" {% if request.GET.sort == 'Nintendo' %}checked{% endif %}> Nintendo</label>
+                    </div>
+                </div>
+
                 <!-- Sort -->
                 <div class="filter-group">
                     <button type="button" class="filter-toggle" data-target="sortDropdown">

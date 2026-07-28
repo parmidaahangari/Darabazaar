@@ -85,7 +85,12 @@
                      data-href="{% url 'product' product.slug %}" 
                      role="link" 
                      tabindex="0">
-                    <img src="{{ product.cover_image.url }}">
+                    <div class="game-img">
+                        <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                        <span class="system-badge">
+                            {{ product.get_system_display }}
+                        </span>
+                    </div>   
                     <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -124,7 +129,12 @@
                          data-href="{% url 'product' product.slug %}" 
                          role="link" 
                          tabindex="0">
-                        <img src="{{ product.cover_image.url }}">
+                        <div class="game-img">
+                            <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                            <span class="system-badge">
+                                {{ product.get_system_display }}
+                            </span>
+                        </div>  
                         <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -164,7 +174,12 @@
                          data-href="{% url 'product' product.slug %}" 
                          role="link" 
                          tabindex="0">
-                        <img src="{{ product.cover_image.url }}">
+                        <div class="game-img">
+                            <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                            <span class="system-badge">
+                                {{ product.get_system_display }}
+                            </span>
+                        </div>  
                         <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -203,7 +218,12 @@
                          data-href="{% url 'product' product.slug %}" 
                          role="link" 
                          tabindex="0">
-                        <img src="{{ product.cover_image.url }}">
+                        <div class="game-img">
+                            <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                            <span class="system-badge">
+                                {{ product.get_system_display }}
+                            </span>
+                        </div>  
                         <form method="POST" action="{% url 'add_new_wishlist' %}" class="wishlist-form" style="margin: 0;">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -233,17 +253,22 @@
 
 <!-- SPECIAL BOXES -->
 <section class="special-boxes" style="text-align: right;" dir="rtl">
+    <a href="{% url 'products_by_player' 'multiplayer' %}">
     <div class="sp-box">
         <img src="{% static 'img/IMG_0015.png' %}">
         <h3>بازی دو نفره و چند نفره</h3>
                 
     </div>
+    </a>
 
+    <a href="{% url 'products_by_used' 'used' %}">
     <div class="sp-box">
         <img src="{% static 'img/IMG_0018.png' %}">
         <h3>بازی و کنسول دست دوم</h3>
                
     </div>
+    </a>
+
 </section>
 
 <!-- CATEGORIES -->

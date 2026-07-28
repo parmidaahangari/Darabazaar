@@ -525,6 +525,28 @@ a:hover, a:focus, a:active {
     object-fit: cover;
 }
 
+.game-img {
+    position: relative;
+}
+
+.system-badge {
+    position: absolute;
+    top: 15px;
+    right: 17px;
+
+    background: rgba(0, 0, 0, 0.566);
+    color: #fff;
+
+    padding: 4px 9px;
+    border-radius: 15px;
+
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    z-index: 2;
+}
+
 .wishlist {
     position: absolute;
     top: 30px;
@@ -1177,6 +1199,13 @@ a:hover, a:focus, a:active {
         font-size: 11px;
         width: 30px;
         height: 30px;
+    }
+
+    .system-badge {
+        top: 9px;
+        right: 9px;
+        padding: 2px 8px;
+
     }
 
     .game-card h3 {

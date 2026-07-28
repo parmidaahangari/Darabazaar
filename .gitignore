@@ -14,3 +14,4 @@ __pycache__/
 db.sqlite3
 *.log
 .env.example
+.nginx.conf

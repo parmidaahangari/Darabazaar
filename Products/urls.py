@@ -7,6 +7,17 @@ urlpatterns = [
     path('', views.ProductsView.as_view(), name='products'),
     path('<slug:slug>/', views.ProductView.as_view(), name='product'),
     path('<str:genre>', views.ProductsGenreView.as_view(), name='products_by_genre'),
+    path(
+        "player/<str:player>/",
+        views.ProductsView.as_view(),
+        name="products_by_player",
+    ),
+
+    path(
+        "used/<str:used>/",
+        views.ProductsView.as_view(),
+        name="products_by_used",
+    ),
 
     ]
 

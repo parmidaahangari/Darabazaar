@@ -184,6 +184,12 @@
 
             <!-- RIGHT (INFO) -->
             <div class="about-right" dir="rtl">
+
+                <div class="info-box">
+                    <div class="info-label">تعداد بازیکنان</div>
+                    <div class="info-value">{{ product.get_player_display}}</div>
+                </div>
+
                 <div class="info-box">
                     <div class="info-label">تولید کننده</div>
                     <div class="info-value">{{ product.developer|default:"N/A" }}</div>

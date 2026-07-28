@@ -32,7 +32,7 @@ class ProductAboutFeatureInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name","system", "price_new", "price_used", "stock_new", "stock_used", "get_genres"]
+    list_display = ["name","system","player", "price_new", "price_used", "stock_new", "stock_used", "get_genres"]
     list_filter = ["genres"]
     search_fields = ["name", "developer", "publisher"]
     filter_horizontal = ("genres",)
@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('اطلاعات اصلی', {
-            'fields': ('name', 'slug', 'genres', 'cover_image', 'logo', 'system',)
+            'fields': ('name', 'slug', 'genres', 'cover_image', 'logo', 'system', 'player')
         }),
         ('قیمت و موجودی', {
             'fields': ('price_new', 'price_used', 'stock_new', 'stock_used', 'discount_used', 'discount_new')

@@ -6,7 +6,7 @@ from CustomerAccount.forms import NewOrderForm
 from django.http import JsonResponse
 
 class ProductsView(View):
-    def get(self, request, genre=None):
+    def get(self, request, genre=None, player=None, used=None):
         products = Product.objects.all()
         
         selected_genres = request.GET.getlist('genre')
@@ -14,6 +14,17 @@ class ProductsView(View):
         keyword = request.GET.get('keyword', '').strip()
         instock = request.GET.get('instock')
         sort = request.GET.get('sort', 'newest')
+        system = request.GET.get('system')
+
+
+        if system:
+            products = products.filter(system=system)
+            
+        if used:
+            products = products.filter(stock_used__gte=1)
+
+        if player:
+            products = products.filter(player=player)
         
         # فیلتر ژانر از URL (مثلاً /products/action/)
         if genre:

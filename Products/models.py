@@ -45,6 +45,11 @@ class Product(models.Model):
         ("Nintendo", "Nintendo")
     ]
 
+    players =[
+        ("singleplayer", "یک نفره"),
+        ("multiplayer", "چند نفره")
+    ]
+
     slug = models.SlugField(unique=True, blank=True)
     name = models.CharField(max_length=100)
 
@@ -62,7 +67,7 @@ class Product(models.Model):
     release_date = models.IntegerField(blank=True, null=True)
     file_size_gb = models.FloatField(blank=True, null=True)
     system = models.CharField(max_length=8, choices=systems, default="ps5")
-
+    player = models.CharField(max_length=12, choices=players, default="singleplayer")
  
     # بخش About
     summary = models.TextField(blank=True, default='', verbose_name="متن کوتاه About")

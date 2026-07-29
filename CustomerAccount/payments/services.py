@@ -37,6 +37,12 @@ def initiate_blupal_payment(user, address_id):
     client = BluPalClient()
     invoice_data = client.create_invoice(amount_rial)
 
+    required_fields = ('invoice_id', 'amount')
+    missing_fields = [field for field in required_fields if field not in invoice_data]
+    if missing_fields:
+        logger.error('BluPal create_invoice missing fields: %s response=%s', missing_fields, invoice_data)
+        raise BluPalError('پاسخ نامعتبر از درگاه پرداخت')
+
     with transaction.atomic():
         order = cart.create_pending_order(address)
         payment = PaymentTransaction.objects.create(

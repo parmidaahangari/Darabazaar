@@ -680,7 +680,15 @@
                             'X-Requested-With': 'XMLHttpRequest',
                         },
                     })
-                    .then(response => response.json().then(data => ({ ok: response.ok, data })))
+                    .then(async response => {
+                        let data = {};
+                        try {
+                            data = await response.json();
+                        } catch (error) {
+                            throw new Error('invalid_json');
+                        }
+                        return { ok: response.ok, data };
+                    })
                     .then(({ ok, data }) => {
                         if (ok && data.success && data.payment_link) {
                             window.location.href = data.payment_link;

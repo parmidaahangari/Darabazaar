@@ -144,6 +144,10 @@ USE_TZ = True
 
 LOGIN_URL = '/login/'
 
+BLUPAL_API_KEY = env('BLUPAL_API_KEY', default='')
+BLUPAL_BASE_URL = env('BLUPAL_BASE_URL', default='https://blupal.net/api')
+BLUPAL_WEBHOOK_SECRET = env('BLUPAL_WEBHOOK_SECRET', default=None)
+
 csrf_trusted = os.environ.get('CSRF_TRUSTED_ORIGINS')
 if csrf_trusted:
     CSRF_TRUSTED_ORIGINS = csrf_trusted.split(',')

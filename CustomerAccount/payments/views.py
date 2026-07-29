@@ -43,6 +43,13 @@ class PaymentInitiateView(LoginRequiredMixin, View):
                 return JsonResponse({'success': False, 'message': str(exc)}, status=400)
             messages.error(request, str(exc))
             return redirect('addresse')
+        except Exception:
+            logger.exception('Payment initiation failed for user=%s address=%s', request.user.id, address_id)
+            message = 'خطا در شروع پرداخت. لطفاً دوباره تلاش کنید.'
+            if is_ajax:
+                return JsonResponse({'success': False, 'message': message}, status=500)
+            messages.error(request, message)
+            return redirect('addresse')
 
         if not payment.payment_link:
             message = 'لینک پرداخت دریافت نشد'

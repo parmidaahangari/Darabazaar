@@ -22,23 +22,37 @@ logger = logging.getLogger(__name__)
 
 class PaymentInitiateView(LoginRequiredMixin, View):
     def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         address_id = request.POST.get('address_id')
         if not address_id:
-            messages.error(request, 'لطفاً یک آدرس انتخاب کنید')
+            message = 'لطفاً یک آدرس انتخاب کنید'
+            if is_ajax:
+                return JsonResponse({'success': False, 'message': message}, status=400)
+            messages.error(request, message)
             return redirect('addresse')
 
         try:
             payment = initiate_blupal_payment(request.user, address_id)
         except ValueError as exc:
+            if is_ajax:
+                return JsonResponse({'success': False, 'message': str(exc)}, status=400)
             messages.error(request, str(exc))
             return redirect('addresse')
         except BluPalError as exc:
+            if is_ajax:
+                return JsonResponse({'success': False, 'message': str(exc)}, status=400)
             messages.error(request, str(exc))
             return redirect('addresse')
 
         if not payment.payment_link:
-            messages.error(request, 'لینک پرداخت دریافت نشد')
+            message = 'لینک پرداخت دریافت نشد'
+            if is_ajax:
+                return JsonResponse({'success': False, 'message': message}, status=400)
+            messages.error(request, message)
             return redirect('addresse')
+
+        if is_ajax:
+            return JsonResponse({'success': True, 'payment_link': payment.payment_link})
 
         return redirect(payment.payment_link)
 

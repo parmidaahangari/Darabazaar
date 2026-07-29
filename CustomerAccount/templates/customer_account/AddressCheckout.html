@@ -157,7 +157,7 @@
                         <form method="POST" action="{% url 'payment_initiate' %}" id="payment-form">
                             {% csrf_token %}
                             <input type="hidden" name="address_id" id="payment-address-id" value="">
-                            <button type="submit" class="btn-confirm" style="margin-top: 20px; width: 100%;" id="payment-btn">تسویه حساب</button>
+                            <button type="button" class="btn-confirm" style="margin-top: 20px; width: 100%;" id="payment-btn">تسویه حساب</button>
                         </form>
                     {% else %}
                         <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
@@ -643,14 +643,21 @@
                 }
             }
 
-            // مدیریت دکمه پرداخت
+            // مدیریت دکمه پرداخت — بدون رفتن به صفحه initiate
             const paymentForm = document.getElementById('payment-form');
-            if (paymentForm) {
-                paymentForm.addEventListener('submit', function(e) {
+            const paymentBtnOriginalHtml = paymentBtn ? paymentBtn.innerHTML : '';
+
+            function resetPaymentButton() {
+                if (!paymentBtn) return;
+                paymentBtn.disabled = false;
+                paymentBtn.innerHTML = paymentBtnOriginalHtml;
+            }
+
+            if (paymentBtn && paymentForm) {
+                paymentBtn.addEventListener('click', function() {
                     const addressId = getSelectedAddressId();
 
                     if (!addressId) {
-                        e.preventDefault();
                         showNotification('لطفاً یک آدرس انتخاب کنید یا آدرس جدید ثبت کنید', 'error');
                         document.querySelector('.addresses-list').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
@@ -663,6 +670,30 @@
                     document.getElementById('payment-address-id').value = addressId;
                     paymentBtn.disabled = true;
                     paymentBtn.innerHTML = '<span class="spinner"></span> در حال انتقال به درگاه...';
+
+                    const formData = new FormData(paymentForm);
+
+                    fetch(paymentForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    })
+                    .then(response => response.json().then(data => ({ ok: response.ok, data })))
+                    .then(({ ok, data }) => {
+                        if (ok && data.success && data.payment_link) {
+                            window.location.href = data.payment_link;
+                            return;
+                        }
+
+                        showNotification(data.message || 'خطا در اتصال به درگاه پرداخت', 'error');
+                        resetPaymentButton();
+                    })
+                    .catch(() => {
+                        showNotification('خطا در ارتباط با سرور', 'error');
+                        resetPaymentButton();
+                    });
                 });
             }
             

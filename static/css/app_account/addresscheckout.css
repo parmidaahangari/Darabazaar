@@ -124,7 +124,7 @@ a, a:hover, a:visited, a:active {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
-    padding: 24px;
+    padding: 24px 24px 24px 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -149,11 +149,18 @@ a, a:hover, a:visited, a:active {
 }
 
 .address-card input[type="radio"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-    cursor: pointer;
-    accent-color: #1B1A55;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+.address-card .check-icon {
+    position: absolute;
+    top: 16px;
+    left: 16px;
 }
 
 .address-content {

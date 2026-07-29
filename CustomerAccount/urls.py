@@ -1,7 +1,11 @@
 from django.urls import path
 from . import views
 from .views import add_new_wishlist
-
+from .payments.views import (
+    PaymentInitiateView,
+    PaymentReturnView,
+    PaymentWebhookView,
+)
 
 urlpatterns = [
     path('dashboard/', views.CustomerAccountView.as_view(), name='dashboard'),
@@ -25,5 +29,8 @@ urlpatterns = [
     path('addresses/set-default/<int:address_id>/', views.SetDefaultAddressView.as_view(), name='set_default_address'),
     path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),
 
+    path('payment/initiate/', PaymentInitiateView.as_view(), name='payment_initiate'),
+    path('payment/return/', PaymentReturnView.as_view(), name='payment_return'),
+    path('payment/webhook/', PaymentWebhookView.as_view(), name='payment_webhook'),
 ]
 

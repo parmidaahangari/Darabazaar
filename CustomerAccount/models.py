@@ -85,24 +85,47 @@ class UserAddress(models.Model):
     
     
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'در انتظار پرداخت'),
+        ('paid', 'پرداخت شده'),
+        ('failed', 'ناموفق'),
+        ('cancelled', 'لغو شده'),
+        ('expired', 'منقضی شده'),
+    ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pay_date = models.DateTimeField(blank=True, null=True)
-    address_text = models.TextField(null=True)  
+    address_text = models.TextField(null=True, blank=True)
+    address = models.ForeignKey(
+        'UserAddress',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='orders',
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    total_amount = models.PositiveIntegerField(default=0, verbose_name='مبلغ کل (تومان)')
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.user.get_username()
-    
+        return f"سفارش #{self.id} - {self.user.get_username()}"
+
+    @property
+    def is_paid(self):
+        return self.status == 'paid'
+
     @property
     def total_discount(self):
         total = 0
-        for detail in self.details.all(): 
+        for detail in self.orderdetail_set.all():
+            if not detail.product:
+                continue
             if detail.condition == 'new':
                 discount_per_item = detail.product.price_new - detail.product.discounted_price_new
             else:
                 discount_per_item = detail.product.price_used - detail.product.discounted_price_used
-            
-            total += (discount_per_item * detail.quantity)
+
+            total += (discount_per_item * detail.count)
         return total
 
 
@@ -183,50 +206,96 @@ class Cart(models.Model):
 
 
 
-    def convert_to_order(self):
+    def _validate_items(self):
         if self.status != 'active':
             raise ValueError("فقط سبد فعال قابل تبدیل است")
-        
+
         if self.is_empty():
             raise ValueError("سبد خالی است")
-        
-        # چک موجودی
+
         for item in self.items.all():
             if not item.is_available():
                 raise ValueError(f"محصول {item.product.name} ناموجود است")
-        
-        # ساخت Order
+
+    def create_pending_order(self, address):
+        self._validate_items()
+
+        address_snapshot = (
+            f"{address.users_total_name}\n"
+            f"{address.address}\n"
+            f"{address.city} - {address.postal_code}\n"
+            f"تلفن: {address.phone}"
+        )
+
         order = Order.objects.create(
             user=self.user,
-            pay_date=None
+            pay_date=None,
+            address=address,
+            address_text=address_snapshot,
+            status='pending',
+            total_amount=int(self.total_price),
         )
-        
-        # انتقال با قیمت لحظه‌ای از Product (نه unit_price ذخیره شده)
+
         for item in self.items.all():
-            # قیمت لحظه‌ای
             current_price = item.product.price_new if item.condition == 'new' else item.product.price_used
-            
             OrderDetail.objects.create(
                 order=order,
                 product=item.product,
                 count=item.quantity,
-                price=int(current_price),  # مستقیم از Product
-                condition=item.condition
+                price=int(current_price),
+                condition=item.condition,
             )
-            
-            # کاهش موجودی
+
+        return order
+
+    def finalize_paid_order(self, order):
+        if self.status != 'active':
+            return
+
+        for item in self.items.all():
             if item.condition == 'new':
                 item.product.stock_new -= item.quantity
             else:
                 item.product.stock_used -= item.quantity
             item.product.save(update_fields=['stock_new', 'stock_used'])
-        
-        # آپدیت وضعیت سبد
+
+        self.status = 'converted'
+        self.order = order
+        self.converted_at = timezone.now()
+        self.save(update_fields=['status', 'order', 'converted_at'])
+
+    def convert_to_order(self):
+        self._validate_items()
+
+        order = Order.objects.create(
+            user=self.user,
+            pay_date=timezone.now(),
+            status='paid',
+            total_amount=int(self.total_price),
+        )
+
+        for item in self.items.all():
+            current_price = item.product.price_new if item.condition == 'new' else item.product.price_used
+
+            OrderDetail.objects.create(
+                order=order,
+                product=item.product,
+                count=item.quantity,
+                price=int(current_price),
+                condition=item.condition,
+            )
+
+            if item.condition == 'new':
+                item.product.stock_new -= item.quantity
+            else:
+                item.product.stock_used -= item.quantity
+            item.product.save(update_fields=['stock_new', 'stock_used'])
+
         self.status = 'converted'
         self.order = order
         self.converted_at = timezone.now()
         self.save()
-        
+
         return order
 
 
@@ -283,3 +352,34 @@ class CartItem(models.Model):
         """آیا قیمت محصول از زمان اضافه شدن تغییر کرده؟"""
         current_price = self.product.price_new if self.condition == 'new' else self.product.price_used
         return self.unit_price != current_price
+
+
+class PaymentTransaction(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', 'در انتظار پرداخت'),
+        ('PAID', 'پرداخت شده'),
+        ('EXPIRED', 'منقضی شده'),
+        ('CANCELED', 'لغو شده'),
+        ('FAILED', 'ناموفق'),
+    ]
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
+    gateway = models.CharField(max_length=20, default='blupal')
+    invoice_id = models.BigIntegerField(unique=True)
+    amount = models.PositiveIntegerField(verbose_name='مبلغ (ریال)')
+    final_amount = models.PositiveIntegerField(null=True, blank=True, verbose_name='مبلغ نهایی (ریال)')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    payment_link = models.URLField(blank=True)
+    card_number = models.CharField(max_length=20, blank=True)
+    mode = models.CharField(max_length=20, blank=True)
+    transaction_id = models.BigIntegerField(null=True, blank=True)
+    raw_create_response = models.JSONField(null=True, blank=True)
+    raw_webhook_response = models.JSONField(null=True, blank=True)
+    paid_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"BluPal #{self.invoice_id} - {self.get_status_display()}"

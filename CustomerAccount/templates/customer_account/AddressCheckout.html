@@ -42,15 +42,21 @@
                     <!-- لیست آدرس‌های موجود -->
                     <div class="addresses-list">
                         {% for addr in addresses %}
-                        <div class="address-card {% if addr.is_default %}default{% endif %}" 
+                        <div class="address-card {% if addr.is_default %}default selected{% endif %}" 
                             data-id="{{ addr.id }}"
                             data-name="{{ addr.users_total_name }}"
                             data-address="{{ addr.address }}"
                             data-city="{{ addr.city }}"
                             data-postal="{{ addr.postal_code }}"
                             data-phone="{{ addr.phone }}"
-                            data-is-default="{{ addr.is_default|yesno:'true,false' }}">
+                            data-is-default="{{ addr.is_default|yesno:'true,false' }}"
+                            onclick="selectAddress({{ addr.id }})">
                             
+                            <input type="radio" name="selected_address" id="addr-{{ addr.id }}" value="{{ addr.id }}"
+                                {% if addr.is_default %}checked{% endif %}
+                                onclick="event.stopPropagation(); selectAddress({{ addr.id }})">
+                            <i class="fas fa-check-circle check-icon"></i>
+
                             <div class="address-content">
                                 <h4><i class="fas fa-user"></i> {{ addr.users_total_name }}</h4>
                                 <p><i class="fas fa-map-pin"></i> {{ addr.address }}</p>
@@ -61,7 +67,7 @@
                                 </div>
                             </div>
                             
-                            <div class="address-actions">
+                            <div class="address-actions" onclick="event.stopPropagation()">
                                 {% if not addr.is_default %}
                                     <button type="button" class="btn-set-default" onclick="SetAddressDefault({{addr.id}})" title="تنظیم به عنوان پیش‌فرض">
                                         <i class="fas fa-check-circle"></i>
@@ -148,7 +154,11 @@
                     </div>
                     
                     {% if cart.items_count > 0 %}
-                        <button class="btn-confirm" style="margin-top: 20px;" id="payment-btn">تسویه حساب</button>
+                        <form method="POST" action="{% url 'payment_initiate' %}" id="payment-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="address_id" id="payment-address-id" value="">
+                            <button type="submit" class="btn-confirm" style="margin-top: 20px; width: 100%;" id="payment-btn">تسویه حساب</button>
+                        </form>
                     {% else %}
                         <div style="color: #ff6b6b; margin-top: 15px; text-align: center;">
                             سبد خرید شما خالی است
@@ -370,6 +380,7 @@
                     }
                     
                     showNotification('آدرس پیش‌فرض تنظیم شد', 'success');
+                    selectAddress(addressId);
                 }
             })
             .catch(error => {
@@ -513,12 +524,22 @@
             document.querySelectorAll('.address-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
+
             const radio = document.getElementById(`addr-${id}`);
             if (radio) {
                 radio.checked = true;
                 radio.closest('.address-card').classList.add('selected');
             }
+
+            const paymentAddressInput = document.getElementById('payment-address-id');
+            if (paymentAddressInput) {
+                paymentAddressInput.value = id;
+            }
+        }
+
+        function getSelectedAddressId() {
+            const selectedRadio = document.querySelector('input[name="selected_address"]:checked');
+            return selectedRadio ? selectedRadio.value : null;
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -611,24 +632,37 @@
                 });
             }
             
+            // انتخاب خودکار آدرس پیش‌فرض برای پرداخت
+            const defaultRadio = document.querySelector('input[name="selected_address"]:checked');
+            if (defaultRadio) {
+                selectAddress(defaultRadio.value);
+            } else {
+                const firstRadio = document.querySelector('input[name="selected_address"]');
+                if (firstRadio) {
+                    selectAddress(firstRadio.value);
+                }
+            }
+
             // مدیریت دکمه پرداخت
-            if (paymentBtn) {
-                paymentBtn.addEventListener('click', function() {
-                    const selectedAddress = document.querySelector('input[name="selected_address"]:checked');
-                    
-                    if (!selectedAddress) {
+            const paymentForm = document.getElementById('payment-form');
+            if (paymentForm) {
+                paymentForm.addEventListener('submit', function(e) {
+                    const addressId = getSelectedAddressId();
+
+                    if (!addressId) {
+                        e.preventDefault();
                         showNotification('لطفاً یک آدرس انتخاب کنید یا آدرس جدید ثبت کنید', 'error');
                         document.querySelector('.addresses-list').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        
+
                         if (document.querySelectorAll('.address-card').length === 0 && formContainer.style.display === 'none') {
                             toggleBtn.click();
                         }
                         return;
                     }
-                    
-                    this.disabled = true;
-                    this.innerHTML = '<span class="spinner"></span> در حال انتقال...';
-                    window.location.href = `/payment/?address_id=${selectedAddress.value}`;
+
+                    document.getElementById('payment-address-id').value = addressId;
+                    paymentBtn.disabled = true;
+                    paymentBtn.innerHTML = '<span class="spinner"></span> در حال انتقال به درگاه...';
                 });
             }
             

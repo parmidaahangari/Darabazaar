@@ -144,9 +144,11 @@ USE_TZ = True
 
 LOGIN_URL = '/login/'
 
-BLUPAL_API_KEY = env('BLUPAL_API_KEY', default='')
-BLUPAL_BASE_URL = env('BLUPAL_BASE_URL', default='https://blupal.net/api')
+BLUPAL_API_KEY = env('BLUPAL_API_KEY', default='').strip()
+BLUPAL_BASE_URL = env('BLUPAL_BASE_URL', default='https://blupal.net/api').strip()
 BLUPAL_WEBHOOK_SECRET = env('BLUPAL_WEBHOOK_SECRET', default=None)
+if BLUPAL_WEBHOOK_SECRET:
+    BLUPAL_WEBHOOK_SECRET = BLUPAL_WEBHOOK_SECRET.strip()
 
 csrf_trusted = os.environ.get('CSRF_TRUSTED_ORIGINS')
 if csrf_trusted:

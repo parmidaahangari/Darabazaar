@@ -15,7 +15,7 @@ class BluPalError(Exception):
 
 class BluPalClient:
     def __init__(self, api_key=None, base_url=None):
-        self.api_key = api_key or settings.BLUPAL_API_KEY
+        self.api_key = (api_key or settings.BLUPAL_API_KEY or '').strip()
         self.base_url = (base_url or settings.BLUPAL_BASE_URL).rstrip('/')
 
         if not self.api_key:

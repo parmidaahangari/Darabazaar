@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from CustomerAccount.views import SignupView, LoginView, CustomerCartView, CustomerAdressesViewCheckout
+from CustomerAccount.payments.views import PaymentWebhookView
 from HomePage.views import TrendingView
 from Products.views import SearchSuggestionsView
 
@@ -34,7 +35,7 @@ urlpatterns = [
     path('checkout/addresse/', CustomerAdressesViewCheckout.as_view(), name='addresse'),
     path('checkout/addresses/edit/<int:address_id>/', CustomerAdressesViewCheckout.as_view(), name='checkout_edit_address'),
     path('api/search/suggestions/', SearchSuggestionsView.as_view(), name='search_suggestions'),
-
+    path('payment/webhook/sandbox/', PaymentWebhookView.as_view(), name='payment_webhook_sandbox'),
 
 ]
 if settings.DEBUG:

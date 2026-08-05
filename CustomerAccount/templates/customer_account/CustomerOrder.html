@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/app_account/customerorder.css' %}">
     <link rel="stylesheet" href="{% static 'css/scroll.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <title>سفارش های من</title>
     <link rel="stylesheet" href="https://lib.arvancloud.ir/font-awesome/6.3.0/css/all.css">
 
@@ -21,7 +23,7 @@
 
 
     <!-- ── CONTENT: ORDERS ── -->
-
+<div class="orders-list">
     {% if orders and orders|length > 0 %}
         {% for item in orders %}
             {% if item.details|length > 0 %}
@@ -64,14 +66,7 @@
                                         <span class="product-qty">{{ detail.count }}x Total</span>
                                         <div class="product-price-action">
                                             <span class="product-price">{{ detail.price }} تومان</span>
-                                            
-                                            <!-- Existing Backend Delete Button -->
-                                            <form method="post" action="{% url 'remove_from_cart' detail.id %}" style="display: inline;">
-                                                {% csrf_token %}
-                                                <button type="submit" style="background: none; border: none; cursor: pointer; margin-left: 15px;">
-                                                    <i class="fas fa-trash-alt" style="color: #ffffffca;"></i>
-                                                </button>
-                                            </form>
+
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +81,7 @@
             </div>
             {% endif %}
         {% endfor %}
-
+</div>
 
         {% if not orders.0.details or orders.0.details|length == 0 %}
             <div class="empty-orders">

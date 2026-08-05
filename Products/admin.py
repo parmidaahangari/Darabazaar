@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('اطلاعات اصلی', {
-            'fields': ('name', 'slug', 'genres', 'cover_image', 'logo', 'system', 'player')
+            'fields': ('name', 'slug', 'genres', 'cover_image','cover_image_products_page', 'logo', 'system', 'player')
         }),
         ('قیمت و موجودی', {
             'fields': ('price_new', 'price_used', 'stock_new', 'stock_used', 'discount_used', 'discount_new')

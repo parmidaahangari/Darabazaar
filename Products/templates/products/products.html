@@ -28,7 +28,13 @@
             <div class="game-card">
                 <a href="{% url 'product' product.slug %}" style="display: block; height: 100%; width: 100%;">
                     <div class="game-img">
-                        <img src="{{ product.cover_image.url }}" alt="{{ product.name }}">
+                        {% if product.cover_image_products_page %}
+                            <img src="{{ product.cover_image_products_page.url }}">
+                        {% elif product.cover_image %}
+                            <img src="{{ product.cover_image.url }}">
+                        {% else %}
+                            <img src="{% static 'img/IMG_0015.png' %}">
+                        {% endif %}
                         <span class="system-badge">
                             {{ product.get_system_display }}
                         </span>

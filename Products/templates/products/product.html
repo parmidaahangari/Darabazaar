@@ -117,9 +117,9 @@
                     {% if product.stock_used > 0 %}onclick="selectCondition(this)"{% endif %}>
                     کارکرده
                     <div class="price-wrapper">
-                        {% if product.stock_new == 0 %}
+                        {% if product.stock_used == 0 %}
                             <span class="final-price">ناموجود</span>
-                        {% elif product.discount_new > 0 %}                        
+                        {% elif product.discount_used > 0 %}                        
                             <span class="discount" data-raw="{{ product.price_used }}">{{ product.price_used|intcomma }}</span>
                             <span class="final-price" data-raw="{{ product.discounted_price_used }}">{{ product.discounted_price_used|intcomma }}</span>
                         {% else %}

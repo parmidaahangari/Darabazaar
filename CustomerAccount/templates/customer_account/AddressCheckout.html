@@ -308,6 +308,9 @@
             }
         }
 
+        // اجرای تبدیل هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', convertNumbersToPersian);
+
         // تابع نمایش نوتیفیکیشن
         function showNotification(message, type = 'success') {
             const existing = document.querySelector('.notification');

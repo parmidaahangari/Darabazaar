@@ -59,9 +59,6 @@ class CustomerCartView(View):
         order_list = []
 
         if request.user.is_authenticated:
-            # -------------------------------------------------
-            # منطق کاربران لاگین شده (خواندن از دیتابیس)
-            # -------------------------------------------------
             carts = (
                 Cart.objects.filter(user=request.user)
                 .prefetch_related('items__product')
@@ -96,24 +93,21 @@ class CustomerCartView(View):
                         else:
                             valid_items.append(item)
                     
-                    total = sum(item.total_price for item in valid_items)
-                    
-                    order_list.append({
-                        'order': cart,
-                        'details': valid_items,
-                        'total_price': total,
-                    })
+                    # ═══ فقط اگه کالای معتبری داری، append کن ═══
+                    if valid_items:
+                        total = sum(item.total_price for item in valid_items)
+                        order_list.append({
+                            'order': cart,
+                            'details': valid_items,
+                            'total_price': total,
+                        })
 
         else:
-            # -------------------------------------------------
-            # منطق کاربران مهمان (خواندن از سشن)
-            # -------------------------------------------------
             cart_session = request.session.get('cart', {})
             valid_items = []
             total = 0
             session_modified = False
             
-            # استفاده از list() برای جلوگیری از خطای تغییر دیکشنری در حین حلقه
             for item_key, item_data in list(cart_session.items()):
                 try:
                     product = Product.objects.get(id=item_data['product_id'])
@@ -147,14 +141,12 @@ class CustomerCartView(View):
                         )
                         continue
                 
-                # محاسبه قیمت (فرض بر این است که متدهای قیمت در مدل Product وجود دارند)
                 price = product.price_new if condition == 'new' else product.price_used
                 item_total_price = price * quantity
                 total += item_total_price
                 
-                # ایجاد یک دیکشنری ساختاریافته مشابه آبجکت CartItem برای ارسال به قالب
                 valid_items.append({
-                    'id': item_key, # برای دکمه حذف
+                    'id': item_key,
                     'product': product,
                     'condition': condition,
                     'quantity': quantity,
@@ -167,7 +159,7 @@ class CustomerCartView(View):
 
             if valid_items:
                 order_list.append({
-                    'order': None, # کاربر مهمان آبجکت Cart در دیتابیس ندارد
+                    'order': None,
                     'details': valid_items,
                     'total_price': total,
                 })

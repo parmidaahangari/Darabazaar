@@ -23,13 +23,14 @@
     {% endif %}
 
     <div>
+
         <main class="main-content">
             {% if orders %}
                 {% for item in orders %}
                     {% if item.details|length > 0 %}
                     
                     <div class="cart-container">
-
+                        <!-- ═══ کل کد سبد خرید (همونی که داری) ═══ -->
                         <div class="cart-column">
                             <div class="cart-header-outer">
                                 <h1 class="page-title">سبد خرید</h1>
@@ -114,22 +115,21 @@
                                 <button class="continue-btn">ادامه خرید</button>
                             </a>
                         </div>
-                        
                     </div>
-                    {% else %}
-                        <div class="empty-wishlist">
-                            <div class="empty-wishlist-icon">
-                                <i class="fas fa-shopping-bag"></i>
-                            </div>
-                            <h2 class="empty-wishlist-title">سبد خرید شما خالی است</h2>
-                            <p class="empty-wishlist-text">شما هنوز هیچ محصولی به سبد خرید اضافه نکرده‌اید.</p>
-                            <a href="/products/" class="empty-wishlist-btn">
-                            
-                                مشاهده فروشگاه
-                            </a>
-                        </div>
+
                     {% endif %}
                 {% endfor %}
+            {% else %}
+                <div class="empty-wishlist">
+                    <div class="empty-wishlist-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h2 class="empty-wishlist-title">سبد خرید شما خالی است</h2>
+                    <p class="empty-wishlist-text">شما هنوز هیچ محصولی به سبد خرید اضافه نکرده‌اید.</p>
+                    <a href="/products/" class="empty-wishlist-btn">
+                        مشاهده فروشگاه
+                    </a>
+                </div>
             {% endif %}
         </main>
     </div>

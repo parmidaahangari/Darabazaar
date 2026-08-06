@@ -74,7 +74,7 @@ class Product(models.Model):
     about_main_image = models.ImageField(upload_to=product_about_image_upload_path, blank=True, null=True, verbose_name="عکس اصلی About")
     
     cover_image = models.ImageField(upload_to=product_cover_upload_path, blank=True, null=True)
-    cover_image_products_page = models.ImageField(upload_to=product_cover_upload_path, blank=True, null=True)
+    cover_image_products_page = models.ImageField(upload_to=product_cover_upload_path, blank=True, null=True, default='img/default.png')
 
     logo = models.ImageField(upload_to=product_logo_upload_path, blank=True, null=True)
 

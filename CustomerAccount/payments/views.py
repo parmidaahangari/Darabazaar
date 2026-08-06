@@ -24,6 +24,31 @@ class PaymentInitiateView(LoginRequiredMixin, View):
     def post(self, request):
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         address_id = request.POST.get('address_id')
+        
+        # ═══ گرفتن و اعتبارسنجی هزینه ارسال ═══
+        shipping_method = request.POST.get('shipping_method', 'tehran_karaj')
+        shipping_cost_str = request.POST.get('shipping_cost', '150000')
+        
+        SHIPPING_RATES = {
+            'tehran_karaj': 150000,
+            'city_post': 200000
+        }
+        
+        try:
+            shipping_cost = int(shipping_cost_str)
+        except (ValueError, TypeError):
+            shipping_cost = SHIPPING_RATES.get(shipping_method, 150000)
+        
+        # اطمینان از درستی مبلغ (جلوگیری از تغییر دستی کاربر)
+        expected_cost = SHIPPING_RATES.get(shipping_method, 150000)
+        if shipping_cost != expected_cost:
+            shipping_cost = expected_cost
+        
+        # ذخیره در سشن برای استفاده بعد از بازگشت از درگاه
+        request.session['shipping_method'] = shipping_method
+        request.session['shipping_cost'] = shipping_cost
+        request.session.modified = True
+        
         if not address_id:
             message = 'لطفاً یک آدرس انتخاب کنید'
             if is_ajax:
@@ -32,7 +57,17 @@ class PaymentInitiateView(LoginRequiredMixin, View):
             return redirect('addresse')
 
         try:
-            payment = initiate_blupal_payment(request.user, address_id)
+            payment = initiate_blupal_payment(
+                request.user, 
+                address_id, 
+                shipping_cost=shipping_cost
+            )
+        except TypeError as exc:
+            # اگر تابع نسخه قدیمیه (بدون پارامتر shipping_cost)
+            if 'shipping_cost' in str(exc) or 'unexpected keyword' in str(exc):
+                payment = initiate_blupal_payment(request.user, address_id)
+            else:
+                raise
         except ValueError as exc:
             if is_ajax:
                 return JsonResponse({'success': False, 'message': str(exc)}, status=400)

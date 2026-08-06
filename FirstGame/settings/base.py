@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'CustomerAccount',
     'HomePage',
     'Products',
+    'news',
 ]
 
 

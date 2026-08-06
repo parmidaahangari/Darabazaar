@@ -22,6 +22,7 @@ from CustomerAccount.views import SignupView, LoginView, CustomerCartView, Custo
 from CustomerAccount.payments.views import PaymentWebhookView
 from HomePage.views import TrendingView
 from Products.views import SearchSuggestionsView
+from news.views import NewsView
 
 urlpatterns = [
     path('', include('HomePage.urls')),
@@ -36,6 +37,7 @@ urlpatterns = [
     path('checkout/addresses/edit/<int:address_id>/', CustomerAdressesViewCheckout.as_view(), name='checkout_edit_address'),
     path('api/search/suggestions/', SearchSuggestionsView.as_view(), name='search_suggestions'),
     path('payment/webhook/sandbox/', PaymentWebhookView.as_view(), name='payment_webhook_sandbox'),
+    path('news/', NewsView.as_view() , name='news'),
 
 ]
 if settings.DEBUG:

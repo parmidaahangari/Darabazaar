@@ -16,7 +16,7 @@ def toman_to_rial(amount_toman):
     return int(amount_toman) * 10
 
 
-def initiate_blupal_payment(user, address_id):
+def initiate_blupal_payment(user, address_id, shipping_cost=0):
     cart = (
         Cart.objects.filter(user=user, status='active')
         .prefetch_related('items__product')
@@ -29,8 +29,11 @@ def initiate_blupal_payment(user, address_id):
     if not address:
         raise ValueError('آدرس انتخاب‌شده معتبر نیست')
 
-    amount_toman = int(cart.total_price)
+    # ═══ محاسبه مبلغ نهایی با احتساب هزینه ارسال ═══
+    products_total = int(cart.total_price)
+    amount_toman = products_total + int(shipping_cost)
     amount_rial = toman_to_rial(amount_toman)
+    
     if amount_rial < MIN_AMOUNT_RIAL:
         raise ValueError('حداقل مبلغ پرداخت ۱۰,۰۰۰ تومان است')
 
@@ -45,6 +48,12 @@ def initiate_blupal_payment(user, address_id):
 
     with transaction.atomic():
         order = cart.create_pending_order(address)
+        
+        # ═══ ذخیره هزینه ارسال و آپدیت total_amount ═══
+        order.shipping_cost = int(shipping_cost)
+        order.total_amount = amount_toman
+        order.save(update_fields=['shipping_cost', 'total_amount'])
+        
         payment = PaymentTransaction.objects.create(
             order=order,
             invoice_id=invoice_data['invoice_id'],

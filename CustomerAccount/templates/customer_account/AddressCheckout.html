@@ -134,29 +134,57 @@
                 </div>
             </div> 
 
-            
             <div class="summary-box glass-box" style="text-align: right;">
                 <h2 style="margin-bottom: 20px;">خلاصه سفارش</h2>
-                
+
                 {% if cart %}
+                    <!-- ═══ انتخاب روش ارسال ═══ -->
+                    <div class="summary-row" style="align-items: flex-start; flex-direction: column; gap: 10px; margin: 15px 0;">
+                        <span style="font-weight: 600; font-size: 15px;">روش ارسال</span>
+                        
+                        <label class="shipping-option" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); width: 100%; transition: 0.2s;">
+                            <input type="radio" name="shipping_method" value="tehran_karaj" checked 
+                                style="accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer;">
+                            <span style="flex: 1;">پست تهران / کرج</span>
+                            <span class="persian-price" data-raw="150000">۱۵۰,۰۰۰ تومان</span>
+                        </label>
+                        
+                        <label class="shipping-option" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); width: 100%; transition: 0.2s;">
+                            <input type="radio" name="shipping_method" value="city_post" 
+                                style="accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer;">
+                            <span style="flex: 1;">پست شهرستان</span>
+                            <span class="persian-price" data-raw="200000">۲۰۰,۰۰۰ تومان</span>
+                        </label>
+                    </div>
+
                     <div class="summary-row">
                         <span>مجموع کالاها (<span class="persian-num" data-raw="{{ cart.items_count }}">{{ cart.items_count }}</span> عدد)</span>
                         <span class="persian-price" data-raw="{{ cart.total_price }}">{{ cart.total_price|intcomma }} تومان</span>
                     </div>
+
+                    <!-- ردیف هزینه ارسال (داینامیک) -->
+                    <div class="summary-row shipping-cost-row">
+                        <span>هزینه ارسال</span>
+                        <span class="persian-price" id="shipping-cost-display" data-raw="150000">۱۵۰,۰۰۰ تومان</span>
+                    </div>
+
                     <div class="summary-row">
                         <span>تخفیف</span>
                         <span class="persian-price" data-raw="{{ discount|default:'0' }}">{{ discount|default:"0"|intcomma }} تومان</span>
                     </div>
+
                     <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+
                     <div class="summary-row" style="font-weight: bold; font-size: 22px;">
                         <span>جمع کل</span>
-                        <span class="persian-price" data-raw="{{ final_price }}">{{ final_price|intcomma }} تومان</span>
+                        <span class="persian-price" id="final-total" data-base-price="{{ final_price }}" data-raw="{{ final_price }}">{{ final_price|intcomma }} تومان</span>               
                     </div>
-                    
+
                     {% if cart.items_count > 0 %}
                         <form method="POST" action="{% url 'payment_initiate' %}" id="payment-form">
                             {% csrf_token %}
                             <input type="hidden" name="address_id" id="payment-address-id" value="">
+                            <input type="hidden" name="shipping_cost" id="payment-shipping-cost" value="150000">
                             <button type="button" class="btn-confirm" style="margin-top: 20px; width: 100%;" id="payment-btn">تسویه حساب</button>
                         </form>
                     {% else %}
@@ -170,7 +198,6 @@
                     </div>
                 {% endif %}
             </div>
-
 
         </div>
     </main>
@@ -280,9 +307,6 @@
                 headerCount.textContent = toPersianNumber(headerCount.textContent.trim());
             }
         }
-
-        // اجرای تبدیل هنگام بارگذاری صفحه
-        document.addEventListener('DOMContentLoaded', convertNumbersToPersian);
 
         // تابع نمایش نوتیفیکیشن
         function showNotification(message, type = 'success') {
@@ -719,6 +743,65 @@
                 }
             });
         });
+
+
+// ═══════════════════════════════════════════════════
+// مدیریت هزینه ارسال و جمع کل
+// ═══════════════════════════════════════════════════
+const SHIPPING_RATES = {
+    tehran_karaj: 150000,
+    city_post: 200000
+};
+
+function updateFinalPrice() {
+    const selected = document.querySelector('input[name="shipping_method"]:checked');
+    if (!selected) return;
+    
+    const shippingCost = SHIPPING_RATES[selected.value] || 0;
+    
+    const finalEl = document.getElementById('final-total');
+    const basePrice = parseInt(finalEl?.getAttribute('data-base-price')) || 0;
+    
+    const total = basePrice + shippingCost;
+    
+    if (finalEl) {
+        finalEl.setAttribute('data-raw', total);
+        finalEl.textContent = formatPersianPrice(total) + ' تومان';
+    }
+    
+    const shippingDisplay = document.getElementById('shipping-cost-display');
+    if (shippingDisplay) {
+        shippingDisplay.setAttribute('data-raw', shippingCost);
+        shippingDisplay.textContent = formatPersianPrice(shippingCost) + ' تومان';
+    }
+    
+    const shippingInput = document.getElementById('payment-shipping-cost');
+    if (shippingInput) {
+        shippingInput.value = shippingCost;
+    }
+}
+
+function highlightShippingOption() {
+    document.querySelectorAll('.shipping-option').forEach(opt => {
+        opt.style.borderColor = 'rgba(255,255,255,0.08)';
+        opt.style.background = 'transparent';
+    });
+    const checked = document.querySelector('input[name="shipping_method"]:checked');
+    if (checked) {
+        checked.closest('.shipping-option').style.borderColor = 'rgba(99, 102, 241, 0.5)';
+        checked.closest('.shipping-option').style.background = 'rgba(99, 102, 241, 0.08)';
+    }
+}
+
+document.querySelectorAll('input[name="shipping_method"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        updateFinalPrice();
+        highlightShippingOption();
+        convertNumbersToPersian();
+    });
+});
     </script>
+
+    
 </body>
 </html>

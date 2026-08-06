@@ -13,19 +13,11 @@
 
 
   <link rel="stylesheet" href="{% static 'css/app_homepage/news.css' %}">
-  <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 
-
-  <!-- Vazirmatn Font -->
-  <!-- <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn-font/dist/font-face.css" rel="stylesheet"> -->
-
-  
 </head>
 <body>
 
     {% include "layout/navbar.html" %}
-
-
 
   <!-- ═══ HERO ══════════════════════════════════════════════ -->
   <section class="hero">
@@ -60,62 +52,23 @@
 
           <article class="news-card">
             <div class="news-content">
+              {% for new in news %}
               <div class="news-image">
-                <img src="https://images.unsplash.com/photo-1673291680859-d1d8690c89eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlYSUyMHNwb3J0cyUyMGZjJTIwMjUlMjBzb2NjZXJ8ZW58MXx8fHwxNzc2Mjk0MzA3fDA&ixlib=rb-4.1.0&q=80&w=1080"
-                     alt="EA SPORTS FC 25">
+                <img src="{{new.cover_news.url}}"
+                     alt="{{new.alt_img}}">
               </div>
               <div class="news-text">
                 <div>
-                  <p class="news-date">2 days ago</p>
-                  <h3 class="news-title">EA SPORTS FC 25 is built first and foremost with the players in mind</h3>
-                  <p class="news-description">EA SPORTS FC™ 25 gives you more ways to win for the club. Team up with friends in your
-                    favorite modes with the new 5v5 Rush, and manage your club to victory as FC IQ delivers more tactical
-                    control than ever before.</p>
+                  <p class="news-date">{{new.date}}</p>
+                  <h3 class="news-title">{{new.title}}</h3>
+                  <p class="news-description">{{new.description}}</p>
                 </div>
+              {% endfor %}
                 <button class="read-more-btn">Read More</button>
               </div>
             </div>
           </article>
 
-          <article class="news-card">
-            <div class="news-content">
-              <div class="news-image">
-                <img src="https://images.unsplash.com/photo-1723539588203-c5a65d91a90b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxndGElMjB2aWNlJTIwY2l0eSUyMGdhbWV8ZW58MXx8fHwxNzc2Mjk0MzA3fDA&ixlib=rb-4.1.0&q=80&w=1080"
-                     alt="GTA VI">
-              </div>
-              <div class="news-text">
-                <div>
-                  <p class="news-date">2 days ago</p>
-                  <h3 class="news-title">GTA VI will feature multiple editions, a full game, and its release date is confirmed</h3>
-                  <p class="news-description">Rockstar Games is finally back with the announcement of a new GTA title. GTA VI will come
-                    with one of the biggest sandbox experiences. From story mode to its enhanced online multiplayer experience,
-                    GTA VI brings insane fidelity.</p>
-                </div>
-                <button class="read-more-btn">Read More</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="news-card">
-            <div class="news-content">
-              <div class="news-image">
-                <img src="https://images.unsplash.com/photo-1770985272716-8224a8a31847?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3YXIlMjBiYXR0bGUlMjBtaWxpdGFyeSUyMGdhbWV8ZW58MXx8fHwxNzc2Mjk0MzEyfDA&ixlib=rb-4.1.0&q=80&w=1080"
-                     alt="Call of Duty vs Battlefield">
-              </div>
-              <div class="news-text">
-                <div>
-                  <p class="news-date">دو روز پیش</p>
-                  <h3 class="news-title">According to Australia, Call of Duty's "not big in AU" against Battlefield 6</h3>
-                  <p class="news-description">What do you think which one Call of Duty: Black Ops 6 or Battlefield 6 is the more
-                    exciting battle? Delayed by the massive backlash, both titles have received enormous demand from players worldwide.</p>
-                </div>
-                <button class="read-more-btn">Read More</button>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </section>
 
       <!-- ── Reviews ── -->
       <section>

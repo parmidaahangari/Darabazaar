@@ -106,7 +106,8 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_amount = models.PositiveIntegerField(default=0, verbose_name='مبلغ کل (تومان)')
     created_at = models.DateTimeField(default=timezone.now)
-
+    shipping_cost = models.PositiveIntegerField(default=150000, verbose_name='هزینه ارسال (تومان)')
+ 
     def __str__(self):
         return f"سفارش #{self.id} - {self.user.get_username()}"
 
@@ -114,6 +115,10 @@ class Order(models.Model):
     def is_paid(self):
         return self.status == 'paid'
 
+    @property
+    def total_with_shipping(self):
+        return self.total_amount + self.shipping_cost
+    
     @property
     def total_discount(self):
         total = 0

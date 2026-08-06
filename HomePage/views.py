@@ -3,11 +3,6 @@ from django.views import View
 from .models import *
 from Products.models import Product
 
-class NewsView(View):
-    def get(self, request):
-        return render(request, 'home_page/news.html')
-
-
 class HomeView(View):
     def get(self, request):
         trending = Trending.objects.all()
